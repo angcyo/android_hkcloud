@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#ffeeeeee" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/category_rlyt_oneitem"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp" >
+
+        <TextView
+            android:id="@+id/category_tv_oneitem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:text="品牌" />
+		
+        <TextView 
+            android:id="@+id/tv_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/category_tv_oneitem"
+            android:layout_centerVertical="true"
+            android:text=":"/>
+        <TextView 
+            android:id="@+id/tv_select_filter_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_sp"
+            android:text="全部"
+            android:layout_centerVertical="true"/>
+        
+        <ImageView
+            android:id="@+id/category_iv_itemone_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16.0dip"
+            android:background="@drawable/category_iv_oneitem_arrow_down" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ffffff" />
+
+</LinearLayout>

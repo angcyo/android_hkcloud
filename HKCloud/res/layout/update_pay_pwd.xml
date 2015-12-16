@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" >
+
+        <ImageView
+            android:id="@+id/iv_pay_pwd_update"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_launcher"
+            android:visibility="gone" />
+
+        <com.huika.cloud.views.ClearableEditText
+            android:id="@+id/up_pay_pwd_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/iv_pay_pwd_update"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="@string/update_input_login_pwd"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textColorHint="@color/common_edit_hint_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/common_divider" >
+    </View>
+
+    <TextView
+        android:id="@+id/phone_tv_update_Pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:text="你的手机: 13717065140"
+        android:textColor="#333333"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_code_phone_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="-2dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp" >
+
+        <LinearLayout
+            android:id="@+id/ll_code_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#f0eeee"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_code_pay_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:text="@string/register_getcode_hint"
+                android:textColor="@color/common_bg_cart_money"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <com.huika.cloud.views.ClearableEditText
+            android:id="@+id/up_pay_pwd_edit_code"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_toLeftOf="@+id/ll_code_pwd"
+            android:background="@null"
+            android:digits="@string/register_phone_char"
+            android:gravity="center_vertical"
+            android:hint="@string/register_code_hint"
+            android:maxLength="6"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textColorHint="@color/common_edit_hint_color"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@color/common_divider" >
+    </View>
+
+    <Button
+        android:id="@+id/update_pay_pwd_btn"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/conner_button"
+        android:gravity="center"
+        android:text="@string/common_next"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

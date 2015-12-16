@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability= "blocksDescendants"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_marginTop="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/attr_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:textColor="@color/common_text_color"
+            android:layout_marginLeft="12dp"
+            android:text="品牌" />
+
+        <TextView
+            android:id="@+id/tv_sp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/attr_name"
+            android:text=":" />
+        <TextView 
+            android:id="@+id/select_attr"
+            android:layout_toRightOf="@+id/tv_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:textColor="#ff3c00"
+            android:text="全部"/>
+        
+        <ImageView 
+            android:id="@+id/iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:focusable="false"
+            android:src="@drawable/icon_drop_down"/>
+    </RelativeLayout>
+       <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView 
+           android:id="@+id/rigv"
+           android:layout_width="match_parent"
+           android:numColumns="4"
+           android:layout_height="match_parent">
+       </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView>
+
+</LinearLayout>

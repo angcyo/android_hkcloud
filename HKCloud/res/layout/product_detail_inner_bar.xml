@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_tab"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal" >
+
+    <com.huika.cloud.views.CheckedTextView
+        android:id="@+id/tv_p_detail"
+        style="@style/p_detail_tab"
+        android:text="@string/product_detail" />
+
+    <com.huika.cloud.views.CheckedTextView
+        android:id="@+id/tv_p_param"
+        style="@style/p_detail_tab"
+        android:text="@string/product_param" />
+
+    <com.huika.cloud.views.CheckedTextView
+        android:id="@+id/tv_p_service"
+        style="@style/p_detail_tab"
+        android:text="@string/product_service" />
+
+</LinearLayout>

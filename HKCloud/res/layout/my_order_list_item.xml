@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imgGoods"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/category_icon" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/tvPrice"
+                style="@style/ListSubjectInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:text="￥ 45.90" />
+
+            <TextView
+                android:id="@+id/tvGoodsNum"
+                style="@style/ListSubjectInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/tvPrice"
+                android:layout_below="@id/tvPrice"
+                android:text="*2" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvGoodsTitle"
+                    style="@style/ListSubjectInfo"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@id/tvPrice"
+                    android:layout_weight="1.0"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="商品名称sdfsdfsdfsdfsdfsdfsdf。。。。。" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/tvSKU"
+                        style="@style/ListAdditionalInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="16dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="颜色：sfdssdfsdfsdfsdfsdfsdfsdfsdsdfsdfsdfsdfsdffsdf"
+                        android:textColor="#969696"
+                        android:textSize="10sp" />
+
+                    <Button
+                        android:id="@+id/btnComment"
+                        android:layout_width="50dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/category_icon"
+                        android:text="评价"
+                        android:textColor="#E12228"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/shoporder_tv_backstate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/tvGoodsTitle"
+                    android:layout_alignParentBottom="true"
+                    android:layout_weight="1.0"
+                    android:text="退款中"
+                    android:textColor="#e12228"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="#DFDFE1" />
+
+</LinearLayout>

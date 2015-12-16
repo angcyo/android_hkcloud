@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eff0f2"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:background="#FFFFFF"
+        android:layout_height="44dp" >
+
+        <TextView
+            android:id="@+id/my_add_bankcard_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:text="持卡人"
+            android:textColor="#969696"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/my_add_bankcard_person_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/my_add_bankcard_person"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/my_bank_tips_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/my_bank_accountor_tips" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="#dfdfe1" />
+
+    <RelativeLayout
+        android:id="@+id/rl_selected_bank"
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        android:focusable="true" >
+
+        <TextView
+            android:id="@+id/my_add_bank_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/my_add_bankcard_bank_name_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:hint="选择开户行"
+            android:maxLength="40"
+            android:paddingLeft="15dp"
+            android:textColor="#333333"
+            android:textColorHint="#cccccc"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/goto_bank_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/right_arrow" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdfe1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="#eff0f2" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdfe1" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="#FFFFFF" >
+
+        <EditText
+            android:id="@+id/my_add_bankcard_no_edt"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:hint="填写银行卡号"
+            android:inputType="number"
+            android:maxLength="19"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textColorHint="#b1b1b1"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="#dfdfe1" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="44dp"
+        android:background="#FFFFFF" >
+
+        <EditText
+            android:id="@+id/my_add_bankcard_bank_part_name_edt"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:background="@null"
+            android:hint="填写开户支行"
+            android:maxLength="38"
+            android:singleLine="true"
+            android:textColor="#333333"
+            android:textColorHint="#b1b1b1"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdfe1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="#eff0f2" />
+
+    <LinearLayout
+        android:id="@+id/delete_card"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#ffffff"
+        android:visibility="gone"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/my_binder_bankcard_add_card_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除银行"
+            android:textColor="#ff0000"
+            android:textSize="22sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</LinearLayout>

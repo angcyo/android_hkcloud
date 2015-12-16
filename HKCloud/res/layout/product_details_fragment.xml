@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_parent_fl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <!-- 翻页框架 -->
+    <com.huika.cloud.views.ScrollViewContainer
+        android:id="@+id/root_sve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:background="@color/white" >
+
+        <include layout="@layout/product_detail_up" />
+
+        <include layout="@layout/product_detail_down" />
+    </com.huika.cloud.views.ScrollViewContainer>
+
+    <!-- 返回顶部导航键 -->
+
+    <ImageView
+        android:id="@+id/index_gotoTop_iv"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="85dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/index_goto_top"
+        android:visibility="invisible" />
+    <!-- 底部付款bar -->
+
+    <LinearLayout
+        android:id="@+id/buy_product_bottom_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/under_the_plane_tips_tv"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="#cce3b013"
+            android:gravity="center"
+            android:text="已下架"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/buy_and_participation_ll"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <Button
+                android:id="@+id/add_product_detail_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ff7815"
+                android:gravity="center"
+                android:text="加入购物车"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/product_buy_now_btn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#e12228"
+                android:gravity="center"
+                android:text="立即购买"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+<!--     透明顶部bar -->
+
+<!--     <RelativeLayout -->
+<!--         android:id="@+id/trans_titlebar" -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="48dp" -->
+<!--         android:layout_gravity="top" -->
+<!--         android:background="@color/color_transparent" > -->
+
+<!--         <TextView -->
+<!--             android:id="@+id/trans_detail_head_left_tv" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_alignParentLeft="true" -->
+<!--             android:drawableLeft="@drawable/product_detail_back_icon" -->
+<!--             android:gravity="center_vertical" -->
+<!--             android:paddingLeft="15dp" -->
+<!--             android:paddingRight="15dp" -->
+<!--             android:textColor="#ffffffff" -->
+<!--             android:textSize="16sp" /> -->
+
+<!--         <TextView -->
+<!--             android:id="@+id/trans_detail_head_rigth_tv" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="match_parent" -->
+<!--             android:layout_alignParentRight="true" -->
+<!--             android:layout_marginRight="15dp" -->
+<!--             android:drawableLeft="@drawable/icon_share_title_notrans" -->
+<!--             android:gravity="center" -->
+<!--             android:textColor="@color/title_left_text_color" /> -->
+<!--     </RelativeLayout> -->
+
+<!--     不透明顶部bar -->
+
+<!--     <include -->
+<!--         android:layout_width="match_parent" -->
+<!--         android:layout_height="48dp" -->
+<!--         android:layout_gravity="top" -->
+<!--         layout="@layout/notrans_detail_head_title" -->
+<!--         android:visibility="gone" /> -->
+    <!-- 悬浮的商品详情bar -->
+
+    <include
+        android:id="@+id/float_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="48dp"
+        layout="@layout/product_detail_inner_bar"
+        android:visibility="gone" />
+
+</FrameLayout>

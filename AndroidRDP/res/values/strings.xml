@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidRDP</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+             <!--     加载框string -->
+    <string name="common_loading_net_error">您的网络无法连接</string>
+    <string name="common_reload">重新加载</string>
+    <string name="common_checknetwork">检查网络设置</string>
+    <string name="common_empty_data">暂无数据</string>
+    
+
+</resources>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/goto_add_address_chird_rl"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingRight="10dp"
+        android:paddingTop="14dp" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/receiver_name_tv"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_hkcloud_adress_tv" />
+
+        <TextView
+            android:id="@+id/tv_no_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/goto_add_address_iv"
+            android:text="请选择收货地址"
+            android:textColor="#333333"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/receiver_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="29dp"
+            android:text="收货人：samy"
+            android:textColor="#333333"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/goto_add_address_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right_arrow" />
+
+        <TextView
+            android:id="@+id/receiver_phone_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/receiver_name_tv"
+            android:text="13717065140"
+            android:textColor="@color/common_text_color"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/receiver_address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/receiver_name_tv"
+            android:layout_below="@+id/receiver_name_tv"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/goto_add_address_iv"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="收货地址：龙华新区梅坂大道民乐科技园城市酒店6B  000000"
+            android:textColor="@color/common_text_color"
+            android:textSize="10sp"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/common_bg_activty" >
+    </View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginLeft="15dp"
+        android:drawablePadding="10dp"
+        android:drawableRight="@drawable/right_arrow"
+        android:gravity="center_vertical"
+        android:text="企业名称"
+        android:textColor="#333333"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/product_tiele_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#dfdfe1" />
+
+</LinearLayout>

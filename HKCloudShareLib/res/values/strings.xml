@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">HKCLoudShareLib</string>
+    <string name="app_tip">พร้อมรับคำ</string>
+    <string name="getting_prepayid">ได้รับการสั่งซื้อเติมเงิน ...</string>
+
+</resources>

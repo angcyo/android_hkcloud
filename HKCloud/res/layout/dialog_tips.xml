@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_transparent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/round_corner_white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="21dp"
+            android:text="标题"
+            android:textColor="#666666"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tip_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="内容"
+            android:textColor="#333333"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minWidth="270dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/tip_left_btn"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="-1dp"
+                android:layout_marginLeft="-1dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_shape_trans_left_selector"
+                android:text="左侧按钮"
+                android:textColor="#007aff"
+                android:textSize="17sp" />
+
+            <Button
+                android:id="@+id/tip_right_btn"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="-1dp"
+                android:layout_marginRight="-1dp"
+                android:layout_weight="1"
+                android:background="@drawable/rect_shape_trans_right_selector"
+                android:text="右侧按钮"
+                android:textColor="#007aff"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

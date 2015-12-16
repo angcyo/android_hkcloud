@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--     <attr name="icon" format="reference" />
+    <attr name="color" format="color" />
+    <attr name="text" format="string" />
+    <attr name="text_size" format="dimension" />
+
+    <declare-styleable name="ChangeColorIconView">
+        <attr name="icon"  />
+        <attr name="color" />
+        <attr name="text" />
+        <attr name="text_size" />
+    </declare-styleable> -->
+
+<!--     <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+    </declare-styleable>
+    
+    
+    <declare-styleable name="ViewPagerIndicator">
+        Style of the circle indicator.
+        <attr name="vpiCirclePageIndicatorStyle" format="reference"/>
+        Style of the icon indicator's views.
+        <attr name="vpiIconPageIndicatorStyle" format="reference"/>
+        Style of the line indicator.
+        <attr name="vpiLinePageIndicatorStyle" format="reference"/>
+        Style of the title indicator.
+        <attr name="vpiTitlePageIndicatorStyle" format="reference"/>
+        Style of the tab indicator's tabs.
+        <attr name="vpiTabPageIndicatorStyle" format="reference"/>
+        Style of the underline indicator.
+        <attr name="vpiUnderlinePageIndicatorStyle" format="reference"/>
+    </declare-styleable>  -->
+
+    <declare-styleable name="gridPasswordView">
+
+        <attr name="textColor" format="color|reference" />
+        <attr name="textSize" format="dimension" />
+
+        <attr name="lineColor" format="color" />
+        <attr name="gridColor" format="color" />
+        <attr name="lineWidth" format="dimension" />
+
+        <attr name="passwordLength" format="integer" />
+        <attr name="passwordTransformation" format="string" />
+
+        <attr name="passwordType" format="enum">
+            <enum name="numberPassword" value="0" />
+            <enum name="textPassword" value="1" />
+            <enum name="textVisiblePassword" value="2" />
+            <enum name="textWebPassword" value="3" />
+        </attr>
+
+    </declare-styleable>
+    
+      <declare-styleable name="roundedimageview">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"></attr>
+    </declare-styleable>
+    
+          <declare-styleable name="MultiImageViewGroup">
+        <attr name="image_num" format="integer" />
+        <attr name="default_img" format="reference" />
+        <attr name="horizontal_spacing" format="dimension" />
+        <attr name="image_width" format="dimension" />
+        <attr name="image_height" format="dimension" />
+    </declare-styleable>
+    
+</resources>

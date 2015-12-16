@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <!-- android:background="@color/transparent" -->
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#00000000"
+        android:dividerHeight="0.01dp"
+        android:fadingEdge="none"
+        android:gravity="center"
+        android:scrollbars="none"
+        android:scrollingCache="false" />
+    <!-- android:divider="#FFFFFF" -->
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:paddingBottom="9dp"
+        android:background="@drawable/btn_dialog_special"
+        android:paddingTop="9dp"
+        android:text="@string/cancel"
+        android:textSize="17sp" />
+
+</LinearLayout>

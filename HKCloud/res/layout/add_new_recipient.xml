@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ll_show_up"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <TextView
+                style="@style/show_address_left"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:text="收货人" />
+
+            <EditText
+                android:id="@+id/et_address_people"
+                style="@style/show_address_right"
+                android:hint="请输入收获人姓名"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:maxLength="10" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="#dfdfe1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <TextView
+                style="@style/show_address_left"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:text="手机号码" />
+
+            <EditText
+                android:id="@+id/et_address_phone"
+                style="@style/show_address_right"
+                android:digits="@string/phone_limit"
+                android:hint="请输入手机号码"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:inputType="phone"
+                android:maxLength="11" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="#dfdfe1" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/tv_address_area"
+                style="@style/show_address_left"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="15dp"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:text="所在地区" />
+
+            <TextView
+                android:id="@+id/et_address_area"
+                style="@style/add_address_right"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_address_area"
+                android:clickable="true"
+                android:drawableRight="@drawable/right_arrow"
+                android:minHeight="44dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="11dp"
+                android:singleLine="false"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:text="选择省/市/区" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="#dfdfe1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <TextView
+                android:id="@+id/tv_address_detail"
+                style="@style/show_address_left"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:text="@string/my_address_detail_hint" />
+
+            <EditText
+                android:id="@+id/et_address_detail"
+                style="@style/show_address_right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/tv_address_detail"
+                android:background="@null"
+                android:hint="@string/my_address_detail_input_hint"
+                android:minHeight="44dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="11dp"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:singleLine="false" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="#dfdfe1" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+             android:paddingTop="10dp"
+             android:paddingBottom="10dp"
+             android:paddingLeft="12dp"
+             android:paddingRight="12dp"
+             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/common_textview_size"
+                android:textColor="@color/common_text_color"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:text="设为默认地址" />
+
+            <ToggleButton
+                android:id="@+id/tglbt"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/selector_butn_toggle"
+                android:text=""
+                android:textOff=""
+                android:textOn="" 
+                />
+        </RelativeLayout>
+          <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:background="#dfdfe1" />
+        
+
+        <Button
+            android:id="@+id/bt_save_recipient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/confirm_button_selected"
+            android:enabled="true"
+            android:text="保存并使用"
+            android:textSize="@dimen/common_textview_size"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

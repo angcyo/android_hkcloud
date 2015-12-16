@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="auth_info_buttomSpiners_one">
+        <item>拍照</item>
+        <item>从相册中选择</item>
+    </string-array>
+    <string-array name="product_envalute_page_indicator">
+        <item>全部</item>
+        <item>有图</item>
+    </string-array>
+
+</resources>

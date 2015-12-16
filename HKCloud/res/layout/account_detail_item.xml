@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/tv_money_type"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="分佣金"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="¥5.00" />
+
+        <TextView
+            android:id="@+id/add_or_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_money"
+            android:text="+" />
+
+        <TextView
+            android:id="@+id/tv_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/tv_money"
+            android:text="-"/>
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView 
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="来源订单号:"/>
+        <TextView 
+            android:id="@+id/tv_money_source"
+            android:layout_toRightOf="@+id/tv_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:text="102409039210"
+            />
+        <TextView 
+            android:id="@+id/tv_account_money"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="¥ 200"/>
+        <TextView 
+            android:layout_toLeftOf="@+id/tv_account_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="余额:"/>
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView 
+            android:id="@+id/tv_trader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:text="交易方"/>
+        
+        <TextView 
+            android:id="@+id/tv_createDt"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="时间"
+            />
+    </RelativeLayout>
+    
+
+</LinearLayout>

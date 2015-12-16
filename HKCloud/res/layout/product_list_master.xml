@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.handmark.pulltorefresh.library.PullToRefreshScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/master_sc"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView
+            android:id="@+id/product_gv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:numColumns="2" >
+        </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView>
+
+        <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerListView
+            android:id="@+id/product_lv"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerListView>
+    </FrameLayout>
+
+</com.handmark.pulltorefresh.library.PullToRefreshScrollView>

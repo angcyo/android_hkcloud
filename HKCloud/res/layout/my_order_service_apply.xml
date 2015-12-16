@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvServiceTypeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="退换货类型：" 
+        />
+    <Spinner 
+        android:id="@+id/spiServiceType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tvServiceTypeLabel"
+        android:spinnerMode="dropdown"
+        
+        android:entries="@array/my_order_service_apply_type"
+        /> 
+	<TextView
+	    android:id="@+id/tvApplyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvServiceTypeLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="申请理由：" 
+        />
+	
+    <EditText
+        android:id="@+id/edtApply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvApplyLabel"
+        android:ems="6"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:focusable="true"
+        android:maxLines="3"
+        android:focusableInTouchMode="true"
+        android:hint="输入您要退货或换货的理由"
+        android:textColor="#333333"
+        android:textColorHint="#b1b1b1"
+        android:textSize="14sp" >
+    </EditText>
+
+</RelativeLayout>

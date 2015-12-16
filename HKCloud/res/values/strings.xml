@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">惠云</string>
+    <!-- 通用 -->
+    <string name="common_loading">加载中...</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_confirm">确定</string>
+    <string name="common_sure">确认</string>
+    <string name="common_back">返回</string>
+    <string name="common_login">登  录</string>
+    <string name="common_logout">退出</string>
+    <string name="common_register">注 册</string>
+    <string name="common_complete">完成</string>
+    <string name="common_next">下一步</string>
+    <string name="common_share">分享</string>
+    <string name="my_account_money_detail_empty">暂时还没有记录</string>
+
+    <!-- 登录 -->
+    <string name="user_login_char">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@._</string>
+    <string name="verify_char">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="login_str_titel">登录</string>
+    <string name="login_pwd">密码</string>
+    <string name="login_pwd_length">(8-20位)</string>
+    <string name="find_login_pwd">忘记密码？</string>
+    <string name="find_login_pwd_pay_title">设置支付密码</string>
+    <string name="login_register_enter">免费注册</string>
+    <string name="login_username_hint">请输入手机号</string>
+    <string name="login_out_hint_username">确定要退出当前账号吗？</string>
+    <!-- 注册 -->
+    <string name="register_title">注册</string>
+    <string name="register_phone_char">1234567890</string>
+    <string name="register_getcode_title">验证码</string>
+    <string name="register_getcode_hint">获取验证码</string>
+    <string name="register_code_hint">请输入验证码</string>
+    <string name="register_pwd_no_hint">(8-20位)</string>
+
+    <!-- 忘记密码 -->
+    <string name="find_pwd_title">忘记密码</string>
+    <string name="update_login_pwd">修改登录密码</string>
+    <string name="update_pay_pwd">修改支付密码</string>
+    <string name="account_safe_title">账号安全</string>
+    <string name="account_auth">身份验证</string>
+    <!-- 修改登录密码 -->
+    <string name="update_pwd_title">修改密码</string>
+    <string name="update_login_pwd_title">修改登录密码</string>
+    <string name="update_str_old_pwd">请输入旧密码</string>
+    <string name="update_str_new_pwd">设置新密码</string>
+    <string name="update_str_phone_pwd">验证手机修改</string>
+    <string name="update_phone_pwd_titel">手机验证修改</string>
+    <string name="update_phone_new_pwd">设置新密码</string>
+    <!-- 修改支付密码 -->
+    <string name="no_set_pay_pwd">还没有设置支付密码，是否现在就去设置支付密码？</string>
+    <string name="update_pay_pwd_title_first">输入登录密码</string>
+    <string name="update_pay_pwd_title_second">修改支付密码</string>
+    <string name="update_pay_pwd_title_find">找回支付密码</string>
+    <string name="update_input_login_pwd">请输入登录密码</string>
+    <string name="update_input_pay_pwd">请输入支付密码</string>
+
+    <!-- 身份认证 -->
+    <string name="authentication_title">身份认证</string>
+    <string name="authentication_name"> 姓   名 </string>
+    <string name="authentication_cardid">身份证</string>
+    <string name="upload_cardid">上传身份证图片：</string>
+
+    <!-- 商品详情部分 -->
+    <string name="product_detail">商品详情</string>
+    <string name="product_param">规格参数</string>
+    <string name="product_service">售后服务</string>
+
+    <!-- 空购物车shicm -->
+    <string name="hkloud_goshop">去逛逛</string>
+    <string name="hkloud_cart_emptytv">购物车还空着呢,快给我挑选商品吧！</string>
+    <string name="hkloud_cart_pick">快给我挑点宝贝吧~</string>
+    <string name="hkloud_cart_poststory">不含运费</string>
+    <string name="hkloud_cart_caculate">马上结算</string>
+    <string name="hkloud_cart_allselect">全选</string>
+    <string name="hkloud_cart_alldelete">删除</string>
+    <string name="cart_stock_low">库存不足</string>
+    <string name="cart_stock_low_one">商品数量不得小于1</string>
+
+    <!-- 确认订单 -->
+    <string name="pay_order_money">配送方式</string>
+    <string name="pay_order_money_express">运费</string>
+    <string name="pay_order_welfare">专享福利</string>
+    <string name="pay_order_say">买家留言:</string>
+
+    <!-- 商品评价 -->
+    <string name="evaluate_empty">暂无评价！</string>
+    <string name="evaluate_list_title">商品评价</string>
+   
+    <string name="phone_limit">0123456789</string>
+    <string name="evaluate_title">评价</string>
+
+
+     <!-- 地址管理 -->
+    <string name="my_address_deltet_tip">确定要删除这个收货地址吗？</string>
+    <string name="my_receive_address_def">默认收货地址</string>
+    <string name="my_receive_address">收货地址</string>
+    <string name="my_address_set_default">设成默认收货地址</string>
+    <string name="my_address_change">修改</string>
+    <string name="my_address_change_title">修改地址</string>
+    <string name="my_address_delete">删除收货地址</string>
+    <string name="my_address_new_add">新增收货地址</string>
+    <string name="my_address_new_add_simple">新增地址</string>
+    <string name="my_address_mng">管理收货地址</string>
+    <string name="my_hx_experience_title">惠信钱包体验金</string>
+    <string name="my_select_address_mng">选择收货地址</string>
+    <string name="my_selects_address_ok">确定</string>
+    <string name="my_selects_address_right_msg">编辑</string>
+    <string name="my_selects_address_right_commit">完成</string>
+    <string name="my_address_select">选择收货地址</string>
+    <string name="my_address_empty">您暂时还没有收货地址\n请新增我的收货地址</string>
+    <string name="my_address_people">收货人</string>
+    <string name="my_address_people_hint">收货人姓名</string>
+    <string name="my_address_phone">手机</string>
+    <string name="my_address_phone_hint">手机号码</string>
+    <string name="my_address_detail">地址</string>
+    <string name="my_address_area">选择省/市/区</string>
+    <string name="address_area">所在地区</string>
+    <string name="my_address_detail_hint">详细地址</string>
+    <string name="my_address_postage">邮政编码</string>
+    <string name="my_address_area_hint">请选择所在区域</string>
+    <string name="my_address_postage_hint">请输入邮政编码</string>
+    <string name="my_address_postage_error">请输入6位数字邮编</string>
+    <string name="my_address_people_input_hint">请输入收货人姓名</string>
+    <string name="my_address_phone_input_hint">请输入手机号码</string>
+    <string name="my_address_detail_input_hint">请输入详细地址</string>
+    <string name="choice_area_title">选择区域</string>
+    <string name="tips_setting_shipping_address">您还未设置收货地址，是否进行设置</string>
+    
+    
+    <!-- 我的 -->
+    <string name="my_coupons">我的优惠券</string>
+    <string name="my_wallet">我的钱包</string>
+	<string name="all_order">全部订单</string>
+	<string name="wait_pay">待付款</string>
+	<string name="wait_send">待发货</string>
+	<string name="exchange">退换货</string>
+	<string name="apply_for_shop">申请开店</string>
+	<string name="invite">邀请会员</string>
+	<string name="my_shop_cart">我的购物车</string>
+	<string name="my_shop">我的店铺</string>
+	<string name="my_ewm">我的二维码</string>
+
+    <!-- 订单管理 -->
+    <string-array name="my_order_type">
+        <item>全部</item>
+        <item>待付款</item>
+        <item>待发货</item>
+        <item>待收货</item>
+        <item>待评价</item>
+    </string-array>
+    <string-array name="my_order_service_apply_type">
+        <item>换货</item>
+        <item>退货</item>
+    </string-array>
+    <string name="order_detail_title">"订单详情"</string>
+    <string name="order_cancel_order">"您确认取消该订单？"</string>
+    <string name="order_delay_receive_order">"确认延长收货时间？"</string>
+    <string name="order_delay_receive_msg">"每笔订单只能延迟一次哦"</string>
+    <string name="order_delete_order">"确认删除订单？"</string>
+    <string name="order_delete_order_msg">"删除之后将无法恢复"</string>
+    <string name="order_comfirm_receive_order">"确认收货后将与卖家结算，请您收到货后，再确认收货"</string>
+    <string name="order_after_service">"退换货申请"</string>
+    <!-- 银行卡 -->
+	<string name="my_card_exist">该卡已存在</string>
+    <string name="my_bankcard_select_account_bank">请选择开户银行!</string>
+    <string name="my_bankcard_input_cardno">请输入银行卡号!</string>
+    <string name="my_bankcard_input_numbers">请输入12-19位银行卡号!</string>
+    <string name="my_bankcard_input_acountor">请输入开户行信息!</string>
+    <string name="my_bankcard_input_part">请输入开户支行信息!</string>
+</resources>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltTitleBar"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/common_title_red"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:id="@+id/lltTitleBarLeftArea"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="2dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+         <ImageView
+            android:id="@+id/back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_head_back_select" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lltTitleBarTitleArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal" >
+		
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="功能标题"
+            android:textColor="#ffffff"
+            android:textSize="21sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lltTitleBarRigthArea"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/consume_serch_icon2" />
+
+            <ImageView
+                android:id="@+id/iv_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:src="@drawable/category_listview" />
+
+            <ImageView
+                android:id="@+id/iv_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/category_gridview"
+                 />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

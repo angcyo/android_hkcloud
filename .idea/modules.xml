@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidRDP/AndroidRDP.iml" filepath="$PROJECT_DIR$/AndroidRDP/AndroidRDP.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HKCloud/HKCloud.iml" filepath="$PROJECT_DIR$/HKCloud/HKCloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HKCloudShareLib/HKCloudShareLib.iml" filepath="$PROJECT_DIR$/HKCloudShareLib/HKCloudShareLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android_hkcloud.iml" filepath="$PROJECT_DIR$/android_hkcloud.iml" />
+    </modules>
+  </component>
+</project>

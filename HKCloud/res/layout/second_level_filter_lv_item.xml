@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/second_level_filter_item"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    >
+    <TextView 
+        android:id="@+id/tv_second_filter_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:textColor="#333333"
+        android:layout_marginLeft="12dp"
+        android:layout_centerVertical="true"
+        android:text="全部"/>
+    <ImageView 
+        android:id="@+id/iv_item_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/item_selected"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:layout_marginRight="12dp"/>
+    
+</RelativeLayout>

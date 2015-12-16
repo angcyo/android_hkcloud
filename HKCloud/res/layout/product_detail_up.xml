@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.huika.cloud.views.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view_up"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:focusableInTouchMode="false"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="none" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical" >
+
+        <include layout="@layout/view_common_ad_head" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/product_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingRight="15dp"
+                android:text="商品详情商品名称"
+                android:textColor="@color/common_text_color"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                 >
+
+                <TextView
+                    android:id="@+id/discount_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="折扣价"
+                    android:textColor="@color/common_text_money_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/trade_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/discount_price_tv"
+                    android:text="价格"
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/commission_money_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/trade_price_tv"
+                    android:text="佣金"
+                    android:textColor="@color/common_text_money_color"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/discount_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:background="@drawable/conner_button"
+                    android:text="折扣"
+                    android:textColor="#ffffff" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/welfare_tips_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="专享福利："
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/welfare_content_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="adaasdas"
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:paddingRight="15dp" >
+
+                <TextView
+                    android:id="@+id/stock_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:text="当前库存：8989"
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/sales_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@+id/stock_tv"
+                    android:gravity="center"
+                    android:text="当前销量:145465"
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/is_postage_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:layout_marginTop="7dp"
+                >
+
+                <TextView
+                    android:id="@+id/postage_detail_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="right"
+                    android:text="配送方式 ："
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/postage_detail_show_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/postage_detail_tv"
+                    android:gravity="left"
+                    android:text="包邮"
+                    android:textColor="@color/common_edit_hint_color"
+                    android:textSize="11sp" />
+            </RelativeLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/common_divider" />
+
+        <RelativeLayout
+            android:id="@+id/goto_average_comment_rl"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" >
+
+            <TextView
+                android:id="@+id/comment_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:text="宝贝评价 (0)"
+                android:textColor="@color/common_edit_hint_color"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/common_arrow_right_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/right_arrow" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/comment_lv_split_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <com.huika.cloud.views.SampleListLinearLayout
+                xmlns:app="http://schemas.android.com/apk/res/com.huika.cloud"
+                xmlns:tools="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/shop_evaluation_slv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#FFFFFF"
+                android:clickable="false"
+                android:divider="@color/common_divider"
+                android:focusableInTouchMode="false"
+                android:orientation="vertical"
+                android:scrollbars="none"
+                app:needDivider="false" />
+
+            <TextView
+                android:id="@+id/average_comment_level_detail_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:text="更多"
+                android:textColor="#797979"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="#EEF1F1"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="1px"
+                android:background="#dfdfe1" >
+            </View>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:gravity="center"
+                android:text="继续拖动，查看图文详情"
+                android:textColor="#969696"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="1px"
+                android:background="#dfdfe1" >
+            </View>
+        </LinearLayout>
+    </LinearLayout>
+
+</com.huika.cloud.views.MyScrollView>

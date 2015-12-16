@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="common_title_red">#e12228</color>
+    <color name="common_divider">#eeeef1</color>
+    <color name="common_color_bg">#EEF1F1</color>
+    <color name="common_bg_activty">#EEEDF2</color>
+     <color name="common_bg_gray">#eff0f2</color>
+     <color name="common_bg_sure">#FF3C00</color>
+     <color name="common_bg_line">#F8F8FA</color>
+     <color name="common_bg_cart_money">#FF4F1C</color>
+     <color name="common_text_money_color">#FF3C00</color>
+     <color name="common_text_color">#333333</color>
+     <color name="common_edit_hint_color">#a3a3a3</color>
+     
+    <color name="color_transparent">#00000000</color>
+    <color name="color_product_title_transparent">#16120F</color>
+    <color name="all_activity_layout_bg_color">#efeff3</color>
+    <color name="my_title">#333333</color>
+    <color name="white">#ffffff</color>
+    <color name="color_999999">#999999</color>
+    <color name="common_single_line">#d9d9d9</color>
+    <color name="color_fd6138">#fd6138</color>
+    <color name="color_969696">#969696</color>
+    
+    <color name="detail_sku_unselect_border">#c8c8c8</color>
+    <color name="detail_sku_count_disable_border">#c8c8c8</color>
+    <color name="detail_sku_out_bg_shadow">#b3000000</color>
+     <color name="color_00a0e9">#00a0e9</color>
+    <color name="bg_no_enable">#CCCCCC</color>
+    <!--列表筛选栏选中颜色-->
+    <color name="selected_product_lv_filter">#FF3c00</color>
+    <color name="common_dialog_bg">#7A000000</color>
+   
+    <color name="shop_evaluate_bt_p">#80FF3C00</color>
+    <color name="shop_evaluate_bt_n">#FF3C00</color>
+   
+</resources>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView
+        android:id="@+id/lvMaster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:listSelector="#00000000" >
+    </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView>
+
+    <LinearLayout
+        android:id="@+id/lltBusi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#F3FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="15dp" >
+
+        <TextView
+            android:id="@+id/txtTimeCountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginLeft="15dp"
+            android:drawablePadding="6dp"
+            android:drawableRight="@drawable/category_icon"
+            android:gravity="center_vertical"
+            android:text="取消订单"
+            android:textColor="#666666"
+            android:visibility="gone"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/txtTimeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical"
+            android:text="00:20:43"
+            android:textColor="#595959"
+            android:visibility="gone"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnBusiOne"
+            android:layout_width="72dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_gray_bg"
+            android:text="取消订单"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnBusiExpress"
+            android:layout_width="72dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/category_icon"
+            android:text="查看物流"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnBusiTwo"
+            android:layout_width="72dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_red_bg"
+            android:text="付款"
+            android:textColor="#FF3C00"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:apk="http://schemas.android.com/apk/res/com.huika.cloud"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </android.support.v4.view.ViewPager>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="#171719"
+        android:orientation="horizontal" >
+
+        <com.huika.cloud.views.ChangeColorIconWithTextView
+            android:id="@+id/id_indicator_one"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:tag="0"
+            apk:icon="@drawable/icon_home_common"
+            apk:text="首页"
+            apk:text_size="13sp"
+            />
+
+        <com.huika.cloud.views.ChangeColorIconWithTextView
+            android:id="@+id/id_indicator_two"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            apk:icon="@drawable/icon_product_common"
+            apk:text="分类"
+             android:tag="1"
+            apk:text_size="13sp"
+            />
+
+        <com.huika.cloud.views.ChangeColorIconWithTextView
+            android:id="@+id/id_indicator_three"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            apk:icon="@drawable/icon_cart_common"
+            apk:text="购物车"
+             android:tag="2"
+            apk:text_size="13sp"
+            />
+
+        <com.huika.cloud.views.ChangeColorIconWithTextView
+            android:id="@+id/id_indicator_four"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            apk:icon="@drawable/icon_person_common"
+            apk:text="我的"
+             android:tag="3"
+            apk:text_size="13sp"
+            />
+    </LinearLayout>
+
+</LinearLayout>

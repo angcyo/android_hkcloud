@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shop_gallery_relayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- ImageView中大小 要优化，不能写死 -->
+
+    <com.zhoukl.androidRDP.RdpViews.photoview.PhotoView
+        android:id="@+id/gallery_image"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
+
+   
+                <RelativeLayout
+                    android:id="@+id/clear_history_shop_Loy"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center" >
+
+                    <Button
+                        android:id="@+id/clear_history_shop_bt"
+                        android:layout_width="142dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/clear_history_shop_select"
+                        android:gravity="center"
+                        android:text="清除历史记录"
+                        android:textColor="@color/common_text_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+         
+    
+
+</RelativeLayout>

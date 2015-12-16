@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_1</item>
+        <item>@color/gplus_color_2</item>
+        <item>@color/gplus_color_3</item>
+        <item>@color/gplus_color_4</item>
+    </integer-array>
+
+    <color name="pocket_color_1">#85edb9</color>
+    <color name="pocket_color_2">#34bdb7</color>
+    <color name="pocket_color_3">#ee4458</color>
+    <color name="pocket_color_4">#fcb74d</color>
+    <color name="gplus_color_1">#f4b400</color>
+    <color name="gplus_color_2">#f4b400</color>
+    <color name="gplus_color_3">#f4b400</color>
+    <color name="gplus_color_4">#f4b400</color >
+    <!-- 
+	    <color name="gplus_color_1">#3e802f</color>
+	    <color name="gplus_color_2">#f4b400</color>
+	    <color name="gplus_color_3">#427fed</color>
+	    <color name="gplus_color_4">#b23424</color >
+    
+     -->
+     
+       <string-array name="index_category_color">
+        <item>#0f6dbc</item>
+        <item>#268bb9</item>
+        <item>#17b4bb</item>
+        <item>#ff649d</item>
+        <item>#3cb38d</item>
+        <item>#e93052</item>
+        <item>#674941</item>
+        <item>#d4595e</item>
+    </string-array>
+    
+
+</resources>

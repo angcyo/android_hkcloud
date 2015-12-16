@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/action_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="9dp"
+        android:paddingTop="9dp"
+        android:text="接受群助手但不推送"
+        android:textColor="#333333"
+        android:textSize="17sp" />
+
+    <ImageView
+        android:id="@+id/action_image"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="35dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/common_select_red_hook" />
+
+</RelativeLayout>

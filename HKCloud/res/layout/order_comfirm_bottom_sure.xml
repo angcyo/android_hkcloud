@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/common_bg_activty">
+
+    <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView
+        android:id="@+id/lv_product_comfirm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:listSelector="#00000000" >
+    </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff" >
+
+        <Button
+            android:id="@+id/goto_confirm_btn"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/conner_button"
+            android:text="确认"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/num_money_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/goto_confirm_btn"
+            android:gravity="right|center_vertical"
+            android:paddingLeft="15dp"
+            android:text="合计：￥00.00"
+            android:textColor="@color/common_bg_cart_money" />
+    </RelativeLayout>
+
+</RelativeLayout>

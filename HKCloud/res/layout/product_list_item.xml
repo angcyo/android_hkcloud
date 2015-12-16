@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingTop="10dp" >
+
+    <ImageView
+        android:id="@+id/imgProduct"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvProductTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_toRightOf="@id/imgProduct"
+        android:text="fsfsafsagdeatetghgsgsgfsfsaffsfsafsagdeatetghgsgsgfsfsaf"
+        android:textColor="#474747"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvProductTitle"
+        android:layout_alignLeft="@id/tvProductTitle"
+        android:layout_marginTop="9dp"
+        android:text="¥"
+        android:textColor="#ff7815"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvProductTitle"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@id/tvUnit"
+        android:text="160.00"
+        android:textColor="#ff7815"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:background="#dfdfe1" />
+
+</RelativeLayout>

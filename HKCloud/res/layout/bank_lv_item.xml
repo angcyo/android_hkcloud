@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:padding="8dp"
+    android:background="#FFFFFF"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+    
+	<ImageView 
+	    android:layout_marginLeft="12dp"
+	    android:id="@+id/iv_bank_logo"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:src="@drawable/ic_launcher"/>
+	<TextView
+	    android:id="@+id/tv_bank_name"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textSize="14sp"
+	    android:layout_marginLeft="10dp"
+	    android:textColor="@color/common_text_color"
+	    android:text="中国银行"/>
+</LinearLayout>

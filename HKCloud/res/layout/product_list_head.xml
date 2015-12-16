@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:background="#ffffff"
+    android:paddingTop="5dp" >
+
+    <LinearLayout
+        android:id="@+id/sortRg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/rl_tabRb1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/index_tabRb1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:button="@null"
+                android:drawablePadding="3dp"
+                android:drawableRight="@drawable/icon_down"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="#ff3c00"
+                android:text="综合" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_tabRb2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/index_tabRb2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="销量" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_tabRb4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/index_tabRb4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="3dp"
+                android:paddingLeft="3dp"
+                android:textColor="#FF3c00"
+                 android:drawableRight="@drawable/icon_down"
+                android:text="筛选" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/common_edit_hint_color" />
+
+    <ImageView
+        android:id="@+id/iv_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/bt_list_show"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/bt_grid_show" />
+
+</LinearLayout>

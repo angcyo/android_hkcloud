@@ -1,0 +1,7 @@
+78-81行  改成你项目的包名
+	/** 本地保存目录 */
+	private static String localDir = Environment.getExternalStorageDirectory().getPath() + "/huifen/update/";
+	/** 本地保存文件名 */
+	private static String localFileName = "huifen.apk";
+	
+Support/GetVersionInfo  看返回值是否一致

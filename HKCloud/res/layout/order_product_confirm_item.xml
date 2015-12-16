@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp" >
+
+        <ImageView
+            android:id="@+id/product_ic_iv"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/product_ic_iv"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="SONYXperiaT2XM50tUltra 4G手机白色【第二期】"
+            android:textColor="#333333"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tv_sku_property"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_product_name"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/product_ic_iv"
+            android:text="颜色：红色  尺码：170/L"
+            android:textColor="#969696"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_quantity_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_sku_property"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/product_ic_iv"
+            android:text="￥ 00.00"
+            android:textColor="#FF3C00"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_quantity_order_gg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_sku_property"
+            android:layout_marginTop="10dp"
+            android:text="uuu"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</LinearLayout>

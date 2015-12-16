@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.huika.cloud"
+    android:versionCode="1"
+    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <application
+        android:name="com.huika.cloud.control.base.HKCloudApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.huika.cloud.control.main.activity.WelcomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/app_name"
+             >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+       <activity android:name="com.huika.cloud.control.main.activity.MainActivity"></activity>
+       <activity android:name="com.huika.cloud.control.home.activity.ProductListActivity"></activity>
+       <activity android:name="com.huika.cloud.control.home.activity.GoodTypesActivity"></activity>
+       <activity android:name="com.huika.cloud.control.home.activity.SearchActivity"></activity>
+       <activity android:name="com.huika.cloud.control.home.activity.ProductDetailsAct"></activity>
+
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.LoginActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.RegisterFindPwdActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.AccountSafeActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.AuthenticationActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.UpLoginPwdActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.UpPayPwdActivity"/>
+        <activity android:name="com.huika.cloud.control.safeaccount.activity.UpPhoneLoginPwdActivity"/>
+        
+        <activity android:name="com.huika.cloud.control.me.activity.MyInfoActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MilitaryForbidAreaActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.DistributorlevelActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MemberLevelActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyRecipientActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MySuperiorActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.AddRecipientActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyCouponsCountActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyWalletActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.ApplyForShopActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.InviteMembersActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MeInviteMembersActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.DistributionOrdersActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.WithdrawApplicationActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepTwoActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepThreeActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BindBankActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BankCardListActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.WithDrawRecordActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.ChoiceProvienceActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyShopActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyDistributionOrderActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyTeamActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.DisOrderDetailActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.CommissionDetailActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BindWXPublicNum"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.AddBankCardActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.BankListActivity"></activity>
+
+        
+        <activity android:name="com.huika.cloud.control.cart.activity.ConfirmOrderActivity"></activity>
+        <activity android:name="com.huika.cloud.control.cart.activity.CartActivity"></activity>
+        <activity
+            android:name="com.huika.cloud.control.pay.activity.HKCloudPayActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="wxf87f6adee7e3c02f" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.huika.cloud.control.main.activity.ImageDetailAct" >
+        </activity>
+        <!-- 支付宝支付 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+
+        <activity android:name="com.huika.cloud.control.eshop.actvity.MyOrderActivity"/>
+        <activity android:name="com.huika.cloud.control.eshop.actvity.MyOrderDetailActivity"/>
+
+         <activity android:name=".control.me.activity.ShopEvaluateActivity" />
+      
+    </application>
+
+
+</manifest>

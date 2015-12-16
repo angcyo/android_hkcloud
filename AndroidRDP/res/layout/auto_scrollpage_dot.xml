@@ -1,0 +1,7 @@
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ad_item_v"
+    android:layout_width="6dp"
+    android:layout_height="6dp"
+    android:layout_marginLeft="4.5dp"
+    android:layout_marginRight="4.5dp"
+    android:background="@drawable/common_dot_normal" />

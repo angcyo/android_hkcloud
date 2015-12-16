@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f2f2f2"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#ffffff"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="12dp"
+                android:text="手机号"
+                android:textSize="15sp" />
+
+            <com.huika.cloud.views.ClearableEditText
+                android:id="@+id/edit_phone"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="@null"
+                android:digits="@string/register_phone_char"
+                android:gravity="center_vertical"
+                android:hint="@string/login_username_hint"
+                android:maxLength="11"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/common_divider" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/register_pwd_tv"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="12dp"
+                android:text="@string/login_pwd"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/pwd_edit"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/register_pwd_tv"
+                android:background="@null"
+                android:focusableInTouchMode="true"
+                android:hint="@string/register_pwd_no_hint"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:textSize="15sp" />
+
+            <CheckBox
+                android:id="@+id/cb_showpw"
+                style="@style/FindPwdCheckboxTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:checked="true"
+                android:paddingRight="10dp"
+                android:text="" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/common_divider" />
+
+        <RelativeLayout
+            android:id="@+id/rl_code"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" >
+
+            <TextView
+                android:id="@+id/register_code_tv"
+                android:layout_width="85dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="12dp"
+                android:text="@string/register_getcode_title"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_code"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_divider"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:minWidth="50dp"
+                    android:text="@string/register_getcode_hint"
+                    android:textColor="@color/common_bg_cart_money"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <com.huika.cloud.views.ClearableEditText
+                android:id="@+id/edit_code"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@+id/ll_code"
+                android:layout_toRightOf="@+id/register_code_tv"
+                android:background="@null"
+                android:digits="@string/register_phone_char"
+                android:gravity="center_vertical"
+                android:hint="@string/register_code_hint"
+                android:maxLength="6"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textColorHint="@color/common_edit_hint_color"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@color/common_divider" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_comfirm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="68dp"
+        android:background="@drawable/conner_button"
+        android:gravity="center"
+        android:text="@string/common_complete"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/cb_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:button="@drawable/protocol_check_selector"
+            android:checked="true"
+            android:text="我已经阅读并接受"
+            android:textColor="@color/common_text_color"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_protocol"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="《用户注册协议》"
+            android:textColor="#00a0e9"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,3 @@
+include ':HKCloud'
+include ':AndroidRDP'
+include ':HKCloudShareLib'

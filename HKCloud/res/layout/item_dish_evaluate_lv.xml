@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/dish_evaluate_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/comment_user_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/icon_person_comment"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:text="谁****谁"
+            android:textColor="@color/common_text_color"
+            android:textSize="13sp" />
+
+        <RatingBar
+            android:id="@+id/comment_level_rb"
+            style="@style/MySmallRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/comment_user_tv"
+            android:isIndicator="true"
+            android:rating="3"
+            android:stepSize="1.0" />
+
+        <TextView
+            android:id="@+id/comment_dt_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="2014-09-12"
+            android:textColor="@color/common_edit_hint_color"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/comment_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:text="samyfdsafdsafsdafdsafdsafdsafdsafdfsadfdkslkfjsdfsa费的方式的方式答复士大夫的说法放到沙发上的发生地方的撒"
+        android:textColor="@color/common_edit_hint_color"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/machent_res_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:text="[商家回复]：请，谢谢您的建议！"
+        android:textColor="#6c6289"
+        android:textSize="11sp"
+        android:visibility="gone" />
+
+    <com.huika.cloud.views.GridViewForScrollView
+        android:id="@+id/shop_evaluate_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:cacheColorHint="#ffffff"
+        android:divider="@null"
+        android:listSelector="@null"
+        android:numColumns="5"
+        android:visibility="gone" >
+    </com.huika.cloud.views.GridViewForScrollView>
+
+</LinearLayout>

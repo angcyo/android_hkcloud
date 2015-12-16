@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/pic_bg_transparent"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <!-- android:background="@color/transparent" -->
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/im_pic_all_round_corner_white"
+        android:cacheColorHint="#00000000"
+        android:dividerHeight="0.01dp"
+        android:fadingEdge="none"
+        android:gravity="center"
+        android:scrollbars="none"
+        android:divider="#d1d1d1"
+        android:scrollingCache="false" />
+    
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/im_btn_dialog_special"
+        android:gravity="center"
+        android:paddingBottom="9dp"
+        android:paddingTop="9dp"
+        android:text="@string/cancel"
+        android:textColor="#e12228"
+        android:textSize="17sp" />
+
+</LinearLayout>
