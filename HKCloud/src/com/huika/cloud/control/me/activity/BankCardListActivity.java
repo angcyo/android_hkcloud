@@ -1,18 +1,8 @@
 package com.huika.cloud.control.me.activity;
 
-import java.io.File;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.LinearGradient;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -23,16 +13,13 @@ import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
-import com.huika.cloud.config.Constant;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.control.safeaccount.activity.AuthenticationActivity;
-import com.huika.cloud.support.model.AccountDetailBean;
+import com.huika.cloud.support.event.GetUserInfoEvent;
 import com.huika.cloud.support.model.CardBean;
 import com.huika.cloud.support.model.UserModel;
-import com.huika.cloud.util.CommonAlertDialog;
 import com.huika.cloud.util.MMAlertDialog;
-import com.umeng.common.util.DeltaUpdate;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
@@ -44,6 +31,12 @@ import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.greenrobot.event.EventBus;
+
 /**
  * 
  * @description：银行卡列表
@@ -51,41 +44,73 @@ import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
  * @date 2015-12-4 上午10:27:55
  */
 public class BankCardListActivity extends RdpBaseActivity implements OnRefreshItemViewsListener, OnItemClickListener, OnItemLongClickListener {
+	public static final int RESULT_CODE = 55;//结果码
 	private static final int AUTHENTICATION_REQUEST_CODE = 0;//实名认证请求码
 	private static final int SET_PAY_WORD_REQUESTCODE = 1;//设置支付密码请求码
+	int selectedPosition = 0;
 	private View mMasterView;
 	private ListView lv_card;
 	private RdpDataListAdapter<CardBean> mAdapter;
 	private View mFootView;
 	private LinearLayout ll_add_new_card;
 	private UserModel mUser;
+	private Dialog dlg;
+	OnClickListener leftClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			dlg.dismiss();
+		}
+	};
+	private int deletePosition;
+	private RdpNetDataSet cardListData;
+	OnClickListener rightClick = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			dlg.dismiss();
+			CardBean deleteCard = (CardBean) cardListData.getRecord(deletePosition);
+			Type deleteResult = new TypeToken<String>() {
+			}.getType();
+			RdpNetCommand deleteCardCommand = new RdpNetCommand(mApplication, deleteResult);
+			deleteCardCommand.setOnCommandSuccessedListener(BankCardListActivity.this);
+			deleteCardCommand.setOnCommandFailedListener(BankCardListActivity.this);
+			deleteCardCommand.setServerApiUrl(UrlConstant.USER_DELETE_CARD);
+			deleteCardCommand.clearConditions();
+			deleteCardCommand.setCondition("memberId", mUser.memberId);
+			deleteCardCommand.setCondition("cardId", deleteCard.cardId);
+			showLoadingOverLay(lv_card);
+			deleteCardCommand.execute();
+		}
+	};
+	private View no_bank_card_rl;
+
 	@Override
 	protected void initActivity() {
 		super.initActivity();
 		setFuncTitle("银行卡列表");
-		
+
 		mMasterView = addMasterView(R.layout.bank_card_list);
 		mFootView = addFooterView(R.layout.bank_card_lv_foot);
 		initView();
-		
+
 		ll_add_new_card.setOnClickListener(this);
-		
+
 		mAdapter = new RdpDataListAdapter<CardBean>(mApplication,R.layout.card_list_item);
 		mAdapter.setListener(this);
 		lv_card.setAdapter(mAdapter);
 		lv_card.setOnItemClickListener(this);
 		lv_card.setOnItemLongClickListener(this);
-		
+
 		cardListData = new RdpNetDataSet(mApplication);
 		cardListData.setOnCommandSuccessedListener(this);
 		cardListData.setOnCommandFailedListener(this);
-		
+
 	}
+
 	/**获取银行卡列表数据*/
 	private void getCardListData(RdpNetDataSet cardListData) {
 		cardListData.clearConditions();
 		cardListData.setServerApiUrl(UrlConstant.USER_GET_MY_CARD_LIST);
-		cardListData.setCondition("memberId","402894e1511f1b6d01511f1bf30d0000");
+		cardListData.setCondition("memberId", mUser.memberId);
 		Type typeOfResult = new TypeToken<List<CardBean>>() {
 		}.getType();
 		cardListData.setTypeOfResult(typeOfResult);
@@ -96,14 +121,12 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 	private void initView() {
 		lv_card = (ListView) mMasterView.findViewById(R.id.lv_card);
 		ll_add_new_card = (LinearLayout) mFootView.findViewById(R.id.ll_add_new_card);
+		no_bank_card_rl = mMasterView.findViewById(R.id.no_bank_card_rl);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		mUser = new UserModel();
-//		mUser.setRealNameAuthentication(1);
-//		mUser.setTransPassword(1);
 		mUser = HKCloudApplication.getInstance().getUserModel();
 		getCardListData(cardListData);
 	}
@@ -126,11 +149,9 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 		ToastMsg.showToastMsg(mApplication, item.cardNumber+":"+item.bankName);
 		Intent data=new Intent();
 		data.putExtra("select_item", item);
-		setResult(RESULT_OK, data);
+		setResult(BankCardListActivity.RESULT_CODE, data);
 		BankCardListActivity.this.finish();
 	}
-	
-	int selectedPosition=0;
 	
 	@Override
 	public void onBackPressed() {
@@ -144,7 +165,6 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 		BankCardListActivity.this.finish();
 	}
 	
-	
 	@Override
 	public void onClick(View v) {
 		if(v.getTag()!=null&&(Integer)v.getTag()==TBAR_FUNC_BACK){
@@ -153,12 +173,12 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 		switch (v.getId()) {
 			case R.id.ll_add_new_card:
 				//判断是否实名认证
-				if(mUser.getRealNameAuthentication()==0){
+				if (mUser.realNameAuthentication == 0) {
 					//未实名认证
 					startActivityForResult(new Intent(mApplication,AuthenticationActivity.class), AUTHENTICATION_REQUEST_CODE);
 					return;
 				}
-				if(mUser.getTransPassword()==0){
+				if (mUser.transPassword == 0) {
 					//没有设置支付密码
 					Intent intent = new Intent(mApplication, BindBankActivity.class);
 					intent.putExtra(BindBankActivity.INP_TYPE, 1);
@@ -179,26 +199,24 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 				break;
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode==AUTHENTICATION_REQUEST_CODE&&resultCode==AuthenticationActivity.RESULT_CODE){
-			if(mUser.getTransPassword()==0){
+			if (mUser.transPassword == 0) {
 				//没有设置支付密码
 				Intent intent = new Intent(mApplication, BindBankActivity.class);
 				intent.putExtra(BindBankActivity.INP_TYPE, 1);
 				startActivityForResult(intent, SET_PAY_WORD_REQUESTCODE);
 			}
-		};
+		}
 		if(requestCode==SET_PAY_WORD_REQUESTCODE&&resultCode==BindBankActivity.RESULT_CODE){
 			//绑定银行卡
 			startActivity(new Intent(mApplication, AddBankCardActivity.class));
 		}
 	}
 
-	private Dialog dlg;
-	private int deletePosition;
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 		deletePosition = position;
@@ -207,41 +225,20 @@ public class BankCardListActivity extends RdpBaseActivity implements OnRefreshIt
 		return false;
 	}
 	
-	OnClickListener leftClick=new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			dlg.dismiss();
-		}
-	};
-	
-	OnClickListener rightClick=new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			dlg.dismiss();
-			CardBean deleteCard=(CardBean) cardListData.getRecord(deletePosition);
-			Type deleteResult = new TypeToken<String>() {
-			}.getType();
-			RdpNetCommand deleteCardCommand = new RdpNetCommand(mApplication, deleteResult);
-			deleteCardCommand.setOnCommandSuccessedListener(BankCardListActivity.this);
-			deleteCardCommand.setOnCommandFailedListener(BankCardListActivity.this);
-			deleteCardCommand.setServerApiUrl(UrlConstant.USER_DELETE_CARD);
-			deleteCardCommand.clearConditions();
-			deleteCardCommand.setCondition("memberId","402894e1511f1b6d01511f1bf30d0000");
-			deleteCardCommand.setCondition("cardId",deleteCard.cardId);
-			showLoadingOverLay(lv_card);
-			deleteCardCommand.execute();
-		}
-	};
-	private RdpNetDataSet cardListData;
-	
 	@Override
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 		hideOverLayView();
 		if(UrlConstant.USER_GET_MY_CARD_LIST.equals(result.getUrl())){
 			//获取银行卡列表
-			mAdapter.setData((List<CardBean>) data);
+			if (((List<CardBean>) data).size() > 0) {
+				no_bank_card_rl.setVisibility(View.GONE);
+				mAdapter.setData((List<CardBean>) data);
+			} else {
+				no_bank_card_rl.setVisibility(View.VISIBLE);
+			}
 		}
 		if(UrlConstant.USER_DELETE_CARD.equals(result.getUrl())){
+			EventBus.getDefault().post(new GetUserInfoEvent());
 			//删除银行卡
 			getCardListData(cardListData);
 		}

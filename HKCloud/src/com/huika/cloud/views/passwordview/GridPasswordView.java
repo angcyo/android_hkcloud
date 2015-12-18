@@ -1,7 +1,5 @@
 package com.huika.cloud.views.passwordview;
 
-import com.huika.cloud.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -24,6 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.huika.cloud.R;
 
 
 @SuppressLint("NewApi")
@@ -56,6 +56,77 @@ public class GridPasswordView extends LinearLayout implements PasswordView {
     private OnPasswordChangedListener listener;
 
     private PasswordTransformationMethod transformationMethod;
+    private OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            forceInputViewGetFocus();
+        }
+    };
+    private ImeDelBugFixedEditText.OnDelKeyEventListener onDelKeyEventListener = new ImeDelBugFixedEditText.OnDelKeyEventListener() {
+
+        @Override
+        public void onDeleteClick() {
+            for (int i = passwordArr.length - 1; i >= 0; i--) {
+                if (passwordArr[i] != null) {
+                    passwordArr[i] = null;
+                    viewArr[i].setText(null);
+                    notifyTextChanged();
+                    break;
+                } else {
+                    viewArr[i].setText(null);
+                }
+            }
+        }
+    };
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s == null) {
+                return;
+            }
+
+            String newStr = s.toString();
+            if (newStr.length() == 1) {
+                passwordArr[0] = newStr;
+                notifyTextChanged();
+            } else if (newStr.length() == 2) {
+                String newNum = newStr.substring(1);
+                for (int i = 0; i < passwordArr.length; i++) {
+                    if (passwordArr[i] == null) {
+                        passwordArr[i] = newNum;
+                        viewArr[i].setText(newNum);
+                        notifyTextChanged();
+                        break;
+                    }
+                }
+                inputView.removeTextChangedListener(this);
+                inputView.setText(passwordArr[0]);
+                inputView.setSelection(1);
+                inputView.addTextChangedListener(this);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+    @Deprecated
+    private OnKeyListener onKeyListener = new OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+                onDelKeyEventListener.onDeleteClick();
+                return true;
+            }
+            return false;
+        }
+    };
 
     public GridPasswordView(Context context) {
         this(context, null);
@@ -168,13 +239,6 @@ public class GridPasswordView extends LinearLayout implements PasswordView {
         view.setTransformationMethod(transformationMethod);
     }
 
-    private OnClickListener onClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            forceInputViewGetFocus();
-        }
-    };
-
     private GradientDrawable generateBackgroundDrawable() {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(gridColor);
@@ -189,74 +253,6 @@ public class GridPasswordView extends LinearLayout implements PasswordView {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(inputView, InputMethodManager.SHOW_IMPLICIT);
     }
-
-    private ImeDelBugFixedEditText.OnDelKeyEventListener onDelKeyEventListener = new ImeDelBugFixedEditText.OnDelKeyEventListener() {
-
-        @Override
-        public void onDeleteClick() {
-            for (int i = passwordArr.length - 1; i >= 0; i--) {
-                if (passwordArr[i] != null) {
-                    passwordArr[i] = null;
-                    viewArr[i].setText(null);
-                    notifyTextChanged();
-                    break;
-                } else {
-                    viewArr[i].setText(null);
-                }
-            }
-        }
-    };
-
-    private TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s == null) {
-                return;
-            }
-
-            String newStr = s.toString();
-            if (newStr.length() == 1) {
-                passwordArr[0] = newStr;
-                notifyTextChanged();
-            } else if (newStr.length() == 2) {
-                String newNum = newStr.substring(1);
-                for (int i = 0; i < passwordArr.length; i++) {
-                    if (passwordArr[i] == null) {
-                        passwordArr[i] = newNum;
-                        viewArr[i].setText(newNum);
-                        notifyTextChanged();
-                        break;
-                    }
-                }
-                inputView.removeTextChangedListener(this);
-                inputView.setText(passwordArr[0]);
-                inputView.setSelection(1);
-                inputView.addTextChangedListener(this);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    @Deprecated
-    private OnKeyListener onKeyListener = new OnKeyListener() {
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
-                onDelKeyEventListener.onDeleteClick();
-                return true;
-            }
-            return false;
-        }
-    };
 
     private void notifyTextChanged() {
         if (listener == null)
@@ -429,12 +425,12 @@ public class GridPasswordView extends LinearLayout implements PasswordView {
         /**
          * Invoked when the password changed.
          */
-        public void onChanged(String psw);
+        void onChanged(String psw);
 
         /**
          * Invoked when the password is at the maximum length.
          */
-        public void onMaxLength(String psw);
+        void onMaxLength(String psw);
 
     }
 }

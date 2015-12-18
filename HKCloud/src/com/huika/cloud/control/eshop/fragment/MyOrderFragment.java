@@ -1,29 +1,22 @@
 package com.huika.cloud.control.eshop.fragment;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.eshop.actvity.MyOrderActivity;
 import com.huika.cloud.control.eshop.adapter.MyOrderListAdapter;
 import com.huika.cloud.support.model.MyOrderBean;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataSetAdapter;
-import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpFragment;
 import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpNetListBaseFragment;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description：订单Fragment
@@ -31,14 +24,11 @@ import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpNetListBaseFragment;
  * @date 2015-5-26 上午8:58:28
  */
 public class MyOrderFragment extends RdpNetListBaseFragment {//implements OnInitShowListener, Listener<RequestResult<List<MyOrderBean>>>, IOrderCallBack, IMyOrderBusiOper{
+	public static final String IPN_ORDER_TYPE = "IPN_ORDER_TYPE";
+	public static final String LOAD_INIT = "load_init";
 	private static final String BUNDLE_DATAS = "BUNDLE_DATAS";
 	private static final String BUNDLE_PAGE = "BUNDLE_PAGE";
 	private static final String BUNDLE_LOADINIT = "BUNDLE_LOADINIT";
-
-	public static final String IPN_ORDER_TYPE = "IPN_ORDER_TYPE";
-
-	public static final String LOAD_INIT = "load_init";
-
 	private List<MyOrderBean> mOrderDataList = new ArrayList<MyOrderBean>();
 	private int mOrderType = MyOrderActivity.ORDER_TYPE_ALL;
 	private boolean loadOnInit = false;
@@ -178,8 +168,7 @@ public class MyOrderFragment extends RdpNetListBaseFragment {//implements OnInit
 //		if (mPullRefreshListView != null) {
 //			mPullRefreshListView.onRefreshComplete();
 //		}
-		if (mMasterAdapter == null || mMasterAdapter.isEmpty()) { return true; }
-		return false;
+		return mMasterAdapter == null || mMasterAdapter.isEmpty();
 	}
 
 //	@Override

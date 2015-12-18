@@ -1,10 +1,5 @@
 package com.huika.cloud.views;
 
-import java.util.ArrayList;
-
-import com.huika.cloud.R;
-import com.huika.cloud.control.base.HKCloudApplication;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -22,19 +17,24 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.huika.cloud.R;
+import com.huika.cloud.control.base.HKCloudApplication;
+
+import java.util.ArrayList;
+
 /**
  * @Description:自定义PopupWindows
  * @date 2015-7-17 下午1:56:04
  */
 public class ButtomPopup extends PopupWindow {
 
-	private Context mContext;
 	// 列表弹窗的间隔
 	protected final int LIST_PADDING = 10;
-	// 实例化一个矩形
-	private Rect mRect = new Rect();
 	// 坐标的位置（x、y）
 	private final int[] mLocation = new int[2];
+	private Context mContext;
+	// 实例化一个矩形
+	private Rect mRect = new Rect();
 	// 屏幕的宽度和高度
 	private int mScreenWidth, mScreenHeight;
 	// 判断是否需要添加或更新列表子类项
@@ -212,15 +212,9 @@ public class ButtomPopup extends PopupWindow {
 			// 表明下标为position 的item不可选中，不可点击
 			@Override
 			public boolean isEnabled(int position) {
-				if (mActionItems.get(position).isTopSpecial) { return false; }
-				return true;
+				return !mActionItems.get(position).isTopSpecial;
 			}
 		});
-	}
-
-	class PopHolder {
-		TextView actionInfo;
-		ImageView actionImage;
 	}
 
 	/**
@@ -274,8 +268,13 @@ public class ButtomPopup extends PopupWindow {
 	 * @author samy
 	 * @date 2014年8月25日 上午12:04:14
 	 */
-	public static interface OnPopupItemOnClickListener {
-		public void onPopupItemClick(ActionPopupItem item, int position);
+	public interface OnPopupItemOnClickListener {
+		void onPopupItemClick(ActionPopupItem item, int position);
+	}
+
+	class PopHolder {
+		TextView actionInfo;
+		ImageView actionImage;
 	}
 
 }

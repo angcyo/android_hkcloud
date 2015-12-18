@@ -1,8 +1,5 @@
 package com.huika.cloud.views;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +12,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * 包含两个ScrollView的容器
  * 更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38656929
@@ -22,22 +22,6 @@ import android.widget.ScrollView;
  * @author chenjing
  */
 public class ScrollViewContainer extends RelativeLayout {
-  public interface OnScrollPageChangeListener {
-    /**
-     * 当前显示页变动监听
-     *
-     * @author FAN 创建于Jan 8, 2015
-     */
-    void onScrollPageChangeListener(int pageNum);
-
-    /**
-     * 翻页动作监听
-     *
-     * @author FAN 创建于Jan 8, 2015
-     */
-    void onScrollPage();
-  }
-
   /**
    * 自动上滑
    */
@@ -54,25 +38,19 @@ public class ScrollViewContainer extends RelativeLayout {
    * 动画速度
    */
   public static final float SPEED = 6.5f;
-
   private boolean isMeasured = false;
-
   /**
    * 用于计算手滑动的速度
    */
   private VelocityTracker vt;
-
   private int mViewHeight;
   private int mViewWidth;
-
   private View topView;
   private View bottomView;
   private ScrollView mBottomScrollView;
-
   private boolean canPullDown;
   private boolean canPullUp;
   private int state = DONE;
-
   /**
    * 记录当前展示的是哪个view，0是topView，1是bottomView
    */
@@ -88,9 +66,7 @@ public class ScrollViewContainer extends RelativeLayout {
    * 这点是去除多点拖动剧变的关键
    */
   private int mEvents;
-
   private OnScrollPageChangeListener onScrollPageChangeListener;
-
   private Handler handler = new Handler() {
 
     @Override public void handleMessage(Message msg) {
@@ -120,6 +96,43 @@ public class ScrollViewContainer extends RelativeLayout {
       requestLayout();
     }
   };
+  private OnTouchListener topViewTouchListener = new OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+      ScrollView sv = (ScrollView) v;
+      canPullUp = sv.getScrollY() == (sv.getChildAt(0).getMeasuredHeight() - sv.getMeasuredHeight())
+              && mCurrentViewIndex == 0;
+      return false;
+    }
+  };
+  private OnTouchListener bottomViewTouchListener = new OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+      if (v instanceof ScrollView) {
+        ScrollView sv = (ScrollView) v;
+        canPullDown = sv.getScrollY() == 0 && mCurrentViewIndex == 1;
+      } else if (v instanceof ListView) {
+        ListView listView = (ListView) v;
+        canPullDown = listView.getFirstVisiblePosition() == 0 && mCurrentViewIndex == 1;
+      }
+      return false;
+    }
+  };
+
+  public ScrollViewContainer(Context context) {
+    super(context);
+    init();
+  }
+
+  public ScrollViewContainer(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    init();
+  }
+
+  public ScrollViewContainer(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+    init();
+  }
 
   private void invokePageChangeListener() {
     if (onScrollPageChangeListener != null) {
@@ -141,21 +154,6 @@ public class ScrollViewContainer extends RelativeLayout {
   public void setScollPageToTop() {
     state = AUTO_DOWN;
     mTimer.schedule(2);
-  }
-
-  public ScrollViewContainer(Context context) {
-    super(context);
-    init();
-  }
-
-  public ScrollViewContainer(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    init();
-  }
-
-  public ScrollViewContainer(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
-    init();
   }
 
   private void init() {
@@ -321,39 +319,21 @@ public class ScrollViewContainer extends RelativeLayout {
     return null;
   }
 
-  private OnTouchListener topViewTouchListener = new OnTouchListener() {
-    @Override public boolean onTouch(View v, MotionEvent event) {
-      ScrollView sv = (ScrollView) v;
-      if (sv.getScrollY() == (sv.getChildAt(0).getMeasuredHeight() - sv.getMeasuredHeight())
-          && mCurrentViewIndex == 0) {
-        canPullUp = true;
-      } else {
-        canPullUp = false;
-      }
-      return false;
-    }
-  };
+  public interface OnScrollPageChangeListener {
+    /**
+     * 当前显示页变动监听
+     *
+     * @author FAN 创建于Jan 8, 2015
+     */
+    void onScrollPageChangeListener(int pageNum);
 
-  private OnTouchListener bottomViewTouchListener = new OnTouchListener() {
-    @Override public boolean onTouch(View v, MotionEvent event) {
-      if (v instanceof ScrollView) {
-        ScrollView sv = (ScrollView) v;
-        if (sv.getScrollY() == 0 && mCurrentViewIndex == 1) {
-          canPullDown = true;
-        } else {
-          canPullDown = false;
-        }
-      } else if (v instanceof ListView) {
-        ListView listView = (ListView) v;
-        if (listView.getFirstVisiblePosition() == 0 && mCurrentViewIndex == 1) {
-          canPullDown = true;
-        } else {
-          canPullDown = false;
-        }
-      }
-      return false;
-    }
-  };
+    /**
+     * 翻页动作监听
+     *
+     * @author FAN 创建于Jan 8, 2015
+     */
+    void onScrollPage();
+  }
 
   class MyTimer {
     private Handler handler;

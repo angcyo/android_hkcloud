@@ -20,12 +20,7 @@ public class NetUtil {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);// 获取系统的连接服务
 		if (connectivityManager == null) return false;
 		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();// 获取网络的连接情况
-		if (activeNetInfo != null && activeNetInfo.isConnected() && activeNetInfo.isAvailable()) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return activeNetInfo != null && activeNetInfo.isConnected() && activeNetInfo.isAvailable();
 	}
 
 	public static boolean isConnectionType(Context context, int type) {
@@ -101,8 +96,7 @@ public class NetUtil {
 		if (State.CONNECTED == state) { return true; }
 		// 获取MOBILE状态
 		state = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
-		if (State.CONNECTED == state) { return true; }
-		return false;
+		return State.CONNECTED == state;
 	}
 
 	public static boolean isWifiOpen(Context context) {

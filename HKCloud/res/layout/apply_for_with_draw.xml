@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEDF2"
-    android:id="@+id/ll_master"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -28,9 +28,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="转出到银行卡"
                     android:textColor="@color/common_text_color"
-                    android:text="转出到银行卡" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <View
                     android:id="@+id/card_selected"
@@ -57,9 +57,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                     android:textSize="@dimen/common_textview_size"
+                    android:text="转出到微信钱包"
                      android:textColor="@color/common_text_color"
-                    android:text="转出到微信钱包" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <View
                     android:layout_width="match_parent"
@@ -94,19 +94,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                     android:textSize="@dimen/common_textview_size"
+                    android:text="储蓄卡"
                      android:textColor="@color/common_text_color"
-                    android:text="储蓄卡" />
+                    android:textSize="@dimen/common_textview_size" />
 
-                <TextView
+                <EditText
                     android:id="@+id/card_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="96dp"
-                     android:textSize="@dimen/common_textview_size"
+                    android:background="@null"
+                    android:focusable="false"
+                    android:hint="请选择银行卡"
                      android:textColor="@color/common_text_color"
-                    android:text="请选择银行卡" />
+                    android:textColorHint="@color/common_edit_hint_color"
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -132,21 +135,21 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                     android:textSize="@dimen/common_textview_size"
+                    android:text="金额"
                      android:textColor="@color/common_text_color"
-                    android:text="金额" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <EditText
                     android:id="@+id/card_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:background="@null"
                     android:layout_marginLeft="96dp"
-                     android:textSize="@dimen/common_textview_size"
-                     android:textColorHint="@color/common_edit_hint_color"
+                    android:background="@null"
+                    android:hint="当前余额"
                     android:textColor="@color/common_text_color"
-                    android:hint="当前余额" />
+                    android:textColorHint="@color/common_edit_hint_color"
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -162,8 +165,8 @@
             android:id="@+id/ll_weixin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -175,9 +178,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="我的微信号:"
                     android:textColor="#333333"
-                    android:text="我的微信号:" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <TextView
                     android:id="@+id/weixin_num"
@@ -185,9 +188,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="96dp"
-                     android:textSize="@dimen/common_textview_size"
+                    android:text="微信号"
                     android:textColor="#333333"
-                    android:text="微信号" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -213,21 +216,21 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                     android:textSize="@dimen/common_textview_size"
+                    android:text="金额"
                     android:textColor="#333333"
-                    android:text="金额" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <EditText
                     android:id="@+id/wx_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:background="@null"
-                     android:textSize="@dimen/common_textview_size"
-                    android:textColor="#333333"
-                    android:cursorVisible="false"
                     android:layout_marginLeft="96dp"
-                    android:hint="本次最多可取现200元" />
+                    android:background="@null"
+                    android:cursorVisible="false"
+                    android:hint="本次最多可取现200元"
+                    android:textColor="#333333"
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -240,28 +243,29 @@
         </LinearLayout>
     </LinearLayout>
     <Button
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:background="@drawable/confirm_button_selected"
         android:id="@+id/confirm_apply_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:enabled="false"
-        android:textColor="@color/white"
-        android:text="确认申请" />
-    <Button 
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/confirm_button_selected"
+        android:enabled="false"
+        android:text="确认申请"
+        android:textColor="@color/white" />
+
+    <Button
         android:id="@+id/confirm_apply_weixin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:layout_marginTop="70dp"
-        android:visibility="gone"
+        android:background="@drawable/confirm_button_selected"
         android:enabled="false"
-        android:textColor="@color/white"
         android:text="确认申请"
+        android:textColor="@color/white"
+        android:visibility="gone"
         />
 
 </LinearLayout>

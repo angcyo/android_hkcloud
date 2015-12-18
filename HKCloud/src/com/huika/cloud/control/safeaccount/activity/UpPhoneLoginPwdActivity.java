@@ -1,7 +1,5 @@
 package com.huika.cloud.control.safeaccount.activity;
 
-import java.lang.reflect.Type;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +16,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
+import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
+
+import java.lang.reflect.Type;
 
 /**
  * @description：绑订的手机号码来修改登录密码
@@ -44,8 +45,8 @@ public class UpPhoneLoginPwdActivity extends RdpBaseActivity {
     	setFuncTitle(getString(R.string.update_login_pwd_title));
     	mViews = addMasterView(R.layout.update_phone_login_pwd);
     	RdpAnnotationUtil.inject(this);
-    	tvPhone.setText("你的手机：" + HKCloudApplication.getInstance().getUserModel().getAccount());
-    }
+		 tvPhone.setText("你的手机：" + HKCloudApplication.getInstance().getUserModel().account);
+	 }
 	
 	@OnClick({R.id.phone_update_btn_login,R.id.tv_code_pwd})
 	@Override
@@ -81,7 +82,7 @@ public class UpPhoneLoginPwdActivity extends RdpBaseActivity {
 		codePwdCommand.clearConditions(); 
 		codePwdCommand.setCondition("merchantId",HKCloudApplication.MERCHANTID);
 		codePwdCommand.setCondition("type", 4);
-		codePwdCommand.setCondition("phone", HKCloudApplication.getInstance().getUserModel().getAccount());
+		codePwdCommand.setCondition("phone", HKCloudApplication.getInstance().getUserModel().phone);
 		codePwdCommand.execute();
 	}
 
@@ -101,9 +102,9 @@ public class UpPhoneLoginPwdActivity extends RdpBaseActivity {
 		updatePwdCommand.setServerApiUrl(UrlConstant.USER_CHANGEPASSWORD); //网络链接地址接口
 		updatePwdCommand.clearConditions(); 
 		updatePwdCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		updatePwdCommand.setCondition("memberId", mUser.getMemberId());
-		updatePwdCommand.setCondition("oldPassWord", "");
-		updatePwdCommand.setCondition("passWord", mEdtNewPwd.getText().toString());
+		updatePwdCommand.setCondition("userId", mUser.userId);
+		updatePwdCommand.setCondition("oldPassword", "");
+		updatePwdCommand.setCondition("password", MD5Security.getMd5_32_UP(mEdtNewPwd.getText().toString()));
 		updatePwdCommand.setCondition("type", 1); // 1登陆密码 2交易密码 3设置交易密码
 		updatePwdCommand.setCondition("validateCode", mEdtPhoneCode.getText().toString());
 		updatePwdCommand.execute();

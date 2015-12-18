@@ -8,8 +8,6 @@
 
 package cn.sharesdk.onekeyshare;
 
-import static com.mob.tools.utils.R.*;
-
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -19,9 +17,13 @@ import android.hardware.SensorManager;
 import android.util.FloatMath;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
+import android.widget.Toast;
+
 import com.mob.tools.FakeActivity;
+
+import static com.mob.tools.utils.R.getBitmapRes;
+import static com.mob.tools.utils.R.getStringRes;
 
 /** 摇一摇启动分享的例子 */
 public class Shake2Share extends FakeActivity implements SensorEventListener {
@@ -132,7 +134,7 @@ public class Shake2Share extends FakeActivity implements SensorEventListener {
 
   }
 
-  public static interface OnShakeListener {
-    public void onShake();
+  public interface OnShakeListener {
+    void onShake();
   }
 }

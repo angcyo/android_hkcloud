@@ -11,18 +11,18 @@ public interface PinnedHeaderStateListener extends OnScrollListener {
   /**
    * Pinned header state: don't show the header.
    */
-  public static final int PINNED_HEADER_GONE = 0;
+  int PINNED_HEADER_GONE = 0;
 
   /**
    * Pinned header state: show the header at the top of the list.
    */
-  public static final int PINNED_HEADER_VISIBLE = 1;
+  int PINNED_HEADER_VISIBLE = 1;
 
   /**
    * Pinned header state: show the header. If the header extends beyond
    * the bottom of the first shown element, push it up and clip.
    */
-  public static final int PINNED_HEADER_PUSHED_UP = 2;
+  int PINNED_HEADER_PUSHED_UP = 2;
 
   /**
    * Computes the desired state of the pinned header for the given

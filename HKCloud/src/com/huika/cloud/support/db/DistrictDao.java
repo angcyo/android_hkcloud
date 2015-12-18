@@ -1,14 +1,14 @@
 package com.huika.cloud.support.db;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.huika.cloud.support.model.City;
 import com.huika.cloud.support.model.District;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
@@ -22,18 +22,8 @@ import de.greenrobot.dao.internal.SqlUtils;
 public class DistrictDao extends AbstractDao<District, Integer> {
 
 	public static final String TABLENAME = "District";
-
-	/**
-	 * Properties of entity District.<br/>
-	 * Can be used for QueryBuilder and for referencing column names.
-	*/
-	public static class Properties {
-		public final static Property DistrictID = new Property(0, int.class, "districtID", true, "districtID");
-		public final static Property DistrictName = new Property(1, String.class, "districtName", false, "districtName");
-		public final static Property CityID = new Property(2, int.class, "cityID", false, "cityID");
-	};
-
 	private AddressDaoSession daoSession;
+	private String selectDeep;
 
 	public DistrictDao(DaoConfig config) {
 		super(config);
@@ -126,8 +116,6 @@ public class DistrictDao extends AbstractDao<District, Integer> {
 		return true;
 	}
 
-	private String selectDeep;
-
 	protected String getSelectDeep() {
 		if (selectDeep == null) {
 			StringBuilder builder = new StringBuilder("SELECT ");
@@ -217,6 +205,16 @@ public class DistrictDao extends AbstractDao<District, Integer> {
 	public List<District> queryDeep(String where, String... selectionArg) {
 		Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
 		return loadDeepAllAndCloseCursor(cursor);
+	}
+
+	/**
+	 * Properties of entity District.<br/>
+	 * Can be used for QueryBuilder and for referencing column names.
+	 */
+	public static class Properties {
+		public final static Property DistrictID = new Property(0, int.class, "districtID", true, "districtID");
+		public final static Property DistrictName = new Property(1, String.class, "districtName", false, "districtName");
+		public final static Property CityID = new Property(2, int.class, "cityID", false, "cityID");
 	}
 
 }

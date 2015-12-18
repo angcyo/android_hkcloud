@@ -15,8 +15,6 @@
  */
 package com.huika.cloud.views.wheel.widget.adapters;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -26,6 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Abstract wheel adapter provides common functionality for adapters.
  */
@@ -33,23 +33,18 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
 
 	/** Text view resource. Used as a default view for adapter. */
 	public static final int TEXT_VIEW_ITEM_RESOURCE = -1;
-
-	/** No resource constant. */
-	protected static final int NO_RESOURCE = 0;
-
 	/** Default text color */
 	public static final int DEFAULT_TEXT_COLOR = 0xFF101010;
-
 	/** Default text color */
 	public static final int LABEL_COLOR = 0xFF700070;
-
 	/** Default text size */
 	public static final int DEFAULT_TEXT_SIZE = 24;
-
-	// Text settings
-	private int textColor = DEFAULT_TEXT_COLOR;
-	private int textSize = DEFAULT_TEXT_SIZE;
-
+	/**
+	 * No resource constant.
+	 */
+	protected static final int NO_RESOURCE = 0;
+	private static int maxsize = 24;
+	private static int minsize = 14;
 	// Current context
 	protected Context context;
 	// Layout inflater
@@ -61,10 +56,10 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
 
 	// Empty items resources
 	protected int emptyItemResourceId;
-
+	// Text settings
+	private int textColor = DEFAULT_TEXT_COLOR;
+	private int textSize = DEFAULT_TEXT_SIZE;
 	private int currentIndex = 0;
-	private static int maxsize = 24;
-	private static int minsize = 14;
 	private ArrayList<View> arrayList = new ArrayList<View>();
 
 	/**
@@ -107,8 +102,8 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
 		itemResourceId = itemResource;
 		itemTextResourceId = itemTextResource;
 		this.currentIndex = currentIndex;
-		this.maxsize = maxsize;
-		this.minsize = minsize;
+		AbstractWheelTextAdapter.maxsize = maxsize;
+		AbstractWheelTextAdapter.minsize = minsize;
 
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}

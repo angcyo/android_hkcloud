@@ -1,9 +1,9 @@
 package com.zhoukl.androidRDP.RdpModel;
 
-import java.io.Serializable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /** 
  * @description：
@@ -12,25 +12,9 @@ import android.os.Parcelable;
  */
 public class BaseUserBean implements Serializable, Parcelable {
     private static final long serialVersionUID = -6618630209605916889L;
-    
-    protected String memberId;
-    protected String account;
-    
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
+    public String userId;   //:用户ID
+    public String memberId; // 会员id
+    public String account;
 
 	@Override
     public int describeContents() {

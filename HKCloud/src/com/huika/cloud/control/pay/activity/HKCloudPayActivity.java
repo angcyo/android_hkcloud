@@ -1,8 +1,5 @@
 package com.huika.cloud.control.pay.activity;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,6 +45,9 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 /**
  * @description：惠云支付界面
  * @author shicm
@@ -76,12 +76,48 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 	private Button payconfirm_btn;
 
 	private double amountMoney = 0;
+	private double mBalance = 0;
 	private String orderNum;
 	private AddressBean mAddress;
+	Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+				case AlipayUtil.SDK_PAY_FLAG:
+					PayResult payResult = new PayResult((String) msg.obj);
+					// 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+					String resultInfo = payResult.getResult();
+					String resultStatus = payResult.getResultStatus();
+					// 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+					if (TextUtils.equals(resultStatus, "9000")) {
+						showToastMsg("支付成功");
+						Intent intent = new Intent(HKCloudPayActivity.this, PayResultActivty.class);
+						Bundle bundle = new Bundle();
+						bundle.putDouble(PayResultActivty.INP_SUCCESSMONEY, amountMoney);
+						bundle.putSerializable(PayResultActivty.INP_SUCCESSADRESS, mAddress);
+						intent.putExtras(bundle);
+						HKCloudPayActivity.this.startActivity(intent);
+					} else {
+						// 判断resultStatus 为非“9000”则代表可能支付失败
+						// “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
+						if (TextUtils.equals(resultStatus, "8000")) {
+							showToastMsg("支付结果确认中");
+						} else {
+							// 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+							showToastMsg("支付失败");
+						}
+					}
+					break;
 
+				default:
+					break;
+			}
+		}
+
+	};
 	private PayTypeAdapter payTypeAdapter;
 	private List<PayChannelBean> payList = PayChannelBean.getData();
-
 	private IWXAPI msgApi = WXAPIFactory.createWXAPI(this, null);
 	private PayReq req;
 
@@ -96,6 +132,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 		amountMoney = getIntent().getDoubleExtra(INP_HKCLOUD_PAY, 0.0);
 		orderNum = getIntent().getStringExtra(INP_HKCLOUD_ORDER_NUM);
 		mAddress = (AddressBean) getIntent().getSerializableExtra(INP_HKCLOUD_ORDER_ADDRESS);
+		mBalance = HKCloudApplication.getInstance().getUserModel().balance;
 	}
 
 	private void initView() {
@@ -120,7 +157,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 				initAdapterUI(isChecked);
 				break;
 			case R.id.protocol_checkout_cb:
-				if (mPayType == 0 && HKCloudApplication.getInstance().getUserModel().getBalance() < amountMoney && isChecked) {
+				if (mPayType == 0 && mBalance < amountMoney && isChecked) {
 					payconfirm_btn.setEnabled(false);
 				} else {
 					payconfirm_btn.setEnabled(isChecked);
@@ -138,8 +175,8 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 	 * @date 2015-11-25 下午4:35:07
 	 */
 	private void initComfirmUI() {
-		if (HKCloudApplication.getInstance().getUserModel().getBalance() < amountMoney) {
-			if (HKCloudApplication.getInstance().getUserModel().getBalance() == 0) {
+		if (mBalance < amountMoney) {
+			if (mBalance == 0) {
 				hkcloud_checkout_cb.setChecked(false);
 				hkcloud_checkout_cb.setEnabled(false);
 			}
@@ -154,7 +191,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 		hkcloud_checkout_cb.setChecked(isChecked);
 		if (isChecked) {
 			// 余额大于登于要付的钱,点击余额是余额支付，其他的不处理
-			if (HKCloudApplication.getInstance().getUserModel().getBalance() >= amountMoney) {
+			if (mBalance >= amountMoney) {
 				// 余额支付
 				mPayType = 0;
 				payTypeAdapter.setNoSelect(true);
@@ -182,7 +219,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 				} else if (mPayType == 2) {
 					requestPay("");
 				} else {
-					if (HKCloudApplication.getInstance().getUserModel().getTransPassword() == 0) {
+					if (HKCloudApplication.getInstance().getUserModel().transPassword == 0) {
 						Dialog dialog = MMAlertDialog.ClearcacheDate(this, "还没有设置支付密码,是否现在去设置支付密码？", this, new OnClickListener() {
 							@Override
 							public void onClick(View v) {
@@ -225,7 +262,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 		RdpNetCommand payCommand = new RdpNetCommand(this, payOfType);
 		payCommand.clearConditions();
 		payCommand.setServerApiUrl(UrlConstant.ORDER_PAYVALIDATE);
-		payCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId());
+		payCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId);
 		payCommand.setCondition("orderNumber", orderNum);
 		payCommand.setCondition("payPwd", psw);
 		payCommand.setCondition("amount", amountMoney);
@@ -246,7 +283,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 		} else if (mPayType == 2) {// 微信
 			wxPayReq((WeixinPay) data);
 		} else if (mPayType == 3) {// 余额支付 + 支付宝
-			double balance = HKCloudApplication.getInstance().getUserModel().getBalance();
+			double balance = mBalance;
 			aliPayReq(amountMoney - balance);
 		} else if (mPayType == 4) {// 余额支付 + 微信
 			wxPayReq((WeixinPay) data);
@@ -276,7 +313,7 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 					}
 					refreshUI(position);
 				} else {
-					if (protocol_checkout_cb.isChecked() && HKCloudApplication.getInstance().getUserModel().getBalance() > amountMoney) {
+					if (protocol_checkout_cb.isChecked() && mBalance > amountMoney) {
 						payconfirm_btn.setEnabled(true); // 确定按钮的监听
 					} else {
 						payconfirm_btn.setEnabled(false);
@@ -295,15 +332,11 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 	private void refreshUI(int position) {
 		payTypeAdapter.setNoSelect(false);
 		for (int i = 0; i < payList.size(); i++) {
-			if (i == position) {
-				payList.get(i).isSelect = true;
-			} else {
-				payList.get(i).isSelect = false;
-			}
+			payList.get(i).isSelect = i == position;
 		}
 		payTypeAdapter.notifyDataSetChanged();
 		if (hkcloud_checkout_cb.isChecked()) {
-			if (HKCloudApplication.getInstance().getUserModel().getBalance() < amountMoney) {
+			if (mBalance < amountMoney) {
 				mPayType = payList.get(position).type;
 				hkcloud_checkout_cb.setChecked(false);
 			} else {
@@ -343,42 +376,4 @@ public class HKCloudPayActivity extends RdpBaseActivity implements OnCheckedChan
 		AlipayUtil alipayUtil = new AlipayUtil(this, mHandler, "惠云商品", "惠云商品详情", orderNum, money);
 		new Thread(alipayUtil).start();
 	}
-
-	Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-				case AlipayUtil.SDK_PAY_FLAG:
-					PayResult payResult = new PayResult((String) msg.obj);
-					// 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
-					String resultInfo = payResult.getResult();
-					String resultStatus = payResult.getResultStatus();
-					// 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
-					if (TextUtils.equals(resultStatus, "9000")) {
-						showToastMsg("支付成功");
-						Intent intent = new Intent(HKCloudPayActivity.this, PayResultActivty.class);
-						Bundle bundle = new Bundle();
-						bundle.putDouble(PayResultActivty.INP_SUCCESSMONEY, amountMoney);
-						bundle.putSerializable(PayResultActivty.INP_SUCCESSADRESS, mAddress);
-						intent.putExtras(bundle);
-						HKCloudPayActivity.this.startActivity(intent);
-					} else {
-						// 判断resultStatus 为非“9000”则代表可能支付失败
-						// “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
-						if (TextUtils.equals(resultStatus, "8000")) {
-							showToastMsg("支付结果确认中");
-						} else {
-							// 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
-							showToastMsg("支付失败");
-						}
-					}
-					break;
-
-				default:
-					break;
-			}
-		}
-
-	};
 }

@@ -1,9 +1,5 @@
 package com.huika.cloud.util;
 
-import com.huika.cloud.R;
-import com.huika.cloud.util.help.BaseEffects;
-import com.huika.cloud.util.help.Effectstype;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +18,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.huika.cloud.R;
+import com.huika.cloud.util.help.BaseEffects;
+import com.huika.cloud.util.help.Effectstype;
 
 /**
  * 通用弹出对话框
@@ -77,15 +77,6 @@ public class CommonAlertDialog extends Dialog {
 		init(context);
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		WindowManager.LayoutParams params = getWindow().getAttributes();
-		params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-		params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-		getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-	}
-
 	/**
 	 * 这里不能使用单例，已经改过来，待改方法名称
 	 *
@@ -95,6 +86,15 @@ public class CommonAlertDialog extends Dialog {
 	 */
 	public static CommonAlertDialog getInstance(Context context) {
 		return new CommonAlertDialog(context, R.style.common_dialog);
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		WindowManager.LayoutParams params = getWindow().getAttributes();
+		params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+		params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+		getWindow().setAttributes(params);
 	}
 
 	private void init(Context context) {

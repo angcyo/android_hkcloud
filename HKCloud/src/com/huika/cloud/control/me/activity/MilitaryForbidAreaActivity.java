@@ -30,7 +30,7 @@ public class MilitaryForbidAreaActivity extends RdpBaseActivity {
 	protected void initActivity() {
 		mView = addMasterView(R.layout.military_forbid_area_activity);
 		initView();
-	};
+	}
 
 	private void initView() {
 		mrbRelease = (RadioButton) mView.findViewById(R.id.rbRelease);

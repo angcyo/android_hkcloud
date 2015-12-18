@@ -10,20 +10,9 @@ import android.widget.TextView;
  * 实现类似checkbox的切换效果，需要完善背景的切换
  */
 public class CheckedTextView extends TextView implements Checkable {
-  public static interface OnCheckedChangeListener {
-    /**
-     * Called when the checked state of a compound button has changed.
-     *
-     * @param buttonView The compound button view whose state has changed.
-     * @param isChecked The new checked state of buttonView.
-     */
-    void onCheckedChanged(Checkable checkableView, boolean isChecked);
-  }
-
   private boolean mChecked;
   private OnCheckedChangeListener mOnCheckedChangeListener;
   private boolean mToggable;
-
   public CheckedTextView(Context context, AttributeSet attrs) {
     super(context, attrs, 0);
   }
@@ -31,18 +20,6 @@ public class CheckedTextView extends TextView implements Checkable {
   public CheckedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     setChecked(mChecked);
-  }
-
-  @Override public void setChecked(boolean checked) {
-    if (mChecked != checked) {
-      mChecked = checked;
-      refreshDrawableState();
-
-      // Avoid infinite recursions if setChecked() is called from a listener
-      if (mOnCheckedChangeListener != null) {
-        mOnCheckedChangeListener.onCheckedChanged(this, mChecked);
-      }
-    }
   }
 
   @Override protected void drawableStateChanged() {
@@ -60,6 +37,19 @@ public class CheckedTextView extends TextView implements Checkable {
 
   @Override public boolean isChecked() {
     return mChecked;
+  }
+
+  @Override
+  public void setChecked(boolean checked) {
+    if (mChecked != checked) {
+      mChecked = checked;
+      refreshDrawableState();
+
+      // Avoid infinite recursions if setChecked() is called from a listener
+      if (mOnCheckedChangeListener != null) {
+        mOnCheckedChangeListener.onCheckedChanged(this, mChecked);
+      }
+    }
   }
 
   @Override public void toggle() {
@@ -87,5 +77,15 @@ public class CheckedTextView extends TextView implements Checkable {
 
   public void setToggable(boolean toggable) {
     this.mToggable = toggable;
+  }
+
+  public interface OnCheckedChangeListener {
+    /**
+     * Called when the checked state of a compound button has changed.
+     *
+     * @param buttonView The compound button view whose state has changed.
+     * @param isChecked  The new checked state of buttonView.
+     */
+    void onCheckedChanged(Checkable checkableView, boolean isChecked);
   }
 }

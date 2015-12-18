@@ -1,8 +1,5 @@
 package com.huika.cloud.control.eshop.common;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
@@ -15,10 +12,8 @@ import android.widget.Spinner;
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
-import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.control.eshop.adapter.MyOrderListAdapter;
 import com.huika.cloud.control.pay.activity.HKCloudPayActivity;
-import com.huika.cloud.support.model.CartProduct;
 import com.huika.cloud.support.model.MyOrderBean;
 import com.huika.cloud.support.model.OrderGoodsBean;
 import com.huika.cloud.util.CommonAlertDialog;
@@ -27,6 +22,10 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpCommand.OnCommandSuccessedListener
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyOrderBusiOper implements OnCommandSuccessedListener, OnCommandFailedListener {
 
@@ -446,11 +445,6 @@ public class MyOrderBusiOper implements OnCommandSuccessedListener, OnCommandFai
 	// }
 	// };
 
-	public interface IMyOrderBusiOper {
-
-		public void onBusiOperResult(int busiOperType, MyOrderBean data);
-	}
-
 	@Override
 	public void onCommandFailed(Object reqKey, RdpResponseResult result) {
 		mActivity.dismissLoadingDialog();
@@ -460,6 +454,11 @@ public class MyOrderBusiOper implements OnCommandSuccessedListener, OnCommandFai
 	@Override
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 
+	}
+
+	public interface IMyOrderBusiOper {
+
+		void onBusiOperResult(int busiOperType, MyOrderBean data);
 	}
 
 }

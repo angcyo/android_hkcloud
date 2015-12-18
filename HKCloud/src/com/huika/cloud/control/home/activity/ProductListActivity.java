@@ -1,27 +1,10 @@
 package com.huika.cloud.control.home.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -32,20 +15,16 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.PopupWindow.OnDismissListener;
 
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -55,16 +34,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.home.adapter.FilterAttrAdapter;
-import com.huika.cloud.control.home.fragment.FilterFragment;
-import com.huika.cloud.support.model.AccountDetailBean;
+import com.huika.cloud.support.event.FinishEvent;
 import com.huika.cloud.support.model.AttrBean;
 import com.huika.cloud.support.model.AttrItemBean;
 import com.huika.cloud.support.model.BrandBean;
 import com.huika.cloud.support.model.ProductBean;
-import com.huika.cloud.support.model.SKUItemValueBean;
-import com.huika.cloud.views.ActionPopupItem;
-import com.huika.cloud.views.TitlePopup;
-import com.huika.cloud.views.TitlePopup.OnItemOnClickListener;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
@@ -73,9 +47,18 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetDataSet;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
-import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerListView;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * @description：商品列表
@@ -85,6 +68,7 @@ import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerListView;
 public class ProductListActivity extends RdpBaseActivity implements OnRefreshItemViewsListener, OnItemClickListener {
 	private static final int REQUEST_CODE = 50;
 	private static final String POP_LV_TAG = "popLvTag";
+	onGotoNextPopListener onGotoNextPopListener;
 	private String coming;
 	private View headView;
 	private View mMasterView;
@@ -100,11 +84,10 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 	private RelativeLayout rl_tabRb1, rl_tabRb2, rl_tabRb4;
 	/** 排序字段 0-综合 1-最终交易价从低到高 2最终交易价从高到底 3-销量 4-人气5 */
 	private int sortType;
-	private boolean isSortUp = true;;
+	private boolean isSortUp = true;
 	private PopupWindow popupWindow;
 	private LinearLayout ll_all;
 	private LinearLayout ll_all_category;
-
 	private int type;
 	private View pop_contentView;
 	private RdpDataListAdapter<String> popAdapter;
@@ -134,139 +117,9 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 	private String skuAttribute;// sku属性
 	private String brandId;// 品牌id
 	private String priceArea;// 价格区间
-
 	private EditText start_price;
 	private EditText end_price;
 	private PopupWindow oneLevelPop;
-	private RdpDataListAdapter<AttrBean> oneLevelAdapter;
-
-	private HashMap<String, List<Object>> selectedFilterAttrMap;
-	private AttrBean attrBean;
-	onGotoNextPopListener onGotoNextPopListener;
-	private FilterAttrAdapter<Object> secondLevelAdapter;
-
-	public interface onGotoNextPopListener {
-		void gotoSecondPop(AttrBean attrBean, int position);
-	}
-
-	@Override
-	protected void initActivity() {
-		super.initActivity();
-		removeLeftFuncView(TBAR_FUNC_BACK);
-		Intent intent = getIntent();
-		if ("category".equals(coming)) {
-			categoryName = intent.getStringExtra("categoryName");
-			categoryId = intent.getStringExtra("categoryId");
-			setFuncTitle(categoryName);
-			iv_search = (ImageView) findViewById(R.id.iv_search);
-			iv_search.setOnClickListener(this);
-		}
-		else if ("search".equals(coming)) {
-			keyWord = intent.getStringExtra("keyword");
-		}
-		headView = addHeaderView(R.layout.product_list_head);
-		mMasterView = addMasterView(R.layout.product_list_master);
-
-		ptrsv = (PullToRefreshScrollView) mMasterView.findViewById(R.id.master_sc);
-		ptrsv.setMode(Mode.BOTH);
-
-		listAdapter = new RdpDataListAdapter<ProductBean>(mApplication, R.layout.list_item_type_zero);
-		gridAdapter = new RdpDataListAdapter<ProductBean>(mApplication, R.layout.product_grid_item);
-
-		initView();
-		initPubWindow();
-		initListener();
-
-		index_tabRb1.setText(dataItems.get(isSelectedPosition));
-		listAdapter.setListener(this);
-		product_lv.setAdapter(listAdapter);
-
-		product_gv.setVisibility(View.GONE);
-		product_gv.setAdapter(gridAdapter);
-		// TODO 获取商品列表
-		mDataSet = new RdpNetDataSet(mApplication);
-		mDataSet.setOnCommandSuccessedListener(this);
-		mDataSet.setOnCommandFailedListener(this);
-		typeOfResult = new TypeToken<ArrayList<ProductBean>>() {
-		}.getType();
-
-		getProductListData(true, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, true);
-	}
-
-	/**获取商品列表数据*/
-	private void getProductListData(boolean isFirst, String merchantId, String categoryId, String priceType, String keyword, String saleCountType, String priceArea, String brandId, String skuAttribute, boolean flushOrMore) {
-		if (isFirst) {
-			showLoadingOverLay(ptrsv);
-		}
-		mDataSet.setServerApiUrl(UrlConstant.GET_PRODUCT_LIST);
-		mDataSet.clearConditions();
-		mDataSet.setCondition("merchantId", merchantId);
-		mDataSet.setCondition("categoryId", categoryId);
-		mDataSet.setCondition("priceType", priceType);
-		mDataSet.setCondition("keyword", keyword);
-		mDataSet.setCondition("saleCountType", saleCountType);
-		mDataSet.setCondition("priceArea", priceArea);
-		mDataSet.setCondition("brandId", brandId);
-		mDataSet.setCondition("skuAttribute", skuAttribute);
-		mDataSet.setTypeOfResult(typeOfResult);
-		if (flushOrMore) {
-			// 刷新
-			mDataSet.open();
-		}
-		else {
-			mDataSet.getNextPageDatas();
-		}
-	}
-
-	private void initView() {
-		index_tabRb1 = (TextView) headView.findViewById(R.id.index_tabRb1);
-		index_tabRb2 = (TextView) headView.findViewById(R.id.index_tabRb2);
-		index_tabRb4 = (TextView) headView.findViewById(R.id.index_tabRb4);
-		mTextViews.add(index_tabRb1);
-		mTextViews.add(index_tabRb2);
-
-		ll_all = (LinearLayout) findViewById(R.id.ll_all);
-		rl_tabRb1 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb1);
-		rl_tabRb2 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb2);
-		rl_tabRb4 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb4);
-
-		back_iv = (ImageView) findViewById(R.id.back_iv);
-		iv_list = (ImageView) headView.findViewById(R.id.iv_list);
-		iv_grid = (ImageView) headView.findViewById(R.id.iv_grid);
-
-		product_gv = (RdpInnerGridView) mMasterView.findViewById(R.id.product_gv);
-		product_lv = (RdpInnerListView) mMasterView.findViewById(R.id.product_lv);
-
-	}
-
-	private void initListener() {
-		back_iv.setOnClickListener(this);
-		iv_list.setOnClickListener(this);
-		iv_grid.setOnClickListener(this);
-
-		rl_tabRb1.setOnClickListener(filterClick);
-		rl_tabRb2.setOnClickListener(filterClick);
-		rl_tabRb4.setOnClickListener(filterClick);
-
-		product_lv.setOnItemClickListener(this);
-		product_gv.setOnItemClickListener(this);
-
-		ptrsv.setOnRefreshListener(new OnRefreshListener2<ScrollView>() {
-			@Override
-			public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-				// 下拉刷新
-				getProductListData(false, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, true);
-			}
-
-			@Override
-			public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
-				// 上拉加载更多
-				getProductListData(false, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, false);
-			}
-		});
-		gridAdapter.setListener(this);
-	}
-
 	OnClickListener filterClick = new OnClickListener() {
 
 		@Override
@@ -317,15 +170,148 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 			// 初始化综合筛选栏显示
 			if (v.getId() == R.id.rl_tabRb2) {
 				initCompositeFilter();
-			}
-			else {
+			} else {
 				isSelectedSale = false;
 				index_tabRb2.setText("销量");
 				saleCountType = "0";
 			}
 		}
 	};
+	private RdpDataListAdapter<AttrBean> oneLevelAdapter;
+	private HashMap<String, List<Object>> selectedFilterAttrMap;
+	private AttrBean attrBean;
+	private FilterAttrAdapter<Object> secondLevelAdapter;
 	private PopupWindow secondLevelPop;
+	private AttrItemBean allAttrItemBean;
+	private BrandBean allBrand;
+	private EditText searchEt;
+
+	@Override
+	protected void initActivity() {
+		super.initActivity();
+		EventBus.getDefault().register(this);
+		removeLeftFuncView(TBAR_FUNC_BACK);
+		Intent intent = getIntent();
+		headView = addHeaderView(R.layout.product_list_head);
+		mMasterView = addMasterView(R.layout.product_list_master);
+		if ("category".equals(coming)) {
+			categoryName = intent.getStringExtra("categoryName");
+			categoryId = intent.getStringExtra("categoryId");
+			setFuncTitle(categoryName);
+			iv_search = (ImageView) findViewById(R.id.iv_search);
+			iv_search.setOnClickListener(this);
+		}
+		else if ("search".equals(coming)) {
+			keyWord = intent.getStringExtra("keyword");
+			searchEt = (EditText) findViewById(R.id.searchEt);
+			searchEt.setText(keyWord);
+		}
+		ptrsv = (PullToRefreshScrollView) mMasterView.findViewById(R.id.master_sc);
+		ptrsv.setMode(Mode.BOTH);
+
+		listAdapter = new RdpDataListAdapter<ProductBean>(mApplication, R.layout.list_item_type_zero);
+		gridAdapter = new RdpDataListAdapter<ProductBean>(mApplication, R.layout.product_grid_item);
+
+		initView();
+		initPubWindow();
+		initListener();
+
+		index_tabRb1.setText(dataItems.get(isSelectedPosition));
+		listAdapter.setListener(this);
+		product_lv.setAdapter(listAdapter);
+
+		product_gv.setVisibility(View.GONE);
+		product_gv.setAdapter(gridAdapter);
+		// 获取商品列表
+		mDataSet = new RdpNetDataSet(mApplication);
+		mDataSet.setOnCommandSuccessedListener(this);
+		mDataSet.setOnCommandFailedListener(this);
+		typeOfResult = new TypeToken<ArrayList<ProductBean>>() {
+		}.getType();
+
+		getProductListData(true, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, true);
+	}
+
+	public void onEventMainThread(FinishEvent event) {
+		finish();
+	}
+
+	/**获取商品列表数据*/
+	private void getProductListData(boolean isFirst, String merchantId, String categoryId, String priceType, String keyword, String saleCountType, String priceArea, String brandId, String skuAttribute, boolean flushOrMore) {
+		if (isFirst) {
+			showLoadingOverLay(ptrsv);
+		}
+		mDataSet.setServerApiUrl(UrlConstant.GET_PRODUCT_LIST);
+		mDataSet.clearConditions();
+		mDataSet.setCondition("merchantId", merchantId);
+		mDataSet.setCondition("categoryId", categoryId);
+		mDataSet.setCondition("priceType", priceType);
+		mDataSet.setCondition("keyword", keyword);
+		mDataSet.setCondition("saleCountType", saleCountType);
+		mDataSet.setCondition("priceArea", priceArea);
+		mDataSet.setCondition("brandId", brandId);
+		mDataSet.setCondition("skuAttribute", skuAttribute);
+		mDataSet.setTypeOfResult(typeOfResult);
+		if (flushOrMore) {
+			// 刷新
+			mDataSet.open();
+		}
+		else {
+			mDataSet.getNextPageDatas();
+		}
+	}
+
+	private void initView() {
+		index_tabRb1 = (TextView) headView.findViewById(R.id.index_tabRb1);
+		index_tabRb2 = (TextView) headView.findViewById(R.id.index_tabRb2);
+		index_tabRb4 = (TextView) headView.findViewById(R.id.index_tabRb4);
+		mTextViews.add(index_tabRb1);
+		mTextViews.add(index_tabRb2);
+
+		ll_all = (LinearLayout) findViewById(R.id.ll_all);
+		rl_tabRb1 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb1);
+		rl_tabRb2 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb2);
+		rl_tabRb4 = (RelativeLayout) headView.findViewById(R.id.rl_tabRb4);
+
+		back_iv = (ImageView) findViewById(R.id.iv_back_icon);
+		iv_list = (ImageView) headView.findViewById(R.id.iv_list);
+		iv_grid = (ImageView) headView.findViewById(R.id.iv_grid);
+
+		product_gv = (RdpInnerGridView) mMasterView.findViewById(R.id.product_gv);
+		product_lv = (RdpInnerListView) mMasterView.findViewById(R.id.product_lv);
+
+	}
+
+	private void initListener() {
+		back_iv.setOnClickListener(this);
+		iv_list.setOnClickListener(this);
+		iv_grid.setOnClickListener(this);
+
+		rl_tabRb1.setOnClickListener(filterClick);
+		rl_tabRb2.setOnClickListener(filterClick);
+		rl_tabRb4.setOnClickListener(filterClick);
+
+		if (searchEt != null) {
+			searchEt.setOnClickListener(this);
+		}
+		product_lv.setOnItemClickListener(this);
+		product_gv.setOnItemClickListener(this);
+
+		ptrsv.setOnRefreshListener(new OnRefreshListener2<ScrollView>() {
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				// 下拉刷新
+				getProductListData(false, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, true);
+			}
+
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase<ScrollView> refreshView) {
+				// 上拉加载更多
+				getProductListData(false, "402881e8461795c201461795c2e90000", categoryId, priceType, keyWord, saleCountType, priceArea, brandId, skuAttribute, false);
+			}
+		});
+		gridAdapter.setListener(this);
+	}
 
 	/** 初始化化综合筛选栏 */
 	private void initCompositeFilter() {
@@ -356,7 +342,18 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back_iv:
+			case R.id.iv_back_icon:
+				if ("search".equals(coming)) {
+					// 直接返回首页,防止死循环
+					EventBus.getDefault().post(new FinishEvent());
+				}
+				finish();
+				break;
+			case R.id.searchEt:
+				startActivity(new Intent(mApplication, SearchActivity.class));
+				break;
+			case R.id.iv_search:
+				startActivity(new Intent(mApplication, SearchActivity.class));
 				finish();
 				break;
 			case R.id.iv_list:
@@ -550,7 +547,7 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 			}
 		}
 	}
-	
+
 	/**初始化一级筛选弹框*/
 	public void initOneLevelFilterPop() {
 		View one_level_filter = View.inflate(mApplication, R.layout.one_level_filter, null);
@@ -569,17 +566,17 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 				return false;
 			}
 		});
-//		// 点击其他地方消失
-//		one_level_filter.setOnTouchListener(new OnTouchListener() {
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {
-//				if (oneLevelPop != null && oneLevelPop.isShowing()) {
-//					oneLevelPop.dismiss();
-//					initFilterSelected();
-//				}
-//				return false;
-//			}
-//		});
+		// // 点击其他地方消失
+		// one_level_filter.setOnTouchListener(new OnTouchListener() {
+		// @Override
+		// public boolean onTouch(View v, MotionEvent event) {
+		// if (oneLevelPop != null && oneLevelPop.isShowing()) {
+		// oneLevelPop.dismiss();
+		// initFilterSelected();
+		// }
+		// return false;
+		// }
+		// });
 		start_price = (EditText) one_level_filter.findViewById(R.id.start_price);
 		end_price = (EditText) one_level_filter.findViewById(R.id.end_price);
 		ListView one_level_lv = (ListView) one_level_filter.findViewById(R.id.one_level_lv);
@@ -594,7 +591,8 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 			@Override
 			public void onClick(View v) {
 				oneLevelPop.dismiss();
-					// 确认筛选条件
+				// 确认筛选条件
+				if (hashMap != null) {
 					Iterator iter = hashMap.entrySet().iterator();
 					StringBuffer skuStr = new StringBuffer();
 					StringBuffer brandStr = new StringBuffer();
@@ -629,8 +627,9 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 					String startPrice = start_price.getText().toString();
 					String endPrice = end_price.getText().toString();
 					priceArea = startPrice + "-" + endPrice;
-					oneLevelPop.dismiss();
-					initFilterSelected();
+				}
+				oneLevelPop.dismiss();
+				initFilterSelected();
 			}
 		});
 		oneLevelAdapter = new RdpDataListAdapter<AttrBean>(mApplication, R.layout.one_level_filter_item);
@@ -681,11 +680,11 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 					}
 					else {
 						list.remove(allBrand);
-						if (list.contains((BrandBean) obj)) {
-							list.remove((BrandBean) obj);
+						if (list.contains(obj)) {
+							list.remove(obj);
 						}
 						else {
-							list.add((BrandBean) obj);
+							list.add(obj);
 						}
 					}
 					selectedFilterAttrMap.put(attrBean.attributeName, list);
@@ -700,11 +699,11 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 					}
 					else {
 						list.remove(allAttrItemBean);
-						if (list.contains((AttrItemBean) obj)) {
-							list.remove((AttrItemBean) obj);
+						if (list.contains(obj)) {
+							list.remove(obj);
 						}
 						else {
-							list.add((AttrItemBean) obj);
+							list.add(obj);
 						}
 					}
 					selectedFilterAttrMap.put(attrBean.attributeName, list);
@@ -722,14 +721,14 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 				holder.getImageView(R.id.iv_item_selected).setVisibility(View.GONE);
 				if (obj instanceof BrandBean) {
 					holder.getTextView(R.id.tv_second_filter_item).setText(((BrandBean) obj).brandName);
-					if (list != null && (list.contains((BrandBean) obj))) {
+					if (list != null && (list.contains(obj))) {
 						holder.getImageView(R.id.iv_item_selected).setVisibility(View.VISIBLE);
 						holder.getTextView(R.id.tv_second_filter_item).setTextColor(getResources().getColor(R.color.selected_product_lv_filter));
 					}
 				}
 				if (obj instanceof AttrItemBean) {
 					holder.getTextView(R.id.tv_second_filter_item).setText(((AttrItemBean) obj).valudStr);
-					if (list != null && (list.contains((AttrItemBean) obj))) {
+					if (list != null && (list.contains(obj))) {
 						holder.getImageView(R.id.iv_item_selected).setVisibility(View.VISIBLE);
 						holder.getTextView(R.id.tv_second_filter_item).setTextColor(getResources().getColor(R.color.selected_product_lv_filter));
 					}
@@ -746,7 +745,7 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 		onGotoNextPopListener = new onGotoNextPopListener() {
 			@Override
 			public void gotoSecondPop(AttrBean object, int position) {
-				attrBean = (AttrBean) object;
+				attrBean = object;
 				if (position == 0) {
 					ArrayList<BrandBean> brandBeans = new ArrayList<BrandBean>();
 					allBrand = new BrandBean("", "全部");
@@ -765,8 +764,24 @@ public class ProductListActivity extends RdpBaseActivity implements OnRefreshIte
 		};
 	}
 
-	private AttrItemBean allAttrItemBean;
-	private BrandBean allBrand;
+	@Override
+	public void onBackPressed() {
+		if ("search".equals(coming)) {
+			// 直接返回首页,防止死循环
+			EventBus.getDefault().post(new FinishEvent());
+		}
+		super.onBackPressed();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		EventBus.getDefault().unregister(this);
+	}
+
+	public interface onGotoNextPopListener {
+		void gotoSecondPop(AttrBean attrBean, int position);
+	}
 
 	// /**初始化筛选弹框*/
 	// private void initFliterPop() {

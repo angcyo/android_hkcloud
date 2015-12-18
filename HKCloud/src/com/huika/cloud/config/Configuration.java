@@ -10,18 +10,15 @@ import com.huika.cloud.util.PreferHelper;
 public class Configuration {
 	// webip配置s // 正式环境
 	public static final String WEB_RELEASE_SERVER_DOMAIN = "http://192.168.50.3:8083/hxlmpro-api";
+	// 预生产环境
+	public static final String WEB_RELEASE_TEST_SERVER_DOMAIN = "http://192.168.50.3:8083/hxlmpro-api";
+	// 测试环境
+	public static final String WEB_TEST_SERVER_DOMAIN = "http://192.168.50.3:8083/hxlmpro-api";
+	public static final String BASE_WEB_SERVER = getWebServerDomain();
 	public static boolean IS_LOG = true;// 发布时改为false,不打LOG
 	public static String DEBUG_TAG = "HKCLOUD";
 
-	// 预生产环境
-	public static final String WEB_RELEASE_TEST_SERVER_DOMAIN = "http://192.168.50.3:8083/hxlmpro-api";
-
-	// 测试环境
-	public static final String WEB_TEST_SERVER_DOMAIN = "http://192.168.50.3:8083/hxlmpro-api";
-
-	public static final String BASE_WEB_SERVER = getWebServerDomain();
-
-	/**
+	 /**
 	  * @Description:获取web服务端配置路径
 	  */
 	private static final String getWebServerDomain() {

@@ -1,7 +1,5 @@
 package com.huika.cloud.views;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -23,19 +21,21 @@ import android.widget.TextView;
 import com.huika.cloud.R;
 import com.zhoukl.androidRDP.RdpUtils.UiHelper;
 
+import java.util.ArrayList;
+
 /**
  * @description：标题按钮上的弹窗（继承自PopupWindow）
  * @author samy
  * @date 2014年8月24日 下午11:57:35
  */
 public class TitlePopup extends PopupWindow {
-	private Context mContext;
 	// 列表弹窗的间隔
 	protected final int LIST_PADDING = 10;
-	// 实例化一个矩形
-	private Rect mRect = new Rect();
 	// 坐标的位置（x、y）
 	private final int[] mLocation = new int[2];
+	private Context mContext;
+	// 实例化一个矩形
+	private Rect mRect = new Rect();
 	// 屏幕的宽度和高度
 	private int mScreenWidth, mScreenHeight;
 	// 判断是否需要添加或更新列表子类项
@@ -197,15 +197,6 @@ public class TitlePopup extends PopupWindow {
 	// }
 
 	/**
-	 * @description：弹窗子类项按钮监听事件
-	 * @author samy
-	 * @date 2014年8月25日 上午12:04:14
-	 */
-	public static interface OnItemOnClickListener {
-		public void onItemClick(ActionPopupItem item, int position);
-	}
-
-	/**
 	 * 设置弹窗列表子项
 	 */
 	private void populateActions() {
@@ -238,7 +229,7 @@ public class TitlePopup extends PopupWindow {
 				ActionPopupItem item = mActionItems.get(position);
 				// 设置文本文字
 				textView.setText(item.mTitle);
-				
+
 				if (null != item.mDrawable) {
 					// 设置文字与图标的间隔
 					textView.setCompoundDrawablePadding(10);
@@ -301,6 +292,15 @@ public class TitlePopup extends PopupWindow {
 
 	public void setUIStyle(int mUIStyle) {
 		this.mUIStyle = mUIStyle;
+	}
+
+	/**
+	 * @author samy
+	 * @description：弹窗子类项按钮监听事件
+	 * @date 2014年8月25日 上午12:04:14
+	 */
+	public interface OnItemOnClickListener {
+		void onItemClick(ActionPopupItem item, int position);
 	}
 
 }

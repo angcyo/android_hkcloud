@@ -1,13 +1,5 @@
 package com.huika.cloud.control.cart.fragment;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +9,11 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -30,7 +21,6 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
@@ -56,6 +46,14 @@ import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpBaseFragment;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -111,13 +109,6 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 		RdpAnnotationUtil.inject(this, mRootView);
 		EventBus.getDefault().register(this);
 		initView();
-		if (HKCloudApplication.getInstance().getUserModel().getMemberId() != null) {
-			showLoadingOverLay(mLltMasterArea);
-			excuteCartData();
-		} else {
-			mType = 1;
-			isOnShow();
-		}
 		return mRootView;
 	}
 
@@ -169,7 +160,7 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 				break;
 			case R.id.login_tv: // 登录按钮
 				showActivity(getActivity(), LoginActivity.class);
-				// showActivity(getActivity(), ProductDetailsAct.class);
+//				 showActivity(getActivity(), ProductDetailsAct.class);
 				break;
 			case R.id.all_checked_cb: // 全选按钮
 				boolean flagAll = all_checked_cb.isSelected();
@@ -215,7 +206,7 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 		addressCommand.setServerApiUrl(UrlConstant.ORDER_GETPRODUCTPRICEFORORDER); // 默认地址的接口
 		addressCommand.clearConditions();
 		addressCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		addressCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId());
+		addressCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId);
 		addressCommand.setCondition("productDetail", getProductDetailInfo());
 		addressCommand.setCondition("addressId", "");
 		addressCommand.execute();
@@ -236,7 +227,7 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 		editCommand.setOnCommandFailedListener(this);
 		editCommand.setServerApiUrl(UrlConstant.ORDER_EDITCART); //
 		editCommand.clearConditions();
-		editCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId()); // HKCloudApplication.getInstance().getUserModel().getMemberId()
+		editCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId); // HKCloudApplication.getInstance().getUserModel().getMemberId()
 		editCommand.setCondition("type", isAllDelete ? 1 : 0);
 		editCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID); // HKCloudApplication.getInstance().getUserModel().getMerchantId()
 		editCommand.setCondition("productId", isAllDelete ? getSelectProductID(0) : cartProduct.getProductId()); //
@@ -310,7 +301,7 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 		cartCommand.setOnCommandFailedListener(this);
 		cartCommand.setServerApiUrl(UrlConstant.ORDER_GETCARTLIST); //
 		cartCommand.clearConditions();
-		cartCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId()); // HKCloudApplication.getInstance().getUserModel().getMemberId()
+		cartCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId); // HKCloudApplication.getInstance().getUserModel().getMemberId()
 		cartCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
 		cartCommand.open();
 	}
@@ -530,6 +521,18 @@ public class ShoppingCartFragment extends RdpBaseFragment implements OnRefreshIt
 			}
 		}
 		return array.toString();
+	}
+
+	@Override
+	public void initFristData() {
+		if (HKCloudApplication.getInstance().getUserModel().memberId != null) {
+			showLoadingOverLay(mLltMasterArea);
+			excuteCartData();
+		} else {
+			mType = 1;
+			isOnShow();
+		}
+		
 	}
 
 }

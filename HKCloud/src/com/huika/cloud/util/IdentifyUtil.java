@@ -3,37 +3,38 @@ package com.huika.cloud.util;
 import java.util.HashMap;
 
 public class IdentifyUtil {
-	      private String _codeError;  
-	  
-	      //wi =2(n-1)(mod 11)  
-	      final int[] wi = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1};  
-	      // verify digit  
-	      final int[] vi = {1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2};  
-	      private int[] ai = new int[18];  
-	      private static String[] _areaCode={"11","12","13","14","15","21","22"  
-	          ,"23","31","32","33","34","35","36","37","41","42","43","44"  
-	          ,"45","46","50","51","52","53","54","61","62","63","64","65","71","81","82","91"};  
-	      private static HashMap<String,Integer> dateMap;  
-	      private static HashMap<String,String> areaCodeMap;  
-	      static{  
-	            dateMap=new HashMap<String,Integer>();  
-	            dateMap.put("01",31);  
-	            dateMap.put("02",null);  
-	            dateMap.put("03",31);  
-	            dateMap.put("04",30);  
-	            dateMap.put("05",31);  
-	            dateMap.put("06",30);  
-	            dateMap.put("07",31);  
-	            dateMap.put("08",31);  
-	            dateMap.put("09",30);  
-	            dateMap.put("10",31);  
-	            dateMap.put("11",30);  
-	            dateMap.put("12",31);  
-	            areaCodeMap=new HashMap<String,String>();  
-	            for(String code:_areaCode){  
-	                  areaCodeMap.put(code,null);  
-	            }  
-	      }  
+	private static String[] _areaCode = {"11", "12", "13", "14", "15", "21", "22"
+			, "23", "31", "32", "33", "34", "35", "36", "37", "41", "42", "43", "44"
+			, "45", "46", "50", "51", "52", "53", "54", "61", "62", "63", "64", "65", "71", "81", "82", "91"};
+	private static HashMap<String, Integer> dateMap;
+	private static HashMap<String, String> areaCodeMap;
+
+	static {
+		dateMap = new HashMap<String, Integer>();
+		dateMap.put("01", 31);
+		dateMap.put("02", null);
+		dateMap.put("03", 31);
+		dateMap.put("04", 30);
+		dateMap.put("05", 31);
+		dateMap.put("06", 30);
+		dateMap.put("07", 31);
+		dateMap.put("08", 31);
+		dateMap.put("09", 30);
+		dateMap.put("10", 31);
+		dateMap.put("11", 30);
+		dateMap.put("12", 31);
+		areaCodeMap = new HashMap<String, String>();
+		for (String code : _areaCode) {
+			areaCodeMap.put(code, null);
+		}
+	}
+
+	//wi =2(n-1)(mod 11)
+	final int[] wi = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1};
+	// verify digit
+	final int[] vi = {1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2};
+	private String _codeError;
+	private int[] ai = new int[18];
 	  
 	      //验证身份证位数,15位和18位身份证  
 	      public boolean verifyLength(String code){  
@@ -150,11 +151,8 @@ public class IdentifyUtil {
 	                  return false;  
 	            }  
 	            //验证18位校验码,校验码采用ISO 7064：1983，MOD 11-2 校验码系统  
-	            if(!verifyMOD(eifhteencard)){  
-	                  return false;  
-	            }  
-	            return true;  
-	      }  
+			  return verifyMOD(eifhteencard);
+		  }
 	  
 	      //验证18位校验码,校验码采用ISO 7064：1983，MOD 11-2 校验码系统  
 	      public boolean verifyMOD(String code){  

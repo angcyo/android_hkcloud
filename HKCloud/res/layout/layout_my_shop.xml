@@ -69,17 +69,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="会员级别:"
-                    android:textSize="@dimen/common_textview_size"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/common_textview_size" />
 
                 <TextView
                     android:id="@+id/tv_level_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:text="普通会员"
-                    android:textSize="@dimen/common_textview_size"
-                    android:textColor="#FF3c00" 
-                    android:layout_marginLeft="5dp"/>
+                    android:textColor="#FF3c00"
+                    android:textSize="@dimen/common_textview_size" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
@@ -105,20 +105,20 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="累计佣金:"
                     android:textColor="#333333"
-                    android:text="累计佣金:" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <TextView
                     android:id="@+id/commission_account"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/tv_commission"
                     android:text="¥ 200.00"
-                    android:textSize="@dimen/common_textview_size"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="#FF3c00" />
+                    android:textColor="#FF3c00"
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:id="@+id/goto_commission_detail"
@@ -144,9 +144,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="今日佣金收益（元）"
                     android:textColor="#333333"
-                    android:text="今日佣金收益（元）" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <TextView
                     android:id="@+id/today_commission_account"
@@ -155,9 +155,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="¥ 55.00"
                     android:textColor="#ff3c00"
-                    android:text="¥ 55.00" />
+                    android:textSize="@dimen/common_textview_size" />
             </RelativeLayout>
 
             <View
@@ -188,9 +188,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="我的团队"
                             android:textColor="#333333"
-                            android:text="我的团队" />
+                            android:textSize="@dimen/common_textview_size" />
 
                         <TextView
                             android:id="@+id/tv_my_team_num"
@@ -199,9 +199,9 @@
                             android:layout_below="@+id/tv_my_team"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="5dp"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="50人"
                             android:textColor="#ff3c00"
-                            android:text="50人" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
 
                     <View
@@ -221,9 +221,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="分销订单"
                             android:textColor="#333333"
-                            android:text="分销订单" />
+                            android:textSize="@dimen/common_textview_size" />
 
                         <TextView
                             android:id="@+id/dis_order_num"
@@ -231,10 +231,10 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_dis_order"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
                             android:layout_marginTop="5dp"
+                            android:text="0单"
                             android:textColor="#ff3c00"
-                            android:text="0单" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
 
                     <View
@@ -254,9 +254,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="消费统计"
                             android:textColor="#333333"
-                            android:text="消费统计" />
+                            android:textSize="@dimen/common_textview_size" />
 
                         <TextView
                             android:id="@+id/consume_count"
@@ -264,10 +264,10 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_consume_count"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
-                            android:textColor="#ff3c00"
                             android:layout_marginTop="5dp"
-                            android:text="0.00元" />
+                            android:text="0.00元"
+                            android:textColor="#ff3c00"
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -278,7 +278,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal" >
 
                     <RelativeLayout
@@ -293,9 +293,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:text="推广产品" 
-                            android:textSize="@dimen/common_textview_size"
-                            android:textColor="#333333"/>
+                            android:text="推广产品"
+                            android:textColor="#333333"
+                            android:textSize="@dimen/common_textview_size" />
 
                         <TextView
                             android:id="@+id/expand_product_num"
@@ -303,9 +303,9 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_expand_product"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="12件"
                             android:textColor="#ff3c00"
-                            android:text="12件" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
 
                     <View
@@ -324,9 +324,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="绑定微信公众号"
                             android:textColor="#333333"
-                            android:text="绑定微信公众号" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
 
                     <View
@@ -345,9 +345,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="推广二维码"
                             android:textColor="#333333"
-                            android:text="推广二维码" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -358,7 +358,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="80dp"
                     android:orientation="horizontal" >
 
                     <RelativeLayout
@@ -372,9 +372,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/common_textview_size"
+                            android:text="申请成为v"
                             android:textColor="#333333"
-                            android:text="申请成为v" />
+                            android:textSize="@dimen/common_textview_size" />
                     </RelativeLayout>
 
                     <View

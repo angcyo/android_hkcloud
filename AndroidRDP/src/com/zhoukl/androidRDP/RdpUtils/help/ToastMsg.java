@@ -1,13 +1,13 @@
 package com.zhoukl.androidRDP.RdpUtils.help;
 
-import com.zhoukl.androidRDP.R;
-
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zhoukl.androidRDP.R;
 
 
 /**
@@ -51,7 +51,6 @@ public class ToastMsg {
 		}
 		else {
 			Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
-			;
 		}
 	}
 

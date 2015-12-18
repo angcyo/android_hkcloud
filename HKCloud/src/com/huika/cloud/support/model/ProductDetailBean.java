@@ -27,7 +27,7 @@ public class ProductDetailBean implements Serializable {
   // 库存
   public String stock;
   public long salesVolume; // 销量
-  public double logistics; // 配送方式 0：包邮其他县市运费
+    public String logistics; // 配送方式 0：包邮其他县市运费
   
   public String introduction; // 商品详情介绍
   public String productparameter; // 商品规格参数
@@ -35,9 +35,9 @@ public class ProductDetailBean implements Serializable {
  
 
   // 商品状态(0-正常，1已下架)
-  public String statusType;
-  // 配送方式给的是字符串多少钱和是否包邮
-  public String postage;
+//  public String statusType;
+//  // 配送方式给的是字符串多少钱和是否包邮
+//  public String postage;
   
 //评论数目
  public int commentCount;

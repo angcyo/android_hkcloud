@@ -42,23 +42,23 @@ public class AccountSafeActivity extends RdpBaseActivity {
 	protected void initActivity() {
 		super.initActivity();
 		setFuncTitle(R.string.account_safe_title);
-		isNameAuth = HKCloudApplication.getInstance().getUserModel().getRealNameAuthentication() == 1;
 		mView = addMasterView(R.layout.account_safe);
 		RdpAnnotationUtil.inject(this);
-		tv_uppay_pwd.setText(HKCloudApplication.getInstance().getUserModel().getTransPassword() == 1 ? "修改支付密码" : "设置支付密码");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		// 判断是都实名认证
+		isNameAuth = HKCloudApplication.getInstance().getUserModel().realNameAuthentication == 1;
+		tv_uppay_pwd.setText(HKCloudApplication.getInstance().getUserModel().transPassword == 1 ? "修改支付密码" : "设置支付密码");
 		account_auth_rl.setVisibility(isNameAuth ? View.GONE : View.VISIBLE);
 		account_auth_rl.setEnabled(!isNameAuth);
 		mView.findViewById(R.id.auth_info_view).setVisibility(isNameAuth ? View.GONE : View.VISIBLE);
 		auth_info_ll.setVisibility(isNameAuth ? View.VISIBLE : View.GONE);
 		if (isNameAuth) {
-			tv_name_account.setText("姓名：" + HKCloudApplication.getInstance().getUserModel().getRealName());
-			tv_card_account.setText("身份证号：" + HKCloudApplication.getInstance().getUserModel().getIdNumber());
+			tv_name_account.setText("姓名：" + HKCloudApplication.getInstance().getUserModel().realName);
+			tv_card_account.setText("身份证号：" + HKCloudApplication.getInstance().getUserModel().idNumber);
 		}
 	}
     @OnClick({R.id.up_login_pwd_rl,R.id.up_paypwd_rl,R.id.account_auth_rl})
@@ -70,7 +70,7 @@ public class AccountSafeActivity extends RdpBaseActivity {
 				showActivity(this, UpLoginPwdActivity.class);
 				break;
 			case R.id.up_paypwd_rl:
-				if (HKCloudApplication.getInstance().getUserModel().getTransPassword() == 1) {
+				if (HKCloudApplication.getInstance().getUserModel().transPassword == 1) {
 					Bundle mBundle = new Bundle();
 					mBundle.putInt(UpPayPwdActivity.INP_UPDATE_PAY_PASSWORD, 1);
 					showActivity(this, UpPayPwdActivity.class,mBundle);

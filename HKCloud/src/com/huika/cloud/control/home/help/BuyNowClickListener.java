@@ -1,7 +1,5 @@
 package com.huika.cloud.control.home.help;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -35,6 +33,9 @@ import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.NetUtil;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @desc：SKU选择购买商品
  * @author: samy (hongfeiliuxing@gmail.com)
@@ -42,22 +43,6 @@ import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
  */
 public class BuyNowClickListener implements View.OnClickListener {
 
-	// SKU 浮层
-	private PopupWindow popupWindow;
-	private View popUpView;
-	private ViewGroup itemDetailPanel;
-	// SKU弹出浮层后的半透明背景
-	private View skuPropertiesBackgroudShadowView;
-	// 图文详情
-	private ImageView dish_add_order_btn;
-	private ImageView sub_order_bt;
-	// private ImageLoader imageLoader;
-
-	private SkuSelect skuSelect;
-	// 商品总库存
-	private String itemQuantity;
-	// 商品基本信息
-	private ProductDetailBean productDetailBean;
 	/**
 	 * sku库存价格
 	 */
@@ -71,10 +56,23 @@ public class BuyNowClickListener implements View.OnClickListener {
 	 * sku属性中的黑白色
 	 */
 	public List<SkuPropertyValueUnit> skuValueItems;
-	
-	private RdpBaseActivity mBaseAct;
 	protected DisplayImageOptions options;
-
+	// SKU 浮层
+	private PopupWindow popupWindow;
+	private View popUpView;
+	// private ImageLoader imageLoader;
+	private ViewGroup itemDetailPanel;
+	// SKU弹出浮层后的半透明背景
+	private View skuPropertiesBackgroudShadowView;
+	// 图文详情
+	private ImageView dish_add_order_btn;
+	private ImageView sub_order_bt;
+	private SkuSelect skuSelect;
+	// 商品总库存
+	private String itemQuantity;
+	// 商品基本信息
+	private ProductDetailBean productDetailBean;
+	private RdpBaseActivity mBaseAct;
 	private IDetailShopingCar detailShopingCar;
 	private Boolean isSkip = false;
 
@@ -86,7 +84,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 		super();
 		this.mBaseAct = baseAct;
 		this.productDetailBean = productDetailBean;
-		this.itemDetailPanel = (ViewGroup) root_merge;
+		this.itemDetailPanel = root_merge;
 		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.circle_shoping_cat_default_ic).showImageForEmptyUri(R.drawable.circle_shoping_cat_default_ic)
 				.showImageOnFail(R.drawable.circle_shoping_cat_default_ic).cacheInMemory(true)// 开启内存缓存
 				.cacheOnDisk(true) // 开启硬盘缓存
@@ -195,7 +193,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 				final SkuPropertyUnit skuProperty = skuPropertyUnit;
 				// 添加尺码和颜色分类
 				TextView textView = new TextView(mBaseAct);
-				textView.setId(Integer.valueOf(skuProperty.attributeId));
+//				textView.setId(Integer.valueOf(skuProperty.attributeId));
 				textView.setText(skuProperty.attributeName);
 				textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mBaseAct.getResources().getDimensionPixelSize(R.dimen.detail_sku_title_size));
 				textView.setTextColor(mBaseAct.getResources().getColor(R.color.common_text_color));
@@ -226,7 +224,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 						skuLayoutParams.setMargins(0, skuBtnTopMargin, skuBtnRightMargin, 0);
 						skuButton.setText(skuPropertyValueUnit.valueStr);
 						skuButton.measure(0, 0);
-						skuButton.setId(Integer.valueOf(skuPropertyValueUnit.valueId));
+//						skuButton.setId(Integer.valueOf(skuPropertyValueUnit.valueId));
 						skuButton.setClickable(true);
 						skuButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, mBaseAct.getResources().getDimensionPixelSize(R.dimen.detail_sku_property_size));
 						skuButton.setTextColor(mBaseAct.getResources().getColor(R.color.common_text_color));
@@ -376,7 +374,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 						ToastMsg.showToastMsg(mBaseAct, skuSelect.getPropNameString());
 						return;
 					} else {
-						String lastSelectSkuId = skuSelect.getSeclectSkuId();
+						String lastSelectSkuId = skuSelect.getSeclectSkuId(skuItems);
 						if (TextUtils.isEmpty(lastSelectSkuId)) {
 							ToastMsg.showToastMsg(mBaseAct, "此商品属性组合下已无商品".concat(skuSelect.getPropNameString()));
 							return;
@@ -402,6 +400,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 			}
 		});
 	}
+	
 
 	/**
 	 * @description：Btn选择
@@ -411,9 +410,9 @@ public class BuyNowClickListener implements View.OnClickListener {
 	@SuppressWarnings("deprecation")
 	private void selectSkuBtnChange(final TextView itemCountTextView, final TextView quantityView, final SkuPropertyUnit skuProperty, final List<Button> skuViewList,
 			final SkuPropertyValueUnit skuPropertyValueUnit, final Button skuButton) {
-		int skuId = skuPropertyValueUnit.valueId;
+		String skuId = skuPropertyValueUnit.valueId;
 		String skuName = skuPropertyValueUnit.valueStr;
-		String sku = skuPropertyValueUnit.sku;
+		String sku = skuProperty.attributeId + ":" + skuPropertyValueUnit.valueId; //skuPropertyValueUnit.sku;
 		String imgUrl = skuPropertyValueUnit.imgUrl;
 		for (Button allButton : skuViewList) {
 			// 默认统一设置成黑色字体
@@ -421,11 +420,12 @@ public class BuyNowClickListener implements View.OnClickListener {
 			allButton.setBackgroundResource(R.drawable.sku_button_unselect_bg);
 		}
 		skuSelect.setSelectedSkuId(skuProperty.attributeId, skuId, skuName, sku, imgUrl, true);
-
+		
 		skuButton.setTextColor(mBaseAct.getResources().getColor(R.color.white));
 		skuButton.setBackgroundResource(R.drawable.sku_button_select_bg);
+		
 		if ((skuItems.size() >= 1 && skuProperty.values.size() == 1) || (!isFirstLoadView && skuSelect.isSelectedAllSkus())) {
-			lastSelectSkuId = skuSelect.getSeclectSkuId();
+			lastSelectSkuId = skuSelect.getSeclectSkuId(skuItems);
 			lastSelectSkuIdStock = null;
 			for (SkuStock tempStok : skuStocks) {
 				if (tempStok.sku.equals(lastSelectSkuId)) {
@@ -449,7 +449,7 @@ public class BuyNowClickListener implements View.OnClickListener {
 			}
 			quantityView.setText("(库存".concat(tempStock + "").concat("件)"));
 			// 更新 商品图片
-			if (skuProperty.isRelationImage) {
+			if (skuProperty.isImage) {
 				ImageView imageView = (ImageView) popUpView.findViewById(R.id.item_detail_sku_sm_img);
 				ImageLoader.getInstance().displayImage(skuPropertyValueUnit.imgUrl, imageView, options);
 			}

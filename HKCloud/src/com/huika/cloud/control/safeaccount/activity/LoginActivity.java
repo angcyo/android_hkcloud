@@ -1,32 +1,25 @@
 package com.huika.cloud.control.safeaccount.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.huika.cloud.R;
-import com.huika.cloud.control.main.activity.MainActivity;
 import com.huika.cloud.control.safeaccount.LoginHelper;
 import com.huika.cloud.support.event.LoginEvent;
-import com.huika.cloud.support.event.MainPagerChangeEvent;
 import com.huika.cloud.views.ClearableEditText;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
-import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 
 import de.greenrobot.event.EventBus;
@@ -111,14 +104,14 @@ public class LoginActivity extends RdpBaseActivity {
 				}
 				showLoadingDialog("");
 				phone = mEdtPhone.getText().toString();
-				pwd = MD5Security.getMd5_32_UP(mEdtPwd.getText().toString());
+				pwd = mEdtPwd.getText().toString();
 				closeInput();
 				/*
 				 * if (null != getCurrentVersionInfo()) {
 				 * version = getCurrentVersionInfo().versionName;
 				 * }
 				 */
-				LoginHelper.getInstance(this).executeLoginRequest(phone, mEdtPwd.getText().toString());
+				LoginHelper.getInstance(this).executeLoginRequest(phone, pwd);
 				break;
 			case R.id.tv_findPwd:
 				showActivity(LoginActivity.this, RegisterFindPwdActivity.class);

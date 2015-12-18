@@ -1,21 +1,6 @@
 package com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.httpClient;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InterruptedIOException;
-import java.io.UnsupportedEncodingException;
-import java.net.ConnectException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
-import javax.net.ssl.SSLException;
+import android.content.Context;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -51,8 +36,22 @@ import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-import android.content.Context;
+import javax.net.ssl.SSLException;
 
 
 //import com.fpi.epma.product.common.http.HttpClient.GzipDecompressingEntity;
@@ -60,38 +59,17 @@ import android.content.Context;
  * 封装网络请求操作
  * **/
 public class HttpClient {
-	/**
-	 * GZIP实体解压缩实现类
-	 */
-	private static class GzipDecompressingEntity extends HttpEntityWrapper {
-
-		public GzipDecompressingEntity(final HttpEntity entity) {
-			super(entity);
-		}
-
-		@Override
-		public InputStream getContent() throws IOException, IllegalStateException {
-			InputStream wrappedInputStream = wrappedEntity.getContent();
-			return new GZIPInputStream(wrappedInputStream);
-		}
-
-		@Override
-		public long getContentLength() {
-			return -1;
-		}
-	}
-
+	// 请求超时设置
+	public static final int CONNECTION_TIMEOUT = 30 * 1000;
+	public static final int SO_TIMEOUT = 30 * 1000;
+	public static final int SO_File_TIMEOUT = 120 * 1000;
 	// 在发生异常时自动重试次数
 	private static final int AUTO_RETRY_TIMES = 2;
 	// WEB服务器地址
 	// TODO: ???
 	private static final String BASE_SERVER = ""; //Configuration.BASE_PUBLIC_SERVER;
-
-	// 请求超时设置
-	public static final int CONNECTION_TIMEOUT = 30 * 1000;
-	public static final int SO_TIMEOUT = 30 * 1000;
-	public static final int SO_File_TIMEOUT = 120 * 1000;
-
+	// 声明APACHE HttpClient实例
+	protected static DefaultHttpClient httpClient;
 	/**
 	 * 请求拦截器, 设置请求支持GZIP.
 	 */
@@ -153,22 +131,13 @@ public class HttpClient {
 			}
 			HttpRequest request = (HttpRequest) context.getAttribute(ExecutionContext.HTTP_REQUEST);
 			boolean idempotent = !(request instanceof HttpEntityEnclosingRequest);
-			if (idempotent) {
-				// Retry if the request is considered idempotent
-				return true;
-			}
-			return false;
+			return idempotent;
 		}
 	};
-
+	protected int connectTimeout, soTimeout;
 	private Context context = null;
-
 	// HTTP cookies 集合
 	private HashMap<String, String> cookies = new HashMap<String, String>();
-	protected int connectTimeout, soTimeout;
-
-	// 声明APACHE HttpClient实例
-	protected static DefaultHttpClient httpClient;
 
 	/**
 	 * 构造HttpClient实例
@@ -182,7 +151,7 @@ public class HttpClient {
 
 	/**
 	 * 添加Cookie.
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 */
@@ -363,7 +332,7 @@ public class HttpClient {
 
 	/**
 	 * 发送网络请求.
-	 * 
+	 *
 	 * @param url
 	 *            请求URL
 	 * @param params
@@ -420,7 +389,7 @@ public class HttpClient {
 	 *       httpClient.setProxy("10.0.0.172", 80, "http");
 	 *   </code>
 	 * </p>
-	 * 
+	 *
 	 * @param host
 	 *            主机名或IP地址
 	 * @param port
@@ -474,6 +443,27 @@ public class HttpClient {
 	 */
 	public void shutdown() {
 		httpClient.getConnectionManager().shutdown();
+	}
+
+	/**
+	 * GZIP实体解压缩实现类
+	 */
+	private static class GzipDecompressingEntity extends HttpEntityWrapper {
+
+		public GzipDecompressingEntity(final HttpEntity entity) {
+			super(entity);
+		}
+
+		@Override
+		public InputStream getContent() throws IOException, IllegalStateException {
+			InputStream wrappedInputStream = wrappedEntity.getContent();
+			return new GZIPInputStream(wrappedInputStream);
+		}
+
+		@Override
+		public long getContentLength() {
+			return -1;
+		}
 	}
 
 }

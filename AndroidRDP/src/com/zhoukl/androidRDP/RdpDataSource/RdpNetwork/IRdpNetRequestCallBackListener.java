@@ -10,15 +10,15 @@ public interface IRdpNetRequestCallBackListener {
         //public boolean onBeforeExecute(String requestKey);
 
         /** 后台执行任务       */
-        public String doTaskInBackground(String requestKey);
+        String doTaskInBackground(String requestKey);
 
         /** 任务返回后将要执行的操作.        */
-        public void onResult(Object requestKey, RdpResponseResult result);
+        void onResult(Object requestKey, RdpResponseResult result);
 
         /** 任务返回后将要执行的操作.        */
         //public void onErrorResult(String requestKey, RdpResponseResult result);
 
         /** 错误回调，包括：任务取消后将要执行的操作、网络异常、业务逻辑异常等.        */
-        public void onErrorResult(Object requestKey, RdpResponseResult result);
+        void onErrorResult(Object requestKey, RdpResponseResult result);
 
 }

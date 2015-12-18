@@ -1,8 +1,5 @@
 package com.zhoukl.androidRDP.RdpViews.RdpCommViews;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +10,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @description：包含多个ScrollView的容器，实现类似京东、淘宝的商品详情的界面 
@@ -103,16 +103,29 @@ public class RdpScrollViewContainer extends RelativeLayout {
             requestLayout();
         }
     };
+    private OnTouchListener topViewTouchListener = new OnTouchListener() {
 
-    private void invokePageChangeListener() {
-        if (onScrollPageChangeListener != null) {
-            if (Math.abs(mMoveLen) >= topView.getMeasuredHeight()) {
-                onScrollPageChangeListener.onScrollPageChange(1);
-            } else if (((int) mMoveLen) == 0) {
-                onScrollPageChangeListener.onScrollPageChange(0);
-            }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            ScrollView sv = (ScrollView) v;
+            canPullUp = sv.getScrollY() == (sv.getChildAt(0).getMeasuredHeight() - sv.getMeasuredHeight()) && mCurrentViewIndex == 0;
+            return false;
         }
-    }
+    };
+    private OnTouchListener bottomViewTouchListener = new OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (v instanceof ScrollView) {
+                ScrollView sv = (ScrollView) v;
+                canPullDown = sv.getScrollY() == 0 && mCurrentViewIndex == 1;
+            } else if (v instanceof ListView) {
+                ListView listView = (ListView) v;
+                canPullDown = listView.getFirstVisiblePosition() == 0 && mCurrentViewIndex == 1;
+            }
+            return false;
+        }
+    };
 
     public RdpScrollViewContainer(Context context) {
         super(context);
@@ -127,6 +140,16 @@ public class RdpScrollViewContainer extends RelativeLayout {
     public RdpScrollViewContainer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+    }
+
+    private void invokePageChangeListener() {
+        if (onScrollPageChangeListener != null) {
+            if (Math.abs(mMoveLen) >= topView.getMeasuredHeight()) {
+                onScrollPageChangeListener.onScrollPageChange(1);
+            } else if (((int) mMoveLen) == 0) {
+                onScrollPageChangeListener.onScrollPageChange(0);
+            }
+        }
     }
 
     private void init() {
@@ -264,43 +287,15 @@ public class RdpScrollViewContainer extends RelativeLayout {
         topView.setOnTouchListener(topViewTouchListener);
     }
     
-    private OnTouchListener topViewTouchListener = new OnTouchListener() {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            ScrollView sv = (ScrollView) v;
-            if (sv.getScrollY() == (sv.getChildAt(0).getMeasuredHeight() - sv.getMeasuredHeight()) && mCurrentViewIndex == 0)
-                canPullUp = true;
-            else
-                canPullUp = false;
-            return false;
-        }
-    };
-    
     public void setOnTouchListenerForBottomView(View bottomView) {
         bottomView.setOnTouchListener(bottomViewTouchListener);
     }
-    
-    private OnTouchListener bottomViewTouchListener = new OnTouchListener() {
 
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (v instanceof ScrollView) {
-                ScrollView sv = (ScrollView) v;
-                if (sv.getScrollY() == 0 && mCurrentViewIndex == 1)
-                    canPullDown = true;
-                else
-                    canPullDown = false;
-            } else if (v instanceof ListView) {
-                ListView listView = (ListView) v;
-                if (listView.getFirstVisiblePosition() == 0 && mCurrentViewIndex == 1)
-                    canPullDown = true;
-                else
-                    canPullDown = false;
-            }
-            return false;
-        }
-    };
+    public interface OnScrollPageChangeListener {
+        void onScrollPageChange(int pageNum);
+
+        void onScrollPage();
+    }
 
     class MyTimer {
         private Handler mHandler;
@@ -341,12 +336,6 @@ public class RdpScrollViewContainer extends RelativeLayout {
             }
 
         }
-    }
-
-    public interface OnScrollPageChangeListener {
-        void onScrollPageChange(int pageNum);
-
-        void onScrollPage();
     }
 
 }

@@ -46,20 +46,14 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	static final String LOG_TAG = "PullToRefresh-LoadingLayout";
 
 	static final Interpolator ANIMATION_INTERPOLATOR = new LinearInterpolator();
-
-	private FrameLayout mInnerLayout;
-
 	protected final ImageView mHeaderImage;
 	protected final ProgressBar mHeaderProgress;
-
-	private boolean mUseIntrinsicAnimation;
-
-	private final TextView mHeaderText;
-	private final TextView mSubHeaderText;
-
 	protected final Mode mMode;
 	protected final Orientation mScrollDirection;
-
+	private final TextView mHeaderText;
+	private final TextView mSubHeaderText;
+	private FrameLayout mInnerLayout;
+	private boolean mUseIntrinsicAnimation;
 	private CharSequence mPullLabel;
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
@@ -181,13 +175,13 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	}
 
 	public final void setHeight(int height) {
-		ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) getLayoutParams();
+		ViewGroup.LayoutParams lp = getLayoutParams();
 		lp.height = height;
 		requestLayout();
 	}
 
 	public final void setWidth(int width) {
-		ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) getLayoutParams();
+		ViewGroup.LayoutParams lp = getLayoutParams();
 		lp.width = width;
 		requestLayout();
 	}

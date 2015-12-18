@@ -1,22 +1,12 @@
 package com.huika.cloud.control.me.activity;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Type;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -27,21 +17,21 @@ import com.huika.cloud.control.safeaccount.activity.AccountSafeActivity;
 import com.huika.cloud.support.model.UpLoadImageResult;
 import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.util.ImageTools;
-import com.huika.cloud.util.MultipartEntity;
 import com.huika.cloud.util.PreferHelper;
 import com.huika.cloud.views.IMActionPopupItem;
 import com.huika.cloud.views.IMButtomPopup;
 import com.huika.cloud.views.IMButtomPopup.OnPopupItemOnClickListener;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.httpClient.HttpClient;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+
+import java.io.File;
+import java.lang.reflect.Type;
 
 /**
  * @description：我的个人资料
@@ -51,6 +41,8 @@ import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 public class MyInfoActivity extends RdpBaseActivity {
 	private final static int CROPCAMARA_TAKEPHOTO = 1003;
 	private final static int CROPCAMARA_SELECTFROMALBUM = 1004;
+	@ViewInject(R.id.my_phone)
+	TextView my_phone;
 	private View mMasterView;
 	@ViewInject(R.id.edit_picture)
 	private LinearLayout edit_picture;
@@ -68,12 +60,33 @@ public class MyInfoActivity extends RdpBaseActivity {
 	private LinearLayout ll_safe;
 	@ViewInject(R.id.shop_my_data_picture)
 	private ImageView shop_my_data_picture;
+	@ViewInject(R.id.my_data_nicheng)
+	private TextView my_data_nicheng;
 	private IMButtomPopup buttomPhotoPopup;
 	private String[] buttomSpiners = { "上传头像", "拍照", "从手机相册中选择" };
 	
 	private File mPicFile;
+	OnPopupItemOnClickListener mSexPopupClickLis = new OnPopupItemOnClickListener() {
+
+		@Override
+		public void onPopupItemClick(IMActionPopupItem item, int position) {
+			switch (item.mItemValue) {
+				case CROPCAMARA_TAKEPHOTO:// 拍照
+					ToastMsg.showToastMsg(mApplication, "拍照");
+					takePhoto();
+					break;
+				case CROPCAMARA_SELECTFROMALBUM:// 选择照片
+					ToastMsg.showToastMsg(mApplication, "选择照片");
+					selectPhoto();
+					break;
+				default:
+					break;
+			}
+		}
+	};
 	private View footView;
 	private File tempFile;
+	private UserModel mUser;
 	
 	@Override
 	protected void initActivity() {
@@ -82,9 +95,16 @@ public class MyInfoActivity extends RdpBaseActivity {
 		mMasterView = addMasterView(R.layout.my_info_activity);
 		footView = addFooterView(R.layout.my_info_foot);
 		RdpAnnotationUtil.inject(this);
-//		initView();
-//		initListener();
 		footView.findViewById(R.id.tv_log_out).setOnClickListener(this);
+	}
+
+	@Override
+	protected void onResume() {
+		mUser = HKCloudApplication.getInstance().getUserModel();
+		RdpImageLoader.displayImage(mUser.imageUrl, shop_my_data_picture, R.drawable.default_icon_photo);
+		my_data_nicheng.setText(mUser.nickName);
+		my_phone.setText(mUser.phone);
+		super.onResume();
 	}
 	
 	@OnClick({R.id.edit_picture,R.id.edit_nickname,R.id.member_Level,R.id.distributor_level,
@@ -99,29 +119,25 @@ public class MyInfoActivity extends RdpBaseActivity {
 			break;
 		case R.id.edit_nickname:
 			//编辑昵称
-			ToastMsg.showToastMsg(mApplication, "跳转到修改昵称界面");
+			startActivity(new Intent(mApplication, EditNIkeNameActivity.class));
 			break;
 		case R.id.member_Level:
 			//会员等级
-			ToastMsg.showToastMsg(mApplication, "跳转到会员等级说明界面");
 			intent=new Intent(mApplication, MemberLevelActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.distributor_level:
 			//分销商等级
-			ToastMsg.showToastMsg(mApplication, "跳转到分销商等级说明界面");
 			intent=new Intent(mApplication, DistributorlevelActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.my_superior:
 			//我的上级
-			ToastMsg.showToastMsg(mApplication, "跳转到上级介绍界面");
 			intent=new Intent(mApplication, MySuperiorActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.edit_recipient:
 			//我的收货地址
-			ToastMsg.showToastMsg(mApplication, "跳转到地址界面");
 			intent = new Intent(mApplication, MyRecipientActivity.class);
 			startActivity(intent);
 			break;
@@ -141,7 +157,7 @@ public class MyInfoActivity extends RdpBaseActivity {
 			super.onClick(v);
 			break;
 		}
-		
+
 	}
 	
 	private void showSelectPhoto() {
@@ -158,26 +174,6 @@ public class MyInfoActivity extends RdpBaseActivity {
 //		buttomPhotoPopup.setAnimationStyle(R.style.popupAnimation);
 		buttomPhotoPopup.show(mMasterView);
 	}
-	
-	OnPopupItemOnClickListener mSexPopupClickLis = new OnPopupItemOnClickListener() {
-
-		@Override
-		public void onPopupItemClick(IMActionPopupItem item, int position) {
-			// TODO Auto-generated method stub
-			switch (item.mItemValue) {
-				case CROPCAMARA_TAKEPHOTO:// 拍照
-					ToastMsg.showToastMsg(mApplication, "拍照");
-					takePhoto();
-					break;
-				case CROPCAMARA_SELECTFROMALBUM:// 选择照片
-					ToastMsg.showToastMsg(mApplication, "选择照片");
-					selectPhoto();
-					break;
-				default:
-					break;
-			}
-		}
-	};
 	
 	/** 拍照 */
 	private void takePhoto() {
@@ -227,7 +223,6 @@ public class MyInfoActivity extends RdpBaseActivity {
 	private void uploadImage() {
 		Type uploadResult=new TypeToken<UpLoadImageResult>(){}.getType();
 		RdpNetCommand uploadCommand = new RdpNetCommand(mApplication, uploadResult);
-//		uploadCommand.setServerApiUrl("http://192.168.49.198:8080/hxlmpro-api/User/uploadFile");
 		uploadCommand.setServerApiUrl("http://192.168.49.198:8080/hxlmpro-api/User/testUploadFile");
 		uploadCommand.setOnCommandSuccessedListener(this);
 		uploadCommand.setOnCommandFailedListener(this);

@@ -1,9 +1,10 @@
 package com.zhoukl.androidRDP.RdpFramework.RdpApp;
 
+import android.app.Application;
+
 import com.zhoukl.androidRDP.RdpModel.BaseUserBean;
 import com.zhoukl.androidRDP.RdpUtils.Security.RSAKeyEntity;
 import com.zhoukl.androidRDP.RdpUtils.Security.RSAUtil;
-import android.app.Application;
 
 /**
  * @description：应用全局
@@ -57,7 +58,7 @@ public class RdpApplication extends Application {
         if (mCurrUser == null) {
             return "";
         } else {
-            return "" + mCurrUser.getMemberId();
+            return mCurrUser.memberId;
         }
     }
     

@@ -1,16 +1,5 @@
 package com.huika.cloud.views;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -25,6 +14,14 @@ import com.huika.cloud.views.wheel.widget.adapters.AbstractWheelTextAdapter;
 import com.huika.cloud.views.wheel.widget.views.OnWheelChangedListener;
 import com.huika.cloud.views.wheel.widget.views.OnWheelScrollListener;
 import com.huika.cloud.views.wheel.widget.views.WheelView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 更改封面对话框
@@ -231,40 +228,9 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 		});
 	}
 
-	private class AddressTextAdapter extends AbstractWheelTextAdapter {
-		ArrayList<AreaInfo> list;
-
-		protected AddressTextAdapter(Context context, ArrayList<AreaInfo> arrCitys, int currentItem, int maxsize, int minsize) {
-			super(context, R.layout.item_birth_year, NO_RESOURCE, currentItem, maxsize, minsize);
-			this.list = arrCitys;
-			setItemTextResource(R.id.tempValue);
-		}
-
-		@Override
-		public View getItem(int index, View cachedView, ViewGroup parent) {
-			View view = super.getItem(index, cachedView, parent);
-			return view;
-		}
-
-		@Override
-		public int getItemsCount() {
-			return list.size();
-		}
-
-		@Override
-		protected CharSequence getItemText(int index) {
-			return list.get(index).getAreaName();
-		}
-		
-		protected String getItemId(int index) {
-			return list.get(index).getAreaId()+"";
-		}
-		
-	}
-
 	/**
 	 * 设置字体大小
-	 * 
+	 *
 	 * @param curriteItemText
 	 * @param adapter
 	 */
@@ -305,16 +271,6 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 	}
 
 	/**
-	 * 回调接口
-	 * 
-	 * @author Administrator
-	 *
-	 */
-	public interface OnAddressCListener {
-		public void onClick(String province, String city,String area,String lastAreaId);
-	}
-
-	/**
 	 * 从文件中读取地址数据
 	 */
 	private void initJsonData() {
@@ -339,7 +295,7 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 	 * 解析数据
 	 */
 	private void initDatas() {
-		
+
 	}
 
 	/**
@@ -351,7 +307,7 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 
 	/**
 	 * 根据省会，生成该省会的所有城市
-	 * 
+	 *
 	 * @param list
 	 */
 	public void initCitys(List<AreaInfo> list) {
@@ -364,6 +320,7 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 			arrCitys.addAll(arrList);
 		}
 	}
+
 	/**根据城市生成地区*/
 	public void initAreas(List<AreaInfo> list){
 		if (list != null) {
@@ -374,6 +331,46 @@ public class ChangeAddressDialog extends Dialog implements android.view.View.OnC
 			arrAreas.clear();
 			arrAreas.addAll(arrList);
 		}
+	}
+
+	/**
+	 * 回调接口
+	 *
+	 * @author Administrator
+	 */
+	public interface OnAddressCListener {
+		void onClick(String province, String city, String area, String lastAreaId);
+	}
+
+	private class AddressTextAdapter extends AbstractWheelTextAdapter {
+		ArrayList<AreaInfo> list;
+
+		protected AddressTextAdapter(Context context, ArrayList<AreaInfo> arrCitys, int currentItem, int maxsize, int minsize) {
+			super(context, R.layout.item_birth_year, NO_RESOURCE, currentItem, maxsize, minsize);
+			this.list = arrCitys;
+			setItemTextResource(R.id.tempValue);
+		}
+
+		@Override
+		public View getItem(int index, View cachedView, ViewGroup parent) {
+			View view = super.getItem(index, cachedView, parent);
+			return view;
+		}
+
+		@Override
+		public int getItemsCount() {
+			return list.size();
+		}
+
+		@Override
+		protected CharSequence getItemText(int index) {
+			return list.get(index).getAreaName();
+		}
+
+		protected String getItemId(int index) {
+			return list.get(index).getAreaId() + "";
+		}
+
 	}
 
 }

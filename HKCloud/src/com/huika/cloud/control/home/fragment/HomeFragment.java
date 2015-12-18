@@ -1,8 +1,5 @@
 package com.huika.cloud.control.home.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -10,40 +7,47 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.AutoScrollViewPager;
 import android.support.v4.view.AutoScrollViewPager.OnPageItemClickListener;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.huika.cloud.R;
 import com.huika.cloud.control.home.activity.GoodTypesActivity;
+import com.huika.cloud.control.home.activity.ProductDetailsAct;
 import com.huika.cloud.control.home.activity.SearchActivity;
+import com.huika.cloud.support.model.AdRotato;
+import com.huika.cloud.support.model.BlankAgarRod;
+import com.huika.cloud.support.model.DynamicProductLv;
+import com.huika.cloud.support.model.HalvingLine;
+import com.huika.cloud.support.model.HomePartBean;
+import com.huika.cloud.support.model.ImageNavigation;
 import com.huika.cloud.support.model.ProductBean;
+import com.huika.cloud.support.model.StaticProductLv;
+import com.huika.cloud.support.model.TitleBarBean;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
-import com.zhoukl.androidRDP.RdpFramework.RdpApp.RdpApplication;
+import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpBaseFragment;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerListView;
-import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description：首页
@@ -61,39 +65,6 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 	private LinearLayout titleLeft;
 	private RelativeLayout search;
 
-	class TitleBarSetting {
-		public String name;
-		public int type_align;// 0 左对齐 1居中 2右对齐
-		public int show_right;// 0不显示 1显示
-		public int text_color;
-		public int backgroud;
-		public int left_icon;
-		public int right_icon;
-		public String link;
-	}
-
-	class BlankStrip {
-		public int height;
-	}
-
-	class ListType {
-		public int type;
-		public String url;
-	}
-
-	class AdVpSetting {
-		public int show_type;// 0轮播显示 1列表显示
-		public List<ProductBean> productBeans;
-	}
-
-	class SearchBarBean {
-
-	}
-
-	class NavigationBean {
-
-	}
-
 	@Override
 	protected void initFragment() {
 		super.initFragment();
@@ -106,6 +77,76 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		m_ll = (LinearLayout) mMasterView.findViewById(R.id.m_ll);
 		ArrayList<Object> arrayList = fillDemoData();
 		addViewBySetting(arrayList);
+//		RdpNetDataSet homePageSettingData = new RdpNetDataSet(mApplication);
+//		homePageSettingData.setServerApiUrl("http://192.168.50.3:8083/hxlmpro-api/templet/homePage");
+//		homePageSettingData.clearConditions();
+//		homePageSettingData.setOnCommandFailedListener(this);
+//		homePageSettingData.setOnCommandSuccessedListener(this);
+//		Type typeOfResult=new TypeToken<List<HomePartBean>>(){}.getType();
+//		homePageSettingData.setTypeOfResult(typeOfResult);
+//		homePageSettingData.open();
+	}
+
+	@Override
+	public void onCommandFailed(Object reqKey, RdpResponseResult result) {
+		super.onCommandFailed(reqKey, result);
+	}
+
+	@Override
+	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
+		super.onCommandSuccessed(reqKey, result, data);
+		List<HomePartBean> homePageDatas = (List<HomePartBean>) data;
+		ArrayList<List> arrayList = new ArrayList<List>();
+		for (HomePartBean homePartBean : homePageDatas) {
+			List list = homePartBean.list;
+			Gson gson = new Gson();
+			String json = gson.toJson(list);
+			switch (homePartBean.type) {
+				case "1"://标题栏
+					List<TitleBarBean> titleBarBeans = gson.fromJson(json, new TypeToken<List<TitleBarBean>>() {
+					}.getType());
+					arrayList.add(titleBarBeans);
+					break;
+				case "2"://辅助空白
+					List<BlankAgarRod> blankList = gson.fromJson(json, new TypeToken<List<BlankAgarRod>>() {
+					}.getType());
+					arrayList.add(blankList);
+					break;
+				case "3"://分割线
+					List<HalvingLine> halvingLineList = gson.fromJson(json, new TypeToken<List<HalvingLine>>() {
+					}.getType());
+					arrayList.add(halvingLineList);
+					break;
+				case "4"://图片广告
+					List<AdRotato> adRotatoList = gson.fromJson(json, new TypeToken<List<AdRotato>>() {
+					}.getType());
+					arrayList.add(adRotatoList);
+					break;
+				case "5"://图片导航
+					List<ImageNavigation> imageNavigationList = gson.fromJson(json, new TypeToken<List<ImageNavigation>>() {
+					}.getType());
+					arrayList.add(imageNavigationList);
+					break;
+				case "6"://固定商品
+					List<StaticProductLv> staticProductList = gson.fromJson(json, new TypeToken<List<StaticProductLv>>() {
+					}.getType());
+					arrayList.add(staticProductList);
+					break;
+				case "7"://分类商品
+					List<DynamicProductLv> dynamicProductLvList = gson.fromJson(json, new TypeToken<List<DynamicProductLv>>() {
+					}.getType());
+					arrayList.add(dynamicProductLvList);
+					break;
+				case "8"://搜索栏
+					List<SearchBarBean> searchBarList = gson.fromJson(json, new TypeToken<List<SearchBarBean>>() {
+					}.getType());
+					arrayList.add(searchBarList);
+					break;
+				default:
+					break;
+			}
+		}
+//		 addViewBySetting(arrayList);
 	}
 
 	private void initListener() {
@@ -173,7 +214,7 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		listType4.type = 3;
 		listType4.url = "1";
 		arrayList.add(listType4);
-		
+
 		TitleBarSetting titleBarSetting2 = new TitleBarSetting();
 		titleBarSetting2.backgroud = Color.YELLOW;
 		titleBarSetting2.name = "更多惊喜";
@@ -223,20 +264,20 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 	private void addSearchBar(SearchBarBean searchBarBean) {
 		RelativeLayout sRl=new RelativeLayout(mApplication);
 		RelativeLayout rl = new RelativeLayout(mApplication);
-		rl.setBackground(getResources().getDrawable(R.drawable.search_et_bg));
+		rl.setBackground(getResources().getDrawable(R.drawable.search_bar_bg));
 		ImageView searchIcon = new ImageView(mApplication);
-		searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.search_icon));
+		searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.search_new_icon));
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		layoutParams.setMargins(0, 0, 10, 0);
 		layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		rl.addView(searchIcon, layoutParams);
-		
+
 		TextView textView=new TextView(mApplication);
 		android.widget.RelativeLayout.LayoutParams layoutParams4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 		layoutParams4.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		layoutParams4.addRule(RelativeLayout.CENTER_VERTICAL);
-		layoutParams4.setMargins(0, 0, 0, 0);
+		layoutParams4.setMargins(10, 0, 0, 0);
 		textView.setHintTextColor(R.color.common_edit_hint_color);
 		textView.setHint("商品搜索：请输入商品关键字");
 		textView.setBackground(null);
@@ -245,8 +286,8 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 
 		android.widget.RelativeLayout.LayoutParams layoutParams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
 		layoutParams2.addRule(RelativeLayout.CENTER_VERTICAL);
-		layoutParams2.setMargins(12, 5, 12, 5);
-		
+		layoutParams2.setMargins(12, 10, 12, 10);
+
 		rl.setFocusable(true);
 		rl.setFocusableInTouchMode(true);
 		rl.setOnClickListener(new OnClickListener() {
@@ -320,6 +361,31 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 
 	}
 
+	// 根据配置添加view
+//	private void addViewBySetting(ArrayList<List> arrayList) {
+//		for (int i = 0; i < arrayList.size(); i++) {
+//			Object object = arrayList.get(i).get(0);
+//			if (object instanceof TitleBarBean) {
+//				addTitleBar((TitleBarSetting) object);
+//			}
+//			if (object instanceof BlankStrip) {
+//				addBlankStrip((BlankStrip) object);
+//			}
+//			if (object instanceof ListType) {
+//				addListView((ListType) object);
+//			}
+//			if (object instanceof AdVpSetting) {
+//				addVpView((AdVpSetting) object);
+//			}
+//			if (object instanceof SearchBarBean) {
+//				addSearchBar((SearchBarBean) object);
+//			}
+//			if (object instanceof NavigationBean) {
+//				addNavigationView((NavigationBean) object);
+//			}
+//		}
+//	}
+
 	/**添加列表*/
 	private void addListView(ListType listType) {
 		if (listType.type == 3) {
@@ -339,10 +405,10 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 //				demoData = ProductBean.getDemoData2();
 //			}
 //			multiTypeListAdapter.setmDataList(demoData);
-			
+
 			final MultiTypeAdapter<ProductBean> multiTypeAdapter = new MultiTypeAdapter<ProductBean>(mApplication, R.layout.list_type_mul_item);
 			multiTypeAdapter.setListener(new OnRefreshItemViewsListener() {
-				
+
 				@Override
 				public boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder) {
 					ProductBean firstItem =null;
@@ -397,7 +463,7 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 			m_ll.addView(rilv, layoutParams);
 			final RdpDataListAdapter<ProductBean> mAdapter = new RdpDataListAdapter<ProductBean>(mApplication, R.layout.list_item_type_one);
 			mAdapter.setListener(new OnRefreshItemViewsListener() {
-				
+
 				@Override
 				public boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder) {
 					ProductBean firstItem =null;
@@ -483,7 +549,7 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		holder.getTextView(R.id.tv_name_1).setText(firstItem.getProductName());
 		holder.getTextView(R.id.tv_price_1).setText(firstItem.getShopPrice()+"");
 	}
-	
+
 	private void setValueByZeroItem(AdapterViewHolder holder, final ProductBean zeroItem) {
 		holder.getView(R.id.rl_zero_item).setOnClickListener(new OnClickListener() {
 			@Override
@@ -507,7 +573,7 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		holder.getTextView(R.id.tv_name_2).setText(secondItem.getProductName());
 		holder.getTextView(R.id.tv_price_2).setText(secondItem.getShopPrice()+"");
 	}
-	
+
 	/**添加导航栏*/
 	private void addNavigationView(NavigationBean navigationBean) {
 		RdpInnerGridView gv = new RdpInnerGridView(mApplication);
@@ -532,6 +598,9 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 				ToastMsg.showToastMsg(mApplication, "点击的导航栏" + productBean.getProductName());
 				if (position==7) {
 					startActivity(new Intent(mApplication, GoodTypesActivity.class));
+				}
+				if (position == 6) {
+					startActivity(new Intent(mApplication, ProductDetailsAct.class));
 				}
 			}
 		});
@@ -570,7 +639,7 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		first_rl.addView(left_iv, left_lp);
 		// 添加右边的图标
 		ImageView right_iv = null;
-		if (titleBarSetting1.show_right == 1) { 
+		if (titleBarSetting1.show_right == 1) {
 			right_iv = new ImageView(mApplication);
 			right_iv.setImageResource(titleBarSetting1.right_icon);
 			right_iv.setId(right_iv_id);
@@ -619,6 +688,39 @@ public class HomeFragment extends RdpBaseFragment implements OnRefreshItemViewsL
 		holder.getTextView(R.id.tv_price).setText("$ " + item.getShopPrice());
 		RdpImageLoader.displayImage(item.getImageUrl(), holder.getImageView(R.id.iv_icon));
 		return false;
+	}
+
+	class TitleBarSetting {
+		public String name;
+		public int type_align;// 0 左对齐 1居中 2右对齐
+		public int show_right;// 0不显示 1显示
+		public int text_color;
+		public int backgroud;
+		public int left_icon;
+		public int right_icon;
+		public String link;
+	}
+
+	class BlankStrip {
+		public int height;
+	}
+
+	class ListType {
+		public int type;
+		public String url;
+	}
+
+	class AdVpSetting {
+		public int show_type;// 0轮播显示 1列表显示
+		public List<ProductBean> productBeans;
+	}
+
+	class SearchBarBean {
+
+	}
+
+	class NavigationBean {
+
 	}
 
 	class MyAdapter<T> extends RdpDataListAdapter {

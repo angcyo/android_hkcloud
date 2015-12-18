@@ -1,18 +1,12 @@
 package com.huika.cloud.control.cart.activity;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,6 +34,13 @@ import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
 import de.greenrobot.event.EventBus;
 
 /**
@@ -59,6 +60,7 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 	private RelativeLayout goto_add_address_chird_rl;
 	private TextView tv_no_address;
 	private TextView receiver_name_tv;
+	private ImageView img_adress_icon;
 	private TextView receiver_phone_tv;
 	private TextView receiver_address_tv;
 	
@@ -90,6 +92,11 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 		orderProduct = (OrderProduct) getIntent().getSerializableExtra(INP_PRODUCT_LIST);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	}
+
 	private void initView() {
 		setFuncTitle("确认订单");
 		mLvProduct = (RdpListView) mLayoutView.findViewById(R.id.lv_product_comfirm);
@@ -108,7 +115,8 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 	    tv_no_address = (TextView)mLvHeadView.findViewById(R.id.tv_no_address);
 	    receiver_name_tv = (TextView)mLvHeadView.findViewById(R.id.receiver_name_tv);
 	    receiver_phone_tv = (TextView)mLvHeadView.findViewById(R.id.receiver_phone_tv);
-	    receiver_address_tv = (TextView)mLvHeadView.findViewById(R.id.receiver_address_tv);
+		img_adress_icon = (ImageView) mLvHeadView.findViewById(R.id.img_adress_icon);
+		receiver_address_tv = (TextView)mLvHeadView.findViewById(R.id.receiver_address_tv);
 	    
 	    // listView 的底部
 	    mLvBottomView = View.inflate(this, R.layout.order_comfirm_bottom, null);
@@ -183,7 +191,7 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 		addressCommand.setServerApiUrl(UrlConstant.ORDER_GETPRODUCTPRICEFORORDER); // 默认地址的接口
 		addressCommand.clearConditions();
 		addressCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		addressCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId());
+		addressCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId);
 		addressCommand.setCondition("productDetail", getProductDetailInfo());
 		addressCommand.setCondition("addressId", address.addressId);
 		addressCommand.execute();
@@ -198,7 +206,7 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 		orderCommand.setOnCommandFailedListener(this);
 		orderCommand.setServerApiUrl(UrlConstant.ORDER_SUBMITORDER); // 下订单的接口
 		orderCommand.clearConditions();
-		orderCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId());
+		orderCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId);
 		orderCommand.setCondition("addressId", address.addressId);
 		orderCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
 		orderCommand.setCondition("remark", edt_merchant_note.getText().toString());
@@ -260,11 +268,11 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 		tv_order_save_money.setText("0元");
 		tv_pay_product_num.setText("共有" + productNum + "件商品");
 		tv_order_welfare.setText("无");
-		tv_order_all_money.setText(Html.fromHtml( "<font color='#D8D8D8'>合计：</font>)" 
+		tv_order_all_money.setText(Html.fromHtml("<font color='#D8D8D8'>合计：</font>"
 				+"<font color='#FDFDFD'>"+ MoneyShowTool.twolastDF(mMoney)+"</font>")); // 合计的金额
 		tv_order_express_money.setText(MoneyShowTool.twolastDF(postPrice)); // 邮费的处理
 		allMoney += mMoney;
-		num_money_tv.setText(Html.fromHtml( "<font color='#D8D8D8'>合计：</font>)" +"<font color='#FDFDFD'>"+
+		num_money_tv.setText(Html.fromHtml("<font color='#D8D8D8'>合计：</font>" + "<font color='#FDFDFD'>" +
 				MoneyShowTool.twolastDF(allMoney)+"</font>")); // 最后的钱
 	}
 
@@ -279,12 +287,14 @@ public class ConfirmOrderActivity extends RdpBaseActivity implements OnRefreshIt
 			receiver_name_tv.setVisibility(View.GONE);
 			receiver_phone_tv.setVisibility(View.GONE);
 			receiver_address_tv.setVisibility(View.GONE);
+			img_adress_icon.setVisibility(View.GONE);
 			tv_no_address.setVisibility(View.VISIBLE);
 		} else {
     		receiver_name_tv.setVisibility(View.VISIBLE);
     		receiver_phone_tv.setVisibility(View.VISIBLE);
     		receiver_address_tv.setVisibility(View.VISIBLE);
-    		tv_no_address.setVisibility(View.GONE);
+			img_adress_icon.setVisibility(View.VISIBLE);
+			tv_no_address.setVisibility(View.GONE);
     		receiver_name_tv.setText("收货人:" + mAddress.receiverName);
     		receiver_phone_tv.setText(mAddress.receiverPhone);
     		receiver_address_tv.setText("收货地址：" + mAddress.receiverAddress);

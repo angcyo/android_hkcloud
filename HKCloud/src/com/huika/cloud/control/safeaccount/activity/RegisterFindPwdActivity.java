@@ -1,19 +1,15 @@
 package com.huika.cloud.control.safeaccount.activity;
 
 
-import java.lang.reflect.Type;
-
-import android.graphics.Color;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
@@ -31,8 +27,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
-import com.zhoukl.androidRDP.RdpModel.BaseUserBean;
+import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
+
+import java.lang.reflect.Type;
 
 import de.greenrobot.event.EventBus;
 
@@ -75,6 +73,7 @@ public class RegisterFindPwdActivity extends RdpBaseActivity {
 		RdpAnnotationUtil.inject(this);
 		mEdtCode.setEnabled(false);
 		cb_protocol.setVisibility(isRegiter ? View.VISIBLE: View.GONE);
+		tv_protocol.setVisibility(isRegiter ? View.VISIBLE : View.GONE);
 		cb_showpw.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -87,25 +86,6 @@ public class RegisterFindPwdActivity extends RdpBaseActivity {
 			}
 		});
 	}
-
-//	private void initView() {
-//		mEdtPhone = (ClearableEditText) mView.findViewById(R.id.edit_phone);
-//		mEdtCode = (ClearableEditText) mView.findViewById(R.id.edit_code);
-//		mEdtPwd = (EditText) mView.findViewById(R.id.pwd_edit);
-//		tv_code = (TextView) mView.findViewById(R.id.tv_code);
-//		cb_showpw = (CheckBox)mView.findViewById(R.id.cb_showpw);
-//		cb_protocol = (CheckBox)mView.findViewById(R.id.cb_protocol);
-//		mBtnConfirm = (Button)mView.findViewById(R.id.btn_comfirm);
-//		tv_protocol = (TextView) mView.findViewById(R.id.tv_protocol);
-//	
-//	}
-
-//	private void initLister() {
-//		
-//		tv_code.setOnClickListener(this);
-//		tv_protocol.setOnClickListener(this);
-//		mBtnConfirm.setOnClickListener(this);
-//	}
 	
 	@OnClick({R.id.btn_comfirm,R.id.tv_protocol, R.id.tv_code})
 	@Override
@@ -188,7 +168,7 @@ public class RegisterFindPwdActivity extends RdpBaseActivity {
 		mRdpnetRequest.setCondition("merchantId", HKCloudApplication.MERCHANTID);
 		mRdpnetRequest.setCondition("phone", mEdtPhone.getText().toString());
 		mRdpnetRequest.setCondition("validateCode", mEdtCode.getText().toString());
-		mRdpnetRequest.setCondition("password", mEdtPwd.getText().toString());
+		mRdpnetRequest.setCondition("password", MD5Security.getMd5_32_UP(mEdtPwd.getText().toString()));
 		mRdpnetRequest.execute();
 	}
 	
@@ -204,7 +184,7 @@ public class RegisterFindPwdActivity extends RdpBaseActivity {
 	            timeCount.start();
 		} else if (result.getUrl().equals(UrlConstant.USER_REGISTER)) {
 			UserModel mUser = (UserModel) data;
-			PreferHelper.getInstance().saveLoginInfo(mUser.getAccount(), mEdtPwd.getText().toString());
+			PreferHelper.getInstance().saveLoginInfo(mUser.account, mEdtPwd.getText().toString());
 			HKCloudApplication.getInstance().setCurrUser(mUser);
 			EventBus.getDefault().post(new MainPagerChangeEvent(0));
 			skipActivity(this, MainActivity.class);

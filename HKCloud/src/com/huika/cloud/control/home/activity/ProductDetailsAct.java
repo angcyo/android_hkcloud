@@ -1,14 +1,5 @@
 package com.huika.cloud.control.home.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.Html;
@@ -24,7 +15,6 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
-import com.huika.cloud.config.Constant;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.control.cart.activity.ConfirmOrderActivity;
@@ -35,9 +25,7 @@ import com.huika.cloud.control.home.help.BuyNowClickListener.IDetailShopingCar;
 import com.huika.cloud.control.safeaccount.LoginHelper;
 import com.huika.cloud.control.safeaccount.activity.LoginActivity;
 import com.huika.cloud.support.event.CartChangeEvent;
-import com.huika.cloud.support.model.CartProduct;
 import com.huika.cloud.support.model.OrderProduct;
-import com.huika.cloud.support.model.ProductComment;
 import com.huika.cloud.support.model.ProductDetailBean;
 import com.huika.cloud.support.model.ProductImageArray;
 import com.huika.cloud.support.model.SkuPropertyUnit;
@@ -53,9 +41,16 @@ import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
 import com.zhoukl.androidRDP.RdpDataSource.RdpCommand.OnCommandSuccessedListener;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetDataSet;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,6 +59,8 @@ import de.greenrobot.event.EventBus;
  * @datetime: 2015/5/26 17:27
  */
 public class ProductDetailsAct extends ADetailDataLayerActivity implements IDetailShopingCar, OnRefreshItemViewsListener {
+	public List<SkuStock> skuStocks;
+	public List<SkuPropertyUnit> skuItems;
 	private TextView product_name_tv; // 商品名称
 	private TextView discount_price_tv; // 折扣价格
 	private TextView trade_price_tv; // 价格
@@ -77,7 +74,6 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 	private RelativeLayout goto_average_comment_rl; // 评价的跳转
 	private LinearLayout comment_lv_split_ll; // 评价的布局
 	private SampleListLinearLayout shop_evaluation_slv; // 评价的list
-
 	// 网页内容
 	private WebView wv_html1;
 	private WebView wv_html2;
@@ -85,33 +81,69 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 	// 详情bar的3个分类
 	private CheckedTextView[] pViews = new CheckedTextView[3];
 	private CheckedTextView[] floatViews = new CheckedTextView[3];
-
 	private String product_id;
 	private ProductDetailBean productDetailBean;
 	private ProductEvaluteAdapter evaluteAdapter;
-
 	// / 底部
 	private TextView under_the_plane_tips_tv; // 下架商品
 	private Button add_product_detail_btn; // 加入购物车
 	private Button product_buy_now_btn; // 马上购买
-
 	private LinearLayout operation_buy_product_ll;
 	private boolean isFistLoad;
-
-	public List<SkuStock> skuStocks;
-	public List<SkuPropertyUnit> skuItems;
 	/** 是否有sku，通过skuItems是否为空来判断，默认情况下商品是有sku */
 	private SkuStock skuStock;
 	private ViewGroup root_parent_fl;
+	/**
+	 * 商品详情bar点击事件监听
+	 */
+	private View.OnClickListener checkedListener = new View.OnClickListener() {
+		public void onClick(View v) {
+			CheckedTextView temp = (CheckedTextView) v;
+			if (temp.isChecked()) return;
+			int position = (Integer) temp.getTag();
+			for (int i = 0; i < pViews.length; i++) {
+				CheckedTextView ctv = pViews[i];
+				CheckedTextView ctvFloat = floatViews[i];
+				if (position == i) {
+					ctv.setChecked(true);
+					ctv.setTextColor(0xFFff4400);
 
-
-	private HashMap<String, String> product_detail_map;
+					ctvFloat.setChecked(true);
+					ctvFloat.setTextColor(0xFFff4400);
+				} else {
+					ctv.setTextColor(0xFF434343);
+					ctv.setChecked(false);
+					ctvFloat.setTextColor(0xFF434343);
+					ctvFloat.setChecked(false);
+				}
+			}
+			String html = "";
+			switch (position) {
+				case 0:
+					html = productDetailBean.introduction;
+					wv_html1.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
+					break;
+				case 1:
+					html = productDetailBean.productparameter;//product_detail_map.get("productparameter");
+					wv_html2.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
+					break;
+				case 2:
+					html = productDetailBean.salesservice; //product_detail_map.get("salesservice");
+					wv_html3.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
+					break;
+			}
+			wv_html1.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+			wv_html2.setVisibility(position == 1 ? View.VISIBLE : View.GONE);
+			wv_html3.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+		}
+	};
+	private EvaluteListImgsAdapter evaluteListImgsAdapter;
 
 	@Override
 	protected void initData() {
 		super.initData();
 		// product_id = getIntent().getStringExtra(INP_PRODUCT_ID);
-		product_id = "4028b284518041370151819939010060";
+		product_id = "4028b1f5516076110151607d26eb000d";
 		isFistLoad = true;
 	}
 
@@ -163,10 +195,11 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 	 * @date 2015年6月15日 下午2:09:17
 	 */
 	private void initOperationListener() {
-		if (productDetailBean.statusType.equals("1") || productDetailBean.stock.equals("0")) {// 没有下架或者库存为0的情况
-			if (productDetailBean.statusType.equals("1")) {
-				showToastMsg("亲，当前商品已下架!");
-			} else if (productDetailBean.stock.equals("0")) {
+		if (productDetailBean.stock.equals("0")) {// 没有下架或者库存为0的情况
+//			if (productDetailBean.statusType.equals("1")) {
+//				showToastMsg("亲，当前商品已下架!");
+//			} else
+			if (productDetailBean.stock.equals("0")) {
 				showToastMsg("亲，当前商品已缺货!");
 			}
 			product_buy_now_btn.setOnClickListener(null);
@@ -187,7 +220,7 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		}
 		goto_average_comment_rl.setOnClickListener(this);
 	}
-
+  
 	private void initViewListener() {
 		initDetailBaseListener();
 		refreshData(); // 请求详情的数据shicm2015.08.03
@@ -198,7 +231,7 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		super.onResume();
 		isFistLoad = false;
 	}
-  
+
 	@Override
 	protected void refreshData() {
 		if (!isFistLoad) {
@@ -214,7 +247,10 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		detailCommand.setOnCommandSuccessedListener(new OnCommandSuccessedListener() {
 			@Override
 			public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
-				refreshEnvaluteData();// 获取评论，如果是最新的放在onresume里面不是区最新的就不用shicm
+//				refreshEnvaluteData();// 获取评论，如果是最新的放在onresume里面不是区最新的就不用shicm
+				dismissLoadingDialog();
+				hideOverLay();
+				refreshSkuData();
 				if (data != null) {
 					productDetailBean = (ProductDetailBean) data;
 					fillViewFromNetwork(productDetailBean);
@@ -224,46 +260,6 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 			}
 		});
 		detailCommand.setOnCommandFailedListener(this);
-	}
-
-	/**
-	 * 获取评论
-	 */
-	protected void refreshEnvaluteData() {
-		Type envaluteType = new TypeToken<ArrayList<ProductComment>>() {
-		}.getType();
-		RdpNetDataSet envaluteCommand = new RdpNetDataSet(this, envaluteType);
-		envaluteCommand.setServerApiUrl(UrlConstant.PRODUCT_GETPRODUCTCOMMENTLIST);
-		envaluteCommand.clearConditions();
-		envaluteCommand.setCondition("type", 0 + "");
-		envaluteCommand.setCondition("productId", product_id);
-		envaluteCommand.open();
-		envaluteCommand.setOnCommandSuccessedListener(new OnCommandSuccessedListener() {
-
-			@Override
-			public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
-				dismissLoadingDialog();
-				hideOverLay();
-				refreshSkuData();
-				// 默认的返回前两条
-				int iCount = 0;
-				@SuppressWarnings("unchecked")
-				ArrayList<ProductComment> listComment = (ArrayList<ProductComment>) data;
-				if (null != listComment && listComment.size() > 0) {
-					ArrayList<ProductComment> datas = new ArrayList<ProductComment>();
-					for (int i = 0; i < listComment.size(); i++) {
-						ProductComment bean = listComment.get(i);
-						datas.add(bean);
-						iCount++;
-						if (iCount > 1) {
-							break;
-						}
-					}
-					evaluteAdapter.setData(datas);
-				}
-			}
-		});
-		envaluteCommand.setOnCommandFailedListener(this);
 	}
 
 	@Override
@@ -350,28 +346,23 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 			advertisementVp.start(5000);
 		}
 		product_name_tv.setText(bean.productName);
-		double showPrice = bean.skuStock.get(0).price;
-
-		for (int i = 0; i < bean.skuStock.size(); i++) {
-			if (showPrice > bean.skuStock.get(i).price) {
-				showPrice = bean.skuStock.get(i).price;
-			}
-		}
+		discount_price_tv.setText(Html.fromHtml("¥<big>" + MoneyShowTool.twolastDF(bean.productPrice) + "</big>"));
 		trade_price_tv.setText(Html.fromHtml("¥<big>" + MoneyShowTool.twolastDF(bean.productPrice) + "</big>"));
-		commission_money_tv.setText(bean.commissionPrice + "");
-		discount_tv.setText(bean.discount + "起");
+		commission_money_tv.setText("¥" + MoneyShowTool.twolastDF(bean.commissionPrice) + "(分佣佣金)");
+		discount_tv.setText((bean.discount * 10) + "折起");
 		sales_tv.setText(Html.fromHtml("当前销量<font color=#333333>" + "　" + bean.salesVolume + "</font>件"));
 		stock_tv.setText(Html.fromHtml("当前库存<font color=#333333>" + "　" + bean.stock + "</font>件"));
-		postage_detail_show_tv.setText(bean.logistics > 0 ? "邮费:  ".concat("¥" + bean.logistics) : "配送方式:  包邮");
-		postage_detail_show_tv.setText(" ".concat(bean.postage));
+		postage_detail_show_tv.setText(bean.logistics); //  > 0 ? "邮费:  ".concat("¥" + bean.logistics) : "配送方式:  包邮"
 		comment_count_tv.setText("评价  (".concat(bean.commentCount + ")"));
 		// comment_count_tv.setText(String.format(baseAct.getString(R.string.post_evaluation_change), bean.commentCount));
 		// 处理评论为零的情况
 		comment_lv_split_ll.setVisibility(0 == bean.commentCount ? View.GONE : View.VISIBLE);
 
-		under_the_plane_tips_tv.setVisibility(bean.statusType.equals("1") ? View.VISIBLE : View.GONE);
+//		under_the_plane_tips_tv.setVisibility(bean.statusType.equals("1") ? View.VISIBLE : View.GONE);
 		welfare_content_tv.setText(bean.favourableTip);
-
+		if (bean.productCommentArray != null && bean.productCommentArray.size() > 0) {
+			evaluteAdapter.setData(bean.productCommentArray);
+		}
 		initOperationListener();
 	}
 
@@ -387,7 +378,6 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 	 */
 	private void addShopCatList(final boolean isSkip, final String buyNum, final String lastSelectSkuId, final String skuText, final int stock) {
 		showLoadingDialog(getString(R.string.common_loading));
-
 		Type shopCartType;
 		if (!isSkip) {
 			shopCartType = new TypeToken<HashMap<String, String>>() {
@@ -399,7 +389,7 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		RdpNetCommand shopCartCommand = new RdpNetCommand(this, shopCartType);
 		shopCartCommand.setServerApiUrl(isSkip ? UrlConstant.ORDER_GETPRODUCTPRICEFORORDER : UrlConstant.ORDER_INTOCART);
 		shopCartCommand.clearConditions();
-		String memberId = HKCloudApplication.getInstance().getUserModel().getMemberId();
+		String memberId = HKCloudApplication.getInstance().getUserModel().memberId;
 		if (TextUtils.isEmpty(memberId)) {
 			memberId = "0";
 		}
@@ -407,8 +397,8 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		shopCartCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID); // 用户id
 		if (!isSkip) {
 			shopCartCommand.setCondition("productId", product_id);
-			shopCartCommand.setCondition("sku", lastSelectSkuId);
-			shopCartCommand.setCondition("buyNum", buyNum);
+			shopCartCommand.setCondition("skuNumber", lastSelectSkuId);
+			shopCartCommand.setCondition("count", buyNum);
 		} else {
 			shopCartCommand.setCondition("productDetail", getProductDetailInfo(buyNum, lastSelectSkuId, skuText));
 			shopCartCommand.setCondition("addressId","");
@@ -447,35 +437,8 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 		super.onScrollPageChangeListener(pageNum);
 		if (pageNum == 1) {
 			initbottomView();
-			product_introduce();
+			checkedListener.onClick(pViews[0]);
 		}
-	}
-
-	/**
-	 * 商品详情下部分，介绍
-	 */
-	private void product_introduce() {
-		showLoadingDialog(getString(R.string.common_loading));
-		Type intrType = new TypeToken<HashMap<String, String>>() {
-		}.getType();
-		RdpNetCommand introCommand = new RdpNetCommand(this, intrType);
-		introCommand.clearConditions();
-		introCommand.setCondition("productId", product_id);
-		introCommand.execute();
-		introCommand.setOnCommandSuccessedListener(new OnCommandSuccessedListener() {
-
-			@Override
-			public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
-				dismissLoadingDialog();
-				@SuppressWarnings("unchecked")
-				HashMap<String, String> map = (HashMap<String, String>) data;
-				if (null != map && map.size() > 0) {
-					product_detail_map = map;
-					checkedListener.onClick(pViews[0]);
-				}
-			}
-		});
-		introCommand.setOnCommandFailedListener(this);
 	}
 
 	/**
@@ -506,52 +469,6 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 			floatViews[i].setOnClickListener(checkedListener);
 		}
 	}
-
-	/**
-	 * 商品详情bar点击事件监听
-	 */
-	private View.OnClickListener checkedListener = new View.OnClickListener() {
-		public void onClick(View v) {
-			CheckedTextView temp = (CheckedTextView) v;
-			if (temp.isChecked()) return;
-			int position = (Integer) temp.getTag();
-			for (int i = 0; i < pViews.length; i++) {
-				CheckedTextView ctv = pViews[i];
-				CheckedTextView ctvFloat = floatViews[i];
-				if (position == i) {
-					ctv.setChecked(true);
-					ctv.setTextColor(0xFFff4400);
-
-					ctvFloat.setChecked(true);
-					ctvFloat.setTextColor(0xFFff4400);
-				} else {
-					ctv.setTextColor(0xFF434343);
-					ctv.setChecked(false);
-					ctvFloat.setTextColor(0xFF434343);
-					ctvFloat.setChecked(false);
-				}
-			}
-			String html = "";
-			switch (position) {
-				case 0:
-					html = product_detail_map.get("introduction");
-					wv_html1.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
-					break;
-				case 1:
-					html = product_detail_map.get("productparameter");
-					wv_html2.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
-					break;
-				case 2:
-					html = product_detail_map.get("salesservice");
-					wv_html3.loadDataWithBaseURL("about:blank", html, "text/html", "utf-8", null);
-					break;
-			}
-			wv_html1.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-			wv_html2.setVisibility(position == 1 ? View.VISIBLE : View.GONE);
-			wv_html3.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-		}
-	};
-	private EvaluteListImgsAdapter evaluteListImgsAdapter;
 
 	@Override
 	public boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder) {
@@ -586,7 +503,6 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 			jsonObject.put("skuId", skuId);
 			jsonObject.put("productCount", buyCount);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		array.put(jsonObject);
@@ -597,12 +513,12 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 	protected void refreshSkuData() {
 		Type skuType = new TypeToken<ProductDetailBean>() {
 		}.getType();
-		RdpNetCommand detailCommand = new RdpNetCommand(this, skuType);
-		detailCommand.setServerApiUrl(UrlConstant.PRODUCT_GETPRODUCTSKUDETAILS); // 商品详情
-		detailCommand.clearConditions();
-		detailCommand.setCondition("productId", product_id);
-		detailCommand.execute();
-		detailCommand.setOnCommandSuccessedListener(new OnCommandSuccessedListener() {
+		RdpNetCommand detailSkuCommand = new RdpNetCommand(this, skuType);
+		detailSkuCommand.setServerApiUrl(UrlConstant.PRODUCT_GETPRODUCTSKUDETAILS); // 商品sku详情
+		detailSkuCommand.clearConditions();
+		detailSkuCommand.setCondition("productId", product_id);
+		detailSkuCommand.execute();
+		detailSkuCommand.setOnCommandSuccessedListener(new OnCommandSuccessedListener() {
 			@Override
 			public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 				if (data != null) {
@@ -614,7 +530,7 @@ public class ProductDetailsAct extends ADetailDataLayerActivity implements IDeta
 				}
 			}
 		});
-		detailCommand.setOnCommandFailedListener(this);
+		detailSkuCommand.setOnCommandFailedListener(this);
 	}
 	
 	

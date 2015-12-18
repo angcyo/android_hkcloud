@@ -1,5 +1,25 @@
 package com.zhoukl.androidRDP.RdpFramework.RdpFragment;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.umeng.analytics.MobclickAgent;
 import com.zhoukl.androidRDP.R;
 import com.zhoukl.androidRDP.RdpDataSource.RdpCommand.OnCommandFailedListener;
@@ -14,26 +34,6 @@ import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 import fr.castorflex.android.loadingview.LoadingAndErrorOverlayLayout;
 import fr.castorflex.android.loadingview.LoadingRainBowDialog;
 import fr.castorflex.android.loadingview.overlay.OverlayLayout;
-
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnCommandSuccessedListener,
    OnCommandFailedListener,ISkipActivity, OnCancelListener{
@@ -53,6 +53,26 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     protected LinearLayout mLltFooterArea;
     
     protected LoadingRainBowDialog loadingDialog;
+    private BroadcastReceiver mLoginReceiver1 = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onLoginStatusChanged(isLogin(false));
+        }
+    };
+    /**
+     * 调此方法可以显示错误页面 targetView 设置overlay替换的view reloadListener 不要用匿名内部类
+     * 点击事件监听的id=R.id.click_reload 点击重新加载
+     */
+    private LoadingAndErrorOverlayLayout overLay;
+    private OverlayLayout mEmtyOverlay;
+    private View commonEmtyOverlay;
+
+    /***
+     * Fragment首次可见时 触发 用于请求数据等
+     */
+    public void initFristData() {
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -60,7 +80,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
         mActivity = (RdpBaseActivity) activity;
         mApplication = (RdpApplication) mActivity.getApplication();
     }
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //notifiyApplicationActivityCreating();
@@ -85,13 +105,13 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
         onAfterInitFragment();
         return mRootView;
     }
+    
     @Override
     public void onResume() {
     	super.onResume();
     	MobclickAgent.onPageEnd(this.getClass().getName()); // 保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息
-    };
-    
-    
+    }
+
     @Override
     public void onPause() {
     	// TODO Auto-generated method stub
@@ -101,7 +121,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     
     protected void onBeforeCreate(Bundle savedInstanceState) {
         //getTAApplication().registerCommand(TAIDENTITYCOMMAND,TAIdentityCommand.class);
-        
+
     }
     
     protected void onAfterOnCreate(Bundle savedInstanceState)
@@ -112,7 +132,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     protected int getBaseLayoutID() {
         return R.layout.rdp_base_activity;
     }
-
+    
     protected View findViewById(int id) {
         return mRootView.findViewById(id);
     }
@@ -123,7 +143,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
         mLltTitleBarLeftArea = (LinearLayout) findViewById(R.id.lltTitleBarLeftArea);
         mLltTitleBarRigthArea = (LinearLayout) findViewById(R.id.lltTitleBarRigthArea);
         addLeftFuncView(R.drawable.common_head_back_select, this, TBAR_FUNC_BACK);
-        
+
         mLltHeaderArea = (LinearLayout) findViewById(R.id.lltHeaderArea);
         mLltMasterArea = (LinearLayout) findViewById(R.id.lltMasterArea);
         mLltFooterArea = (LinearLayout) findViewById(R.id.lltFooterArea);
@@ -131,13 +151,13 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     }
     
     protected void initFragment() {
-        
+
     }
-    
+
     protected void onAfterInitFragment() {
-        
+
     }
-    
+
     protected boolean isLogin() {
         return isLogin(true);
     }
@@ -149,16 +169,15 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     protected void setFuncTitle(int titleResID) {
         setFuncTitle(getString(titleResID));
     }
-
+    
     protected void setFuncTitle(String title) {
         mTvTitle.setText(title);
     }
 
-
     protected View addHeaderView(int resLayoutID) {
         return mLayoutInflater.inflate(resLayoutID, mLltHeaderArea);
     }
-    
+
     protected View addMasterView(int resLayoutID) {
         return mLayoutInflater.inflate(resLayoutID, mLltMasterArea);
     }
@@ -166,7 +185,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     protected View addFooterView(int resLayoutID) {
         return mLayoutInflater.inflate(resLayoutID, mLltFooterArea);
     }
-    
+
     protected ImageButton addLeftFuncView(int drawableResID, OnClickListener listener, int funcViewTag) {
         return addFuncView(drawableResID, listener, funcViewTag, mLltTitleBarLeftArea);
     }
@@ -178,7 +197,7 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     protected ImageButton addRightFuncView(int drawableResID, OnClickListener listener, int funcViewTag) {
         return addFuncView(drawableResID, listener, funcViewTag, mLltTitleBarRigthArea);
     }
-    
+
     protected TextView addRightFuncTextView(String text, OnClickListener listener, int funcViewTag) {
         return addFuncTextView(text, listener, funcViewTag, mLltTitleBarRigthArea);
     }
@@ -198,14 +217,14 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
             button.setOnClickListener(listener);
         return button;
     }
-
+    
     private TextView addFuncTextView(String text, OnClickListener listener, int funcViewTag, LinearLayout parent) {
         TextView textView = new TextView(mActivity.getApplicationContext());
         textView.setTag(funcViewTag);
         textView.setText(text);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT); 
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         //params.setMargins(20, 0, 40, 0);
-        
+
         textView.setLayoutParams(params);
         textView.setPadding(20, 0, 40, 0);
         textView.setGravity(Gravity.CENTER);
@@ -241,18 +260,18 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
     }
 
     public void onLoginStatusChanged(boolean loginStatus) {
-        
+
     }
     
     @Override
     public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void onCommandFailed(Object reqKey, RdpResponseResult result) {
-        mActivity.onCommandFailed(reqKey, result);        
+        mActivity.onCommandFailed(reqKey, result);
     }
 
     @Override
@@ -260,23 +279,6 @@ public class RdpBaseFragment extends RdpFragment implements OnClickListener, OnC
         mActivity.unregisterReceiver(mLoginReceiver1);
         super.onDestroy();
     }
-
-    private BroadcastReceiver mLoginReceiver1 = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onLoginStatusChanged(isLogin(false));
-        }
-    };
-    
-    
-    /**
-	 * 调此方法可以显示错误页面 targetView 设置overlay替换的view reloadListener 不要用匿名内部类
-	 * 点击事件监听的id=R.id.click_reload 点击重新加载
-	 */
-	private LoadingAndErrorOverlayLayout overLay;
-	private OverlayLayout mEmtyOverlay;
-	private View commonEmtyOverlay;
 
 	// ------第一次加载覆盖页
 	protected void showLoadingOverLay(View targetView) {

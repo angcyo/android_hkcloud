@@ -1,14 +1,5 @@
 package com.huika.cloud.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.huika.cloud.config.Constant;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +19,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
+
+import com.huika.cloud.config.Constant;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 
@@ -463,35 +463,6 @@ public class ImageTools {
 		return output;
 	}
 
-	/**
-	 * 方法概述：读取sd卡下图片，由图片路径转换为bitmap
-	 * 
-	 * @author samy
-	 * @throws
-	 * @date 2014-5-21 下午7:15:15
-	 */
-	public Bitmap convertToBitmap(String path, int w, int h) {
-		BitmapFactory.Options opts = new BitmapFactory.Options();
-		// 设置为ture只获取图片大小
-		opts.inJustDecodeBounds = true;
-		opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		// 返回为空
-		BitmapFactory.decodeFile(path, opts);
-		int width = opts.outWidth;
-		int height = opts.outHeight;
-		float scaleWidth = 0.f, scaleHeight = 0.f;
-		if (width > w || height > h) {
-			// 缩放
-			scaleWidth = ((float) width) / w;
-			scaleHeight = ((float) height) / h;
-		}
-		opts.inJustDecodeBounds = false;
-		float scale = Math.max(scaleWidth, scaleHeight);
-		opts.inSampleSize = (int) scale;
-		WeakReference<Bitmap> weak = new WeakReference<Bitmap>(BitmapFactory.decodeFile(path, opts));
-		return Bitmap.createScaledBitmap(weak.get(), w, h, true);
-	}
-
 	public static Bitmap getNewBitmapIfNeedRotate() {
 		Bitmap bitmap = null;
 
@@ -531,16 +502,10 @@ public class ImageTools {
 		return resultBitmap;
 	}
 
-	private boolean isSDCARDMounted() {
-		String status = Environment.getExternalStorageState();
-		if (status.equals(Environment.MEDIA_MOUNTED)) return true;
-		return false;
-	}
-
 	/**
-	 * 
+	 *
 	 * 方法概述：压缩和保持图片
-	 * 
+	 *
 	 * @author samy
 	 * @date 2014-5-22 下午3:06:10
 	 */
@@ -553,5 +518,39 @@ public class ImageTools {
 			file = FileImgUtils.saveBitmap(zoomBitmap2, "" + newStr2);
 		}
 		return file;
+	}
+
+	/**
+	 * 方法概述：读取sd卡下图片，由图片路径转换为bitmap
+	 *
+	 * @throws
+	 * @author samy
+	 * @date 2014-5-21 下午7:15:15
+	 */
+	public Bitmap convertToBitmap(String path, int w, int h) {
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		// 设置为ture只获取图片大小
+		opts.inJustDecodeBounds = true;
+		opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+		// 返回为空
+		BitmapFactory.decodeFile(path, opts);
+		int width = opts.outWidth;
+		int height = opts.outHeight;
+		float scaleWidth = 0.f, scaleHeight = 0.f;
+		if (width > w || height > h) {
+			// 缩放
+			scaleWidth = ((float) width) / w;
+			scaleHeight = ((float) height) / h;
+		}
+		opts.inJustDecodeBounds = false;
+		float scale = Math.max(scaleWidth, scaleHeight);
+		opts.inSampleSize = (int) scale;
+		WeakReference<Bitmap> weak = new WeakReference<Bitmap>(BitmapFactory.decodeFile(path, opts));
+		return Bitmap.createScaledBitmap(weak.get(), w, h, true);
+	}
+
+	private boolean isSDCARDMounted() {
+		String status = Environment.getExternalStorageState();
+		return status.equals(Environment.MEDIA_MOUNTED);
 	}
 }

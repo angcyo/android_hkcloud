@@ -1,5 +1,7 @@
 package com.zhoukl.androidRDP.RdpUtils.Security.huixinRSA;
 
+import android.text.TextUtils;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
@@ -15,8 +17,6 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import android.text.TextUtils;
 
 /**
  * 
@@ -47,15 +47,13 @@ public class StringUtils {
 
 	// email address pattern
 	public static final String EMAIL_ADDRESS_PATTERN = "^(\\w+([-+.]\\w+)*@\\w+([-]\\w+)*.\\w+)$|^(\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+).\\w+$";
-
-	private static Hashtable htmlEntityTable = null;
 	private static final String[] HTML_ENTITIES = { ">", "&gt;", "<", "&lt;", "&", "&amp;", "\"", "&quot;", "'", "&#039;", "//", "&#092;", "\u00a9", "&copy;", "\u00ae", "&reg;" };
-
 	// BSC00015P
 	private static final String beginFormula = "{#";
 	private static final String endFormula = "}";
 	// system root path
 	public static String sysRootPath = "";
+	private static Hashtable htmlEntityTable = null;
 
 	/**
 	 * return null input string as emptry string
@@ -92,10 +90,7 @@ public class StringUtils {
 	 * @return boolean
 	 */
 	public static boolean isNull(String s) {
-		if (s == null || s.trim().equals(""))
-			return true;
-		else
-			return false;
+		return s == null || s.trim().equals("");
 	}
 
 	/**
@@ -1226,7 +1221,7 @@ public class StringUtils {
 			for (int i = 0; i < size; i++) {
 				if (i != 0)
 					retString.append(",");
-				retString.append("'''" + (String) array.get(i) + "'''");
+				retString.append("'''" + array.get(i) + "'''");
 			}
 		}
 		return retString.toString();
@@ -1247,7 +1242,7 @@ public class StringUtils {
 			for (int i = 0; i < size; i++) {
 				if (i != 0)
 					retString.append(",");
-				retString.append("'" + (String) array.get(i) + "'");
+				retString.append("'" + array.get(i) + "'");
 			}
 		}
 		return retString.toString();
@@ -1306,7 +1301,7 @@ public class StringUtils {
 			return null;
 		}
 		return date;
-	};
+	}
 
 	public static java.sql.Date getSqlDate(java.util.Date date) {
 		return new java.sql.Date(date.getTime());
@@ -1384,12 +1379,7 @@ public class StringUtils {
 			return false;
 		int firstIndex = value.indexOf(beginFormula);
 		int lastIndex = value.lastIndexOf(endFormula);
-		if (lastIndex > firstIndex) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return lastIndex > firstIndex;
 	}
 
 	/**

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.huika.cloud"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.huika.cloud"
     android:versionCode="1"
-    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -17,11 +18,22 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!--<activity-->
+        <!--android:name="com.huika.cloud.control.main.activity.WelcomeActivity"-->
+        <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
+        <!--android:label="@string/app_name"-->
+        <!--&gt;-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN" />-->
+
+        <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
+
         <activity
-            android:name="com.huika.cloud.control.main.activity.WelcomeActivity"
+            android:name=".control.me.view.RsenTestActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/app_name"
-             >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,11 +41,11 @@
             </intent-filter>
         </activity>
 
-       <activity android:name="com.huika.cloud.control.main.activity.MainActivity"></activity>
-       <activity android:name="com.huika.cloud.control.home.activity.ProductListActivity"></activity>
-       <activity android:name="com.huika.cloud.control.home.activity.GoodTypesActivity"></activity>
-       <activity android:name="com.huika.cloud.control.home.activity.SearchActivity"></activity>
-       <activity android:name="com.huika.cloud.control.home.activity.ProductDetailsAct"></activity>
+        <activity android:name="com.huika.cloud.control.main.activity.MainActivity" />
+        <activity android:name="com.huika.cloud.control.home.activity.ProductListActivity" />
+        <activity android:name="com.huika.cloud.control.home.activity.GoodTypesActivity" />
+        <activity android:name="com.huika.cloud.control.home.activity.SearchActivity" />
+        <activity android:name="com.huika.cloud.control.home.activity.ProductDetailsAct" />
 
         <activity android:name="com.huika.cloud.control.safeaccount.activity.LoginActivity"/>
         <activity android:name="com.huika.cloud.control.safeaccount.activity.RegisterFindPwdActivity"/>
@@ -42,39 +54,40 @@
         <activity android:name="com.huika.cloud.control.safeaccount.activity.UpLoginPwdActivity"/>
         <activity android:name="com.huika.cloud.control.safeaccount.activity.UpPayPwdActivity"/>
         <activity android:name="com.huika.cloud.control.safeaccount.activity.UpPhoneLoginPwdActivity"/>
-        
-        <activity android:name="com.huika.cloud.control.me.activity.MyInfoActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MilitaryForbidAreaActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.DistributorlevelActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MemberLevelActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyRecipientActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MySuperiorActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.AddRecipientActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyCouponsCountActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyWalletActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.ApplyForShopActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.InviteMembersActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MeInviteMembersActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.DistributionOrdersActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.WithdrawApplicationActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepTwoActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepThreeActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BindBankActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BankCardListActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.WithDrawRecordActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.ChoiceProvienceActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyShopActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyDistributionOrderActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.MyTeamActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.DisOrderDetailActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.CommissionDetailActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BindWXPublicNum"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.AddBankCardActivity"></activity>
-        <activity android:name="com.huika.cloud.control.me.activity.BankListActivity"></activity>
 
-        
-        <activity android:name="com.huika.cloud.control.cart.activity.ConfirmOrderActivity"></activity>
-        <activity android:name="com.huika.cloud.control.cart.activity.CartActivity"></activity>
+        <activity android:name="com.huika.cloud.control.me.activity.MyInfoActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MilitaryForbidAreaActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.DistributorlevelActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MemberLevelActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyRecipientActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MySuperiorActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.AddRecipientActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyCouponsCountActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyWalletActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.ApplyForShopActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.InviteMembersActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MeInviteMembersActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.DistributionOrdersActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.WithdrawApplicationActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepTwoActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BindCardStepThreeActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BindBankActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BankCardListActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.WithDrawRecordActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.ChoiceProvienceActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyShopActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyDistributionOrderActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.MyTeamActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.DisOrderDetailActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.CommissionDetailActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BindWXPublicNum" />
+        <activity android:name="com.huika.cloud.control.me.activity.AddBankCardActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.BankListActivity" />
+        <activity android:name="com.huika.cloud.control.me.activity.EditNIkeNameActivity" />
+
+
+        <activity android:name="com.huika.cloud.control.cart.activity.ConfirmOrderActivity" />
+        <activity android:name="com.huika.cloud.control.cart.activity.CartActivity" />
         <activity
             android:name="com.huika.cloud.control.pay.activity.HKCloudPayActivity"
             android:exported="true"

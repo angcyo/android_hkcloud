@@ -1,12 +1,6 @@
 package com.huika.cloud.control.eshop.adapter;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.TextView;
 
 import com.huika.cloud.R;
@@ -14,10 +8,10 @@ import com.huika.cloud.support.model.MyOrderBean;
 import com.huika.cloud.support.model.MyOrderDetailBean;
 import com.huika.cloud.support.model.OrderGoodsBean;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
+
+import java.text.DecimalFormat;
 
 public class OrderGoodsAdapter extends RdpDataListAdapter<OrderGoodsBean> {
 	private DecimalFormat df = new DecimalFormat("0.00");
@@ -66,8 +60,8 @@ public class OrderGoodsAdapter extends RdpDataListAdapter<OrderGoodsBean> {
 	}
     
     protected void refreshItemViews(int position, AdapterViewHolder viewHolder) {
-        final OrderGoodsBean data = (OrderGoodsBean) getItem(position);
-        viewHolder.getTextView(R.id.tvGoodsTitle).setText(data.productName);
+		final OrderGoodsBean data = getItem(position);
+		viewHolder.getTextView(R.id.tvGoodsTitle).setText(data.productName);
         viewHolder.getTextView(R.id.tvPrice).setText("¥" + df.format(data.shopPrice));
         viewHolder.getTextView(R.id.tvGoodsNum).setText("x" + data.buyCount);
         viewHolder.getTextView(R.id.tvSKU).setText(data.skuRs);

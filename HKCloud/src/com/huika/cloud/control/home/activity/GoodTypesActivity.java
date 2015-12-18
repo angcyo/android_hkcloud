@@ -1,16 +1,10 @@
 package com.huika.cloud.control.home.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -32,6 +26,10 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpInnerGridView;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description：商品分类
@@ -103,9 +101,8 @@ public class GoodTypesActivity extends RdpBaseActivity implements
 					public void onCommandSuccessed(Object reqKey,
 							RdpResponseResult result, Object data) {
 						hideOverLayView();
-						Log.i("test", "二级分类数据"+data.toString());
 						secondAdapter.setData((List<TwoTypeBean>) data);
-					};
+					}
 				});
 		first_classify.setOnItemClickListener(this);
 		secondAdapter.setListener(new OnRefreshItemViewsListener() {
@@ -122,7 +119,6 @@ public class GoodTypesActivity extends RdpBaseActivity implements
 				threeAdapter = new RdpDataListAdapter<ThreeTypeBean>(mApplication,
 						R.layout.three_type_item);
 				threeAdapter.setListener(new OnRefreshItemViewsListener() {
-
 					@Override
 					public boolean onRefreshItemViews(RdpAdapter adapter,
 							int position, View convertView,
@@ -139,12 +135,10 @@ public class GoodTypesActivity extends RdpBaseActivity implements
 				threeAdapter.setData(twoTypeBean.children);
 				rigv.setAdapter(threeAdapter);
 				rigv.setOnItemClickListener(new OnItemClickListener() {
-
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						ThreeTypeBean threeTypeBean = twoTypeBean.children.get(position);
-						Toast.makeText(mApplication, "点击了条目"+threeTypeBean.categoryName, 0).show();
 						Intent intent=new Intent(mApplication, ProductListActivity.class);
 						intent.putExtra("categoryId", threeTypeBean.categoryId);
 						intent.putExtra("categoryName", threeTypeBean.categoryName);
@@ -193,7 +187,9 @@ public class GoodTypesActivity extends RdpBaseActivity implements
 		firstAdapter.setData((List<OneTypeBean>) data);
 		firstAdapter.setSelectedItem(0);
 		OneTypeBean bean = (OneTypeBean) firstDataSet.getRecord(0);
-		getSecondTypeData(bean.categoryId);
+		if (bean != null) {
+			getSecondTypeData(bean.categoryId);
+		}
 	}
 
 	@Override
@@ -220,9 +216,6 @@ public class GoodTypesActivity extends RdpBaseActivity implements
 			Toast.makeText(mApplication, "条状到搜索界面", Toast.LENGTH_SHORT).show();
 			Intent intent=new Intent(mApplication, SearchActivity.class);
 			startActivity(intent);
-			break;
-		case R.id.back_iv:
-			finish();
 			break;
 		default:
 			super.onClick(v);

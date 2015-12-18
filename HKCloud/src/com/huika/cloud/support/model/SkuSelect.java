@@ -3,13 +3,9 @@ package com.huika.cloud.support.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @desc：SKU
@@ -18,10 +14,10 @@ import java.util.Set;
  */
 public class SkuSelect implements Serializable {
   // key 为 propId
-  private HashMap<Integer, SkuPropertySelect> skuSelectMap;
+  private HashMap<String, SkuPropertySelect> skuSelectMap;
 
   public SkuSelect() {
-    this.skuSelectMap = new HashMap<Integer, SkuPropertySelect>();
+      this.skuSelectMap = new HashMap<String, SkuPropertySelect>();
   }
 
   /**
@@ -80,70 +76,30 @@ public class SkuSelect implements Serializable {
    * @author samy
    * @date 2015年6月4日 下午3:51:02
    */
-  public String getSeclectSkuId() {
-    List<String> lastSkuIds = new ArrayList<String>();
-    for (Map.Entry entry : skuSelectMap.entrySet()) {
-      SkuPropertySelect skuPropertySelect = (SkuPropertySelect) entry.getValue();
-      if (!skuPropertySelect.isUseSelectMap) {
-        continue;
+  public String getSeclectSkuId(List<SkuPropertyUnit> skuItems) {
+      List<String> sortStr = new ArrayList<String>();
+      String skuId = "";
+      for (Map.Entry entry : skuSelectMap.entrySet()) {
+          SkuPropertySelect skuPropertySelect = (SkuPropertySelect) entry.getValue();
+          if (!skuPropertySelect.isUseSelectMap) {
+              continue;
+          }
+          sortStr.add(skuPropertySelect.getSku());
       }
-      lastSkuIds.addAll(Arrays.asList(skuPropertySelect.getSku().split(",")));
-    }
-    for (String value : lastSkuIds) {
-      if (getEqualCount(lastSkuIds, value) == skuSelectMap.size()) return value;
-    }
-    return lastSkuIds.get(0).toString();
-  }
+      for (int i = 0; i < skuItems.size(); i++) {
+          SkuPropertyUnit propertyUnit = skuItems.get(i);
+          for (int j = 0; j < sortStr.size(); j++) {
+              if (sortStr.get(j).startsWith(propertyUnit.attributeId)) {
+                  skuId += sortStr.get(j) + ",";
+              }
+          }
 
-  private int getEqualCount(List<String> list, String compareStr) {
-    int result = 0;
-    for (String value : list) {
-      if (value.equals(compareStr)) result++;
-    }
-    return result;
-  }
-
-  public static List findDuplicateWithOrder(List list) {
-    Set set = new HashSet();
-    List repeatList = new ArrayList();
-    for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-      Object element = iter.next();
-      if (!set.add(element)) {
-        repeatList.add(element);
       }
-    }
-    //		如果Bean，只有一项是。默认的填充一个对象；保持repeatList始终有一个以上数据
-    if (repeatList.isEmpty()) {
-      repeatList.addAll(set);
-    }
-    return repeatList;
+      return skuId.substring(0, skuId.length() - 1);
   }
 
-  /**
-   * 先根据 propId 进行排序
-   */
-  public String getPpath() {
-    List<SkuPropertySelect> sortedSkuProperties = new ArrayList<SkuPropertySelect>();
-    for (Map.Entry entry : skuSelectMap.entrySet()) {
-      SkuPropertySelect skuPropertySelect = (SkuPropertySelect) entry.getValue();
-      sortedSkuProperties.add(skuPropertySelect);
-    }
-    Collections.sort(sortedSkuProperties);
-    StringBuilder builder = new StringBuilder();
-    for (SkuPropertySelect sku : sortedSkuProperties) {
-      builder.append(sku.getAttributeId());
-      builder.append(":");
-      builder.append(sku.getValueId());
-      builder.append(";");
-    }
-    String result = builder.toString();
-    if (result.endsWith(";")) {
-      result = result.substring(0, result.length() - 1);
-    }
-    return result;
-  }
 
-  public void put(int propId, String propName, boolean isSelect) {
+    public void put(String propId, String propName, boolean isSelect) {
     SkuPropertySelect skuPropertySelect = new SkuPropertySelect();
     skuPropertySelect.setAttributeId(propId);
     skuPropertySelect.setAttributeName(propName);
@@ -151,17 +107,14 @@ public class SkuSelect implements Serializable {
     this.skuSelectMap.put(propId, skuPropertySelect);
   }
 
-  public void remove(Long propId) {
-    this.skuSelectMap.remove(propId.toString());
-  }
 
   /**
    * @description：填充颜色和尺寸中的选择map数据
    * @author samy
    * @date 2015年6月4日 下午5:20:24
    */
-  public void setSelectedSkuId(int propId, int valueId, String valueStr, String sku, String imgUrl,
-      boolean isUseSelectMap) {
+  public void setSelectedSkuId(String propId, String valueId, String valueStr, String sku, String imgUrl,
+                               boolean isUseSelectMap) {
     this.skuSelectMap.get(propId).setValueId(valueId);
     this.skuSelectMap.get(propId).setValueStr(valueStr);
     this.skuSelectMap.get(propId).setSelected(Boolean.TRUE);
@@ -169,6 +122,14 @@ public class SkuSelect implements Serializable {
     this.skuSelectMap.get(propId).setImgUrl(imgUrl);
     this.skuSelectMap.get(propId).setUseSelectMap(isUseSelectMap);
   }
+
+    public HashMap<String, SkuPropertySelect> getSkuSelectMap() {
+        return skuSelectMap;
+    }
+
+    public void setSkuSelectMap(HashMap<String, SkuPropertySelect> skuSelectMap) {
+        this.skuSelectMap = skuSelectMap;
+    }
 
   /**
    * @author samy
@@ -179,9 +140,9 @@ public class SkuSelect implements Serializable {
 public class SkuPropertySelect implements Comparable<SkuPropertySelect>, Serializable {
     private boolean isSelected;
 
-    private int attributeId;
+      private String attributeId;
     private String attributeName;
-    private int valueId;
+      private String valueId;
     private String valueStr;
     private String sku;
     private String imgUrl;
@@ -208,11 +169,11 @@ public class SkuPropertySelect implements Comparable<SkuPropertySelect>, Seriali
       this.isSelected = isSelected;
     }
 
-    public int getAttributeId() {
+      public String getAttributeId() {
       return attributeId;
     }
 
-    public void setAttributeId(int attributeId) {
+      public void setAttributeId(String attributeId) {
       this.attributeId = attributeId;
     }
 
@@ -224,11 +185,11 @@ public class SkuPropertySelect implements Comparable<SkuPropertySelect>, Seriali
       this.attributeName = attributeName;
     }
 
-    public int getValueId() {
+      public String getValueId() {
       return valueId;
     }
 
-    public void setValueId(int valueId) {
+      public void setValueId(String valueId) {
       this.valueId = valueId;
     }
 
@@ -261,13 +222,5 @@ public class SkuPropertySelect implements Comparable<SkuPropertySelect>, Seriali
           + ", attributeName=" + attributeName + ", valueId=" + valueId + ", valueStr=" + valueStr
           + ", sku=" + sku + ", imgUrl=" + imgUrl + ", isUseSelectMap=" + isUseSelectMap + "]";
     }
-  }
-
-  public HashMap<Integer, SkuPropertySelect> getSkuSelectMap() {
-    return skuSelectMap;
-  }
-
-  public void setSkuSelectMap(HashMap<Integer, SkuPropertySelect> skuSelectMap) {
-    this.skuSelectMap = skuSelectMap;
   }
 }

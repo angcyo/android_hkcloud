@@ -1,16 +1,13 @@
 package com.huika.cloud.control.me.fragment;
 
-import java.lang.reflect.Type;
-
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -18,33 +15,44 @@ import com.huika.cloud.R;
 import com.huika.cloud.control.me.activity.DisOrderDetailActivity;
 import com.huika.cloud.support.model.MyTeamBean;
 import com.huika.cloud.support.model.TeamBean;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpBaseFragment;
+import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
 
+import java.lang.reflect.Type;
+
 public class MyTeamFragment extends RdpBaseFragment implements OnTouchListener  {
+	boolean isSelectedAll = true;
 	private View mMasterView;
 	private RdpListView rlv;
-	private ImageView iv_user;
-	private ImageView iv_goto_my_invite;
-	private TextView tv_user_name;
-	private TextView tv_user_level;
+	@ViewInject(R.id.direct_invite_num)
 	private TextView direct_invite_num;
+	@ViewInject(R.id.my_team_num)
 	private TextView my_team_num;
-	private RelativeLayout rl_all;
-	private RelativeLayout rl_team_num;
-	private RelativeLayout rl_consume_num;
-	
+	@ViewInject(R.id.view_all)
+	private View view_all;
+	@ViewInject(R.id.view_team)
+	private View view_team;
+	@ViewInject(R.id.view_consume)
+	private View view_consume;
+	private boolean isSelectedTeam = false;
+	private boolean isSelectedConsume = false;
+	private RdpDataListAdapter<TeamBean> adapter;
+	private RdpNetCommand teamRequest;
+
+
 	@Override
 	protected void initFragment() {
 		super.initFragment();
 		mTitleBar.setVisibility(View.GONE);
 		mMasterView = addMasterView(R.layout.my_team_layout);
-		initView();
-		initListener();
+		rlv = (RdpListView) mMasterView.findViewById(R.id.rlv);
 		//设置点击事件传递监听
 		mMasterView.setOnTouchListener(this);
 		adapter = new RdpDataListAdapter<TeamBean>(mApplication, R.layout.item_my_team);
@@ -53,6 +61,13 @@ public class MyTeamFragment extends RdpBaseFragment implements OnTouchListener  
 		Type typeOfResult=new TypeToken<MyTeamBean>(){}.getType();
 		teamRequest = new RdpNetCommand(mApplication, typeOfResult);
 		getMyTeamInfo(teamRequest,"memberId",0,0);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		RdpAnnotationUtil.inject(this, mRootView);
+		return mRootView;
 	}
 
 	private void getMyTeamInfo(RdpNetCommand teamRequest, String memberId, int teamCountType, int consumeAmountType) {
@@ -66,36 +81,8 @@ public class MyTeamFragment extends RdpBaseFragment implements OnTouchListener  
 		showLoadingOverLay(rlv);
 		teamRequest.execute();
 	}
-	
-	private void initListener() {
-		iv_goto_my_invite.setOnClickListener(this);
-		rl_all.setOnClickListener(this);
-		rl_team_num.setOnClickListener(this);
-		rl_consume_num.setOnClickListener(this);
-	}
 
-	private void initView() {
-		iv_goto_my_invite = (ImageView) mMasterView.findViewById(R.id.iv_goto_my_invite);
-		direct_invite_num = (TextView) mMasterView.findViewById(R.id.direct_invite_num);
-		my_team_num = (TextView) mMasterView.findViewById(R.id.my_team_num);
-		rl_all = (RelativeLayout) mMasterView.findViewById(R.id.rl_all);
-		rl_team_num = (RelativeLayout) mMasterView.findViewById(R.id.rl_team_num);
-		rl_consume_num = (RelativeLayout) mMasterView.findViewById(R.id.rl_consume_num);
-		rlv = (RdpListView) mMasterView.findViewById(R.id.rlv);
-		view_all = mMasterView.findViewById(R.id.view_all);
-		view_team = mMasterView.findViewById(R.id.view_team);
-		view_consume = mMasterView.findViewById(R.id.view_consume);
-	}
-	
-	boolean isSelectedAll=true;
-	private View view_all;
-	private View view_team;
-	private View view_consume;
-	private boolean isSelectedTeam=false;
-	private boolean isSelectedConsume=false;
-	private RdpDataListAdapter<TeamBean> adapter;
-	private RdpNetCommand teamRequest;
-	
+	@OnClick({R.id.rl_all, R.id.rl_team_num, R.id.rl_consume_num, R.id.iv_goto_my_invite})
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

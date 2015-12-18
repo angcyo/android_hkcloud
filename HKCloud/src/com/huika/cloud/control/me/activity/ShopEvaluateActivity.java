@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -206,24 +205,24 @@ public class ShopEvaluateActivity extends RdpBaseActivity
 		return mShopPrice.getText().toString();
 	}
 
+	public void setmShopPrice(String mShopPrice) {
+		this.mShopPrice.setText("￥" + mShopPrice);
+	}
+
 	public void setmShopPrice(float price) {
 		String p = String.format("￥%01.2f", price);//
 		this.mShopPrice.setText(p);
-	}
-
-	public void setmShopPrice(String mShopPrice) {
-		this.mShopPrice.setText("￥" + mShopPrice);
 	}
 
 	public String getmShopNum() {
 		return mShopNum.getText().toString();
 	}
 
-	public void setmShopNum(int mShopNum) {
+	public void setmShopNum(String mShopNum) {
 		this.mShopNum.setText("x" + mShopNum);
 	}
 
-	public void setmShopNum(String mShopNum) {
+	public void setmShopNum(int mShopNum) {
 		this.mShopNum.setText("x" + mShopNum);
 	}
 

@@ -1,30 +1,25 @@
 package com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.httpClient;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetRequest.RdpNetRequest;
+import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpRequest;
+import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.params.HttpParams;
 
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.IRdpNetRequestCallBackListener;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpRequest;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetRequest.RdpNetRequest;
-
-
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * 异步任务实例类
@@ -36,19 +31,19 @@ public class RdpHttpClientRequest extends RdpNetRequest implements Observer {
 	//protected String mRequestKey = "mRequestKey";
 	/** 任务提交监听器 */
 	//protected IRdpNetRequestCallBackListener taskListener = null;
-	/** 是否有网络连接 */
-	private boolean isNetworkAvailable = true;
+    public static HttpClient mHttpClient;
+    protected HashMap<String, HttpClientReqAsyncTask> mAsyncTaskMap = new HashMap<String, HttpClientReqAsyncTask>();
 
-	private boolean isCompleteOK = false;
-	
 //	protected AjaxParams mAjaxParams;// = new AjaxParams(); // 有可能不是AjaxParams，而是HttpEntity
 	//protected HttpEntity mHttpEntity;
 	//protected String mUrl = "";
+    /**
+     * 是否有网络连接
+     */
+    private boolean isNetworkAvailable = true;
+    private boolean isCompleteOK = false;
 
-	public static HttpClient mHttpClient;
-	protected HashMap<String, HttpClientReqAsyncTask> mAsyncTaskMap = new HashMap<String, HttpClientReqAsyncTask>();
-	
-	public static void initialize(HttpClient httpClient) {
+    public static void initialize(HttpClient httpClient) {
 		mHttpClient = httpClient;
 	}
 	
@@ -269,8 +264,8 @@ public class RdpHttpClientRequest extends RdpNetRequest implements Observer {
             mRdpRequest.mCallBackListener.onErrorResult(mKeyTag, result);
         }
 
-    };
-    
+    }
+
 //	public interface ZklHttpClientAsyncTaskListener {
 //		/** 提交任务前先添加到任务观察器管理中.
 //		 * @param task 实现了Observer接口的任务实例

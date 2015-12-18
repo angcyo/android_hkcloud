@@ -1,14 +1,9 @@
 package com.huika.cloud.control.home.fragment;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
-import android.location.GpsStatus.Listener;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
@@ -20,11 +15,12 @@ import com.huika.cloud.views.GridViewForScrollView;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetDataSet;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpFragment.RdpNetListBaseFragment;
 import com.zhoukl.androidRDP.RdpMultimedia.Image.RdpImageLoader;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import fr.castorflex.android.loadingview.overlay.OverlayLayout;
 
@@ -38,7 +34,8 @@ public class BaseProductEnvaluteFragment extends RdpNetListBaseFragment {
 	public String productId;
 	public int type;
 	public int size;
-	
+	private OverlayLayout overlayLayout;
+	private EvaluteListImgsAdapter evaluteListImgsAdapter;
 
 	@Override
 	protected void initFragment() {
@@ -57,7 +54,7 @@ public class BaseProductEnvaluteFragment extends RdpNetListBaseFragment {
 		mMasterAdapter.setItemLayoutID(R.layout.item_dish_evaluate_lv);
 		mMasterAdapter.setListener(this);
 	}
-	
+
 	protected void refreshData(int type, String productId) {
 		Type productType = new TypeToken<ArrayList<ProductComment>>() {
 		}.getType();
@@ -65,7 +62,7 @@ public class BaseProductEnvaluteFragment extends RdpNetListBaseFragment {
 		mDataSet.setServerApiUrl(UrlConstant.PRODUCT_GETPRODUCTCOMMENTLIST);
 		mDataSet.clearConditions();
 		mDataSet.setCondition("productId", productId); // 0001
-		mDataSet.setCondition("getMemberId", HKCloudApplication.getInstance().getUserModel().getMemberId()); // 402880e447d7243d0147d72ea3eb0002
+		mDataSet.setCondition("getMemberId", HKCloudApplication.getInstance().getUserModel().memberId); // 402880e447d7243d0147d72ea3eb0002
 		mDataSet.setCondition("type", type);
 		mDataSet.open();
 	}
@@ -98,11 +95,9 @@ public class BaseProductEnvaluteFragment extends RdpNetListBaseFragment {
 		// TODO Auto-generated method stub
 		super.onCommandFailed(reqKey, result);
 		showToastMsg(R.string.common_loading_net_error);
-	
+
 	}
 
-	private OverlayLayout overlayLayout;
-	private EvaluteListImgsAdapter evaluteListImgsAdapter;
 	private void showOverLayTip(int strId) {
 		if (overlayLayout == null) {
 			overlayLayout = createEmptyOverLay();

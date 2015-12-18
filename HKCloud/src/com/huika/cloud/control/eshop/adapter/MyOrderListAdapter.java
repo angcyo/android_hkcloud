@@ -1,32 +1,21 @@
 package com.huika.cloud.control.eshop.adapter;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 
 import com.huika.cloud.R;
 import com.huika.cloud.control.eshop.actvity.MyOrderDetailActivity;
 import com.huika.cloud.control.eshop.common.MyOrderBusiOper;
 import com.huika.cloud.control.eshop.common.MyOrderBusiOper.IMyOrderBusiOper;
 import com.huika.cloud.support.model.MyOrderBean;
-import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
-import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataSetAdapter;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.TextView;
+import java.text.DecimalFormat;
 
 /**
  * @description：
@@ -87,8 +76,8 @@ public class MyOrderListAdapter extends RdpDataSetAdapter {
     }
 
     public interface IOrderCallBack {
-        
-        public void onMerchantClick(MyOrderBean data, View v);
+
+        void onMerchantClick(MyOrderBean data, View v);
     }
 
 	

@@ -1,12 +1,5 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.content.Intent;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -18,7 +11,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.huika.cloud.R;
 import com.huika.cloud.support.model.AccountDetailBean;
 import com.huika.cloud.support.model.CardBean;
-import com.huika.cloud.support.model.OneTypeBean;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
@@ -28,12 +20,20 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * @description：提现申请记录
+ * @description：账单明细
  * @author ht
  * @date 2015-12-4 上午10:24:34
  */
 public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefreshItemViewsListener {
+	boolean selectedAll = true;
+	boolean selectedIncome = false;
+	boolean selectedExpanse = false;
+	String[] moneyType = new String[]{"充值", "转账", "消费", "提现", "提现", "佣金", "买单返现"};
 	private View mMasterView;
 	private RdpListView rlv;
 	private TextView tv_my_banlance;
@@ -43,6 +43,10 @@ public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefresh
 	private View view_all;
 	private View view_income;
 	private View view_expense;
+	private RdpListView rlv2;
+	private RdpNetDataSet mDataSet;
+	private RdpDataListAdapter<AccountDetailBean> adapter;
+	private CardBean selectedCard;
 
 	@Override
 	protected void initActivity() {
@@ -52,7 +56,7 @@ public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefresh
 		initView();
 		initListener();
 		if(selectedCard!=null){
-			
+
 		}
 		adapter = new RdpDataListAdapter<AccountDetailBean>(mApplication, R.layout.account_detail_item);
 		adapter.setListener(this);
@@ -104,12 +108,6 @@ public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefresh
 		view_expense = mMasterView.findViewById(R.id.view_expense);
 	}
 	
-	boolean selectedAll=true;
-	boolean selectedIncome=false;
-	boolean selectedExpanse=false;
-	private RdpListView rlv2;
-	private RdpNetDataSet mDataSet;
-	private RdpDataListAdapter<AccountDetailBean> adapter;
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -158,7 +156,7 @@ public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefresh
 			break;
 		}
 	}
-	
+
 	@Override
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result,
 			Object data) {
@@ -166,14 +164,12 @@ public class WithDrawRecordActivity extends RdpBaseActivity implements OnRefresh
 		hideOverLayView();
 		adapter.setData((List<AccountDetailBean>)data);
 	}
-	
+
 	@Override
 	public void onCommandFailed(Object reqKey, RdpResponseResult result) {
 		super.onCommandFailed(reqKey, result);
 	}
 
-	String [] moneyType=new String []{"充值","转账","消费","提现","提现","佣金","买单返现"};
-	private CardBean selectedCard;
 	@Override
 	public boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder) {
 		AccountDetailBean accountDetailBean = (AccountDetailBean) adapter.getItem(position);

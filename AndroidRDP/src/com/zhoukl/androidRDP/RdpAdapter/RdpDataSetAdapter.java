@@ -1,19 +1,19 @@
 package com.zhoukl.androidRDP.RdpAdapter;
 
+import android.content.Context;
+import android.view.View;
+import android.widget.ListView;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.zhoukl.androidRDP.RdpDataSource.RdpCommand.OnCommandFailedListener;
 import com.zhoukl.androidRDP.RdpDataSource.RdpCommand.OnCommandSuccessedListener;
 import com.zhoukl.androidRDP.RdpDataSource.RdpDataSet;
-import com.zhoukl.androidRDP.RdpDataSource.RdpRecord;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
+import com.zhoukl.androidRDP.RdpDataSource.RdpRecord;
 import com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView;
 import com.zhoukl.androidRDP.RdpViews.RdpDBViews.IRdpDBView;
 import com.zhoukl.androidRDP.RdpViews.RdpDBViews.IRdpDBView.RdpDBViewListener;
-
-import android.content.Context;
-import android.view.View;
-import android.widget.ListView;
 
 /**
  * @description：绑定listView的适配器，绑定网络加载
@@ -148,7 +148,7 @@ public class RdpDataSetAdapter extends RdpAdapter implements OnCommandSuccessedL
     }
 
     public interface OnRefreshDBViewListener {
-        public boolean onRefreshDBView(IRdpDBView dbView, String value, StringBuffer displayValue); 
+        boolean onRefreshDBView(IRdpDBView dbView, String value, StringBuffer displayValue);
         void onExtendedBs();
     }
 }

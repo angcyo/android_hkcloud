@@ -1,8 +1,5 @@
 package android.support.v4.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -18,6 +15,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zhoukl.androidRDP.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * 
@@ -27,14 +27,9 @@ import com.zhoukl.androidRDP.R;
  * @date 2014年7月15日 下午19, fanxing修改
  */
 public class AutoScrollViewPager<T extends PagerData> extends ViewPager {
-	public interface OnPageItemClickListener<T extends PagerData> {
-		void onPageItemClickListener(T pd);
-	}
-
 	private int mScrollTime = 0;
 	private int oldIndex = 0;
 	private int curIndex = 0;
-
 	private List<T> mPagerData = new ArrayList<T>();
 	private PagerAdapter pagerAdapter;
 	private LinearLayout indicatorView;
@@ -43,6 +38,26 @@ public class AutoScrollViewPager<T extends PagerData> extends ViewPager {
 	private OnPageItemClickListener<T> pageItemClickListener;
 	private boolean isFakeCycle = false;// 是否是假的循环
 	private boolean isStartScroll;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			handler.removeCallbacksAndMessages(null);
+			if (isFakeCycle) {
+				setCurrentItem(getCurrentItem() + 1);
+			}
+			else {
+				if (getCurrentItem() == mPagerData.size() - 1) {
+					setCurrentItem(0, true);
+				}
+				else {
+					setCurrentItem(getCurrentItem() + 1);
+				}
+			}
+			handler.sendMessageDelayed(handler.obtainMessage(), mScrollTime);
+		}
+	};
+	// private int errorImageResId=R.drawable.product_list_default;
+	// private int defaultImageResId=R.drawable.product_list_default;
+	private DisplayImageOptions options;
 
 	public AutoScrollViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -230,28 +245,6 @@ public class AutoScrollViewPager<T extends PagerData> extends ViewPager {
 		}
 	}
 
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			handler.removeCallbacksAndMessages(null);
-			if (isFakeCycle) {
-				setCurrentItem(getCurrentItem() + 1);
-			}
-			else {
-				if (getCurrentItem() == mPagerData.size() - 1) {
-					setCurrentItem(0, true);
-				}
-				else {
-					setCurrentItem(getCurrentItem() + 1);
-				}
-			}
-			handler.sendMessageDelayed(handler.obtainMessage(), mScrollTime);
-		};
-	};
-
-	// private int errorImageResId=R.drawable.product_list_default;
-	// private int defaultImageResId=R.drawable.product_list_default;
-	private DisplayImageOptions options;
-
 	// public void setErrorImageResId(int errorImageResId){
 	// this.errorImageResId=errorImageResId;
 	// }
@@ -260,6 +253,15 @@ public class AutoScrollViewPager<T extends PagerData> extends ViewPager {
 	// }
 	public void setImageOptions(DisplayImageOptions options) {
 		this.options = options;
+	}
+
+	/** 设置显示条目的点击事件 */
+	public void setOnPageItemClickListener(OnPageItemClickListener<T> pageItemClickListener) {
+		this.pageItemClickListener = pageItemClickListener;
+	}
+
+	public interface OnPageItemClickListener<T extends PagerData> {
+		void onPageItemClickListener(T pd);
 	}
 
 	// 适配器 //循环设置
@@ -313,10 +315,5 @@ public class AutoScrollViewPager<T extends PagerData> extends ViewPager {
 		public boolean isViewFromObject(View view, Object object) {
 			return view == object;
 		}
-	}
-
-	/** 设置显示条目的点击事件 */
-	public void setOnPageItemClickListener(OnPageItemClickListener<T> pageItemClickListener) {
-		this.pageItemClickListener = pageItemClickListener;
 	}
 }

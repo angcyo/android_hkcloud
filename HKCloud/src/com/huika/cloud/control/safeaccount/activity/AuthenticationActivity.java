@@ -1,8 +1,5 @@
 package com.huika.cloud.control.safeaccount.activity;
 
-import java.io.File;
-import java.lang.reflect.Type;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -11,7 +8,6 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
@@ -31,15 +27,18 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 
+import java.io.File;
+import java.lang.reflect.Type;
+
 /**
  * @description：实名认证（身份认证）
  * @author shicm
  * @date 2015-11-10 下午2:09:39
  */
 public class AuthenticationActivity extends RdpBaseActivity implements OnPopupItemOnClickListener{
+	public static final int RESULT_CODE = 99;
 	private final static int CROPCAMARA_TAKEPHOTO = 1001;
 	private final static int CROPCAMARA_SELECTFROMALBUM = 1002;
-	public static final int RESULT_CODE = 99;
 	@ViewInject(R.id.auth_name_edt)
     private EditText mEdtName;
 	@ViewInject(R.id.auth_cardid_edt)
@@ -118,7 +117,7 @@ public class AuthenticationActivity extends RdpBaseActivity implements OnPopupIt
 		authCommand.setCondition("idNumber", mEdtCard.getText().toString());
 		authCommand.setCondition("realName", mEdtName.getText().toString());
 		authCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		authCommand.setCondition("memberId", mUser.getMemberId());
+		authCommand.setCondition("memberId", mUser.memberId);
 		authCommand.execute();
 		
 	}
@@ -128,9 +127,9 @@ public class AuthenticationActivity extends RdpBaseActivity implements OnPopupIt
 		super.onCommandSuccessed(reqKey, result, data);
 		setResult(RESULT_CODE);//实名认证成功结果码
 		dismissLoadingDialog();
-		HKCloudApplication.getInstance().getUserModel().setIdNumber(mEdtCard.getText().toString());
-		HKCloudApplication.getInstance().getUserModel().setRealName(mEdtName.getText().toString());
-		HKCloudApplication.getInstance().getUserModel().setRealNameAuthentication(1);
+		HKCloudApplication.getInstance().getUserModel().idNumber = mEdtCard.getText().toString();
+		HKCloudApplication.getInstance().getUserModel().realName = mEdtName.getText().toString();
+		HKCloudApplication.getInstance().getUserModel().realNameAuthentication = 1;
 		showToastMsg(result.getMsg());
 		finish();
 	}

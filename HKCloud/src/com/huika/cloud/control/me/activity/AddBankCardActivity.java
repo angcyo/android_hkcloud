@@ -1,33 +1,34 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
+import com.huika.cloud.control.base.HKCloudApplication;
+import com.huika.cloud.support.event.GetUserInfoEvent;
 import com.huika.cloud.support.model.BankBean;
-import com.huika.cloud.support.model.CardBean;
+import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.util.CommonAlertDialog;
-import com.huika.cloud.util.MMAlertDialog;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * @description：添加银行卡界面
@@ -53,23 +54,36 @@ public class AddBankCardActivity extends RdpBaseActivity {
 	private ArrayList<String> bankList;
 	private BankBean selectedBank;
 	private RelativeLayout selecte_bank;
+	private UserModel mUser;
+
+	/**
+	 * 判断是否银行卡
+	 */
+	public static boolean isBankCard(String str) {
+		if (TextUtils.isEmpty(str)) {
+			return false;
+		}
+		String scard = str.trim();
+		Pattern pattern = Pattern.compile("^\\d{12,1000}$");
+		return pattern.matcher(scard).matches();
+	}
 
 	@Override
 	protected void initActivity() {
 		super.initActivity();
 		setFuncTitle("添加银行卡");
-		RdpAnnotationUtil.inject(this);
+		mUser = HKCloudApplication.getInstance().getUserModel();
 		bankList = new ArrayList<String>();
 		if (null != getIntent().getSerializableExtra("cardNumList")) {
 			bankList.addAll((ArrayList<String>) getIntent().getSerializableExtra("cardNumList"));
 		}
 		addRightFuncTextView("保存", this, SAVE_CARD);
 		mMasterView = addMasterView(R.layout.add_card_layout);
-		mMasterView.findViewById(R.id.my_bank_tips_iv).setOnClickListener(this);
-		mMasterView.findViewById(R.id.delete_card).setOnClickListener(this);
-		mMasterView.findViewById(R.id.rl_selected_bank).setOnClickListener(this);
+		RdpAnnotationUtil.inject(this);
+		bankCardPerson.setText(mUser.realName);
 	}
 
+	@OnClick({R.id.my_bank_tips_iv, R.id.delete_card, R.id.rl_selected_bank})
 	@Override
 	public void onClick(View v) {
 		if (v.getTag() != null && (Integer) v.getTag() == SAVE_CARD) {
@@ -84,10 +98,10 @@ public class AddBankCardActivity extends RdpBaseActivity {
 					addCardCommand.setOnCommandSuccessedListener(this);
 					addCardCommand.setOnCommandFailedListener(this);
 					addCardCommand.clearConditions();
-					addCardCommand.setCondition("memberId","402894e1511f1b6d01511f1bf30d0000");
+					addCardCommand.setCondition("memberId", mUser.memberId);
 					addCardCommand.setCondition("cardNumber",card_num.getText().toString());
 					addCardCommand.setCondition("bankId",selectedBank.id);
-					addCardCommand.setCondition("realName","糖糖");
+					addCardCommand.setCondition("realName", mUser.realName);
 					addCardCommand.setCondition("subbranchBank",bank_part_name.getText().toString());
 					addCardCommand.execute();
 				}
@@ -109,7 +123,7 @@ public class AddBankCardActivity extends RdpBaseActivity {
 				break;
 		}
 	}
-
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -125,6 +139,7 @@ public class AddBankCardActivity extends RdpBaseActivity {
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 		super.onCommandSuccessed(reqKey, result, data);
 		ToastMsg.showToastMsg(mApplication, result.getMsg());
+		EventBus.getDefault().post(new GetUserInfoEvent());
 		finish();
 	}
 	
@@ -133,7 +148,7 @@ public class AddBankCardActivity extends RdpBaseActivity {
 		super.onCommandFailed(reqKey, result);
 		ToastMsg.showToastMsg(mApplication, result.getMsg());
 	}
-	
+
 	/**
 	 * 处理真实姓名，只显示名字最后一个字
 	 * @description：
@@ -212,16 +227,6 @@ public class AddBankCardActivity extends RdpBaseActivity {
 				tipDialog.dismiss();
 			}
 		}).show();
-	}
-	
-	/**
-	 * 判断是否银行卡
-	 */
-	public static boolean isBankCard(String str) {
-		if (TextUtils.isEmpty(str)) { return false; }
-		String scard = str.trim();
-		Pattern pattern = Pattern.compile("^\\d{12,1000}$");
-		return pattern.matcher(scard).matches();
 	}
 	
 //	private void initView() {

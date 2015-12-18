@@ -13,17 +13,17 @@ public class SkuPropertyUnit implements Serializable {
   /***/
   private static final long serialVersionUID = 7298076100631999265L;
   /** 属性ID */
-  public int attributeId;
+  public String attributeId;
   /** 属性名称 */
   public String attributeName;
   /** 图片或文字 true图片，false文字 */
   //此SKU属性是否关联了商品图片的变更
-  public boolean isRelationImage;
+  public boolean isImage;
   /** 子单元的属性 */
   public List<SkuPropertyValueUnit> values = new ArrayList<SkuPropertyValueUnit>();
 
   @Override public String toString() {
     return "SkuPropertyUnit [attributeId=" + attributeId + ", attributeName=" + attributeName
-        + ", isRelationImage=" + isRelationImage + ", values=" + values + "]";
+            + ", isImage=" + isImage + ", values=" + values + "]";
   }
 }

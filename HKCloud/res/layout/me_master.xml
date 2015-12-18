@@ -93,9 +93,9 @@
                     android:id="@+id/reg_log"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                android:layout_toRightOf="@+id/iv_user"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:layout_toRightOf="@+id/iv_user"
                     android:text="登录/注册"/>
         </RelativeLayout>
 
@@ -150,13 +150,13 @@
                     android:layout_marginTop="8dp"
                     android:src="@drawable/all" />
 
-                <TextView
+                <!-- <TextView
                     android:id="@+id/my_all_order_num"
                     style="@style/me_section_pop_num"
                     android:layout_alignTop="@+id/iv_1"
                     android:layout_toRightOf="@+id/iv_1"
                     android:text="2"
-                    android:visibility="visible" />
+                    android:visibility="visible" /> -->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -447,9 +447,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="12dp"
                     android:layout_toRightOf="@+id/iv_ewm"
-                    android:textSize="@dimen/common_textview_size"
+                    android:text="@string/my_ewm"
                     android:textColor="#333333"
-                    android:text="@string/my_ewm" />
+                    android:textSize="@dimen/common_textview_size" />
 
                 <ImageView
                     android:layout_width="wrap_content"

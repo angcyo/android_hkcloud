@@ -13,14 +13,14 @@ public class SkuPropertyValueUnit implements Serializable {
   /** 展示文字  白色、黑色 */
   public String valueStr;
   /** 属性值ID */
-  public int valueId;
+  public String valueId;
   /** 展示图片地址 */
   public String imgUrl;
   /** SKU编码,得手动解析成数组 */
-  public String sku; // 4025: 4028"//sku组合。4025 指attributeId
+//  public String sku; // 4025: 4028"//sku组合。4025 指attributeId ", sku=" + sku +
 
   @Override public String toString() {
     return "SkuPropertyValueUnit [valueStr=" + valueStr + ", valueId=" + valueId + ", imgUrl="
-        + imgUrl + ", sku=" + sku + "]";
+            + imgUrl + "]";
   }
 }

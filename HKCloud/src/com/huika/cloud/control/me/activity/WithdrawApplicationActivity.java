@@ -1,60 +1,43 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Parcelable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
-import com.huika.cloud.config.Constant;
+import com.huika.cloud.config.UrlConstant;
+import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.control.safeaccount.activity.UpPayPwdActivity;
 import com.huika.cloud.support.event.GetUserInfoEvent;
 import com.huika.cloud.support.model.CardBean;
+import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.support.model.WithDrawInfoBean;
 import com.huika.cloud.util.MMAlertDialog;
 import com.huika.cloud.util.MMAlertDialog.DialogOnItemClickListener;
 import com.huika.cloud.views.passwordview.GridPasswordView;
-import com.huika.cloud.views.passwordview.GridPasswordView.OnPasswordChangedListener;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
-import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
-import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
-import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetDataSet;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,8 +47,19 @@ import de.greenrobot.event.EventBus;
  * @date 2015-12-4 上午10:24:21
  */
 public class WithdrawApplicationActivity extends RdpBaseActivity {
-	private static final int CARD_LIST_REQUEST_CODE = 0;
 	protected static final int REQUESTCODE = 0;
+	private static final int CARD_LIST_REQUEST_CODE = 0;
+	OnClickListener closeClick = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			if (v.getId() == R.id.iv_close) {
+				EventBus.getDefault().post(
+						new GetUserInfoEvent());
+				WithdrawApplicationActivity.this.finish();
+			}
+		}
+	};
 	private View mMasterView;
 	private View card_selected;
 	private View weixin_selected;
@@ -89,19 +83,18 @@ public class WithdrawApplicationActivity extends RdpBaseActivity {
 	private TextView forget_pwd;
 	@ViewInject(R.id.with_draw_money)
 	private TextView with_draw_money;
-	
 	private List<CardBean> cardList;
 	private int isSelectedPosition;
 	private CardBean selectedCard;
-
-
 	private RdpDataListAdapter<CardBean> cardListAdapter;
 	private PopupWindow cardListPop;
-	
+	private UserModel mUser;
+
 	@Override
 	protected void initActivity() {
 		super.initActivity();
 		setFuncTitle("提现申请");
+		mUser = HKCloudApplication.getInstance().getUserModel();
 		selectedCard = getIntent().getParcelableExtra("selected_card");
 		mMasterView = addMasterView(R.layout.apply_for_with_draw);
 		RdpAnnotationUtil.inject(this);
@@ -110,12 +103,8 @@ public class WithdrawApplicationActivity extends RdpBaseActivity {
 			card_name.setText(setBankNameAndCardNum(selectedCard));
 		}
 	}
+
 	private void initListener() {
-//		roll_out_card.setOnClickListener(this);
-//		roll_out_weixin.setOnClickListener(this);
-//		confirm_apply_card.setOnClickListener(this);
-//		confirm_apply_weixin.setOnClickListener(this);
-//		rl_card_list.setOnClickListener(this);
 		TextWatcher textWatcher = new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -160,7 +149,7 @@ public class WithdrawApplicationActivity extends RdpBaseActivity {
 		card_count.addTextChangedListener(textWatcher);
 		wx_money.addTextChangedListener(textWatcher2);
 	}
-	
+
 	private void initView() {
 		card_selected = mMasterView.findViewById(R.id.card_selected);
 		weixin_selected = mMasterView.findViewById(R.id.weixin_selected);
@@ -201,42 +190,32 @@ public class WithdrawApplicationActivity extends RdpBaseActivity {
 				startActivityForResult(new Intent(mApplication, BankCardListActivity.class),CARD_LIST_REQUEST_CODE);
 				break;
 			case R.id.confirm_apply_card:
-				String withdraw_count ="¥"+card_count.getText().toString();
-				// 提现到银行卡
-				DialogOnItemClickListener onItemClickListener = new DialogOnItemClickListener() {
-					@Override
-					public void onItemClickListener(View v, int position) {
-						if(v.getId()==R.id.forget_pwd){
-							ToastMsg.showToastMsg(mApplication, "忘记密码");
-							Intent updatePwd = new Intent(mApplication,UpPayPwdActivity.class);
-							updatePwd.putExtra(BindBankActivity.INP_TYPE, 2);
-							startActivityForResult(updatePwd, REQUESTCODE);
-						}
-					}
-					
-					@Override
-					public void onDialogDismiss(String psw) {
-//						ToastMsg.showToastMsg(mApplication, "输入的密码" + psw);
-						String withDrawMoney = card_count.getText().toString();
-						// TODO 发送提现申请请求
-						// sendWithDrawRequest();
-						String titleStr="申请已提交，将在1-2个工作日内完成转账，请注意查收";
-						Dialog warnDlg = MMAlertDialog.createCenterWarnDialog(WithdrawApplicationActivity.this, titleStr, closeClick);
-						warnDlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
-							@Override
-							public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-								 if (keyCode == KeyEvent.KEYCODE_BACK  
-					                        && event.getRepeatCount() == 0) {  
-					                   WithdrawApplicationActivity.this.finish();
-					                }  
-								return false;
+				if (card_name.getText() != null && !TextUtils.isEmpty(card_name.getText())) {
+					final String withdraw_count = "¥" + card_count.getText().toString();
+					// 提现到银行卡
+					DialogOnItemClickListener onItemClickListener = new DialogOnItemClickListener() {
+						@Override
+						public void onItemClickListener(View v, int position) {
+							if (v.getId() == R.id.forget_pwd) {
+								ToastMsg.showToastMsg(mApplication, "忘记密码");
+								Intent updatePwd = new Intent(mApplication, UpPayPwdActivity.class);
+								updatePwd.putExtra(BindBankActivity.INP_TYPE, 2);
+								startActivityForResult(updatePwd, REQUESTCODE);
 							}
-						});
-						warnDlg.show();
-					}
-				};
-				Dialog dialog = new MMAlertDialog().createPwdDialog(WithdrawApplicationActivity.this, onItemClickListener, false,withdraw_count);
-				dialog.show();
+						}
+
+						@Override
+						public void onDialogDismiss(String psw) {
+							String withDrawMoney = card_count.getText().toString();
+							// 发送提现申请请求
+							sendWithDrawRequest(selectedCard.cardId, mUser.memberId, psw, withdraw_count, "0", "402881e8461795c201461795c2e90000", "");
+						}
+					};
+					Dialog dialog = new MMAlertDialog().createPwdDialog(WithdrawApplicationActivity.this, onItemClickListener, false, withdraw_count);
+					dialog.show();
+				} else {
+					ToastMsg.showToastMsg(mApplication, "请选择提现银行");
+				}
 				break;
 			case R.id.confirm_apply_weixin:
 				// 提现到微信
@@ -247,57 +226,60 @@ public class WithdrawApplicationActivity extends RdpBaseActivity {
 		super.onClick(v);
 	}
 
-	OnClickListener closeClick=new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			if(v.getId()==R.id.iv_close){
-				EventBus.getDefault().post(
-						new GetUserInfoEvent());
-				WithdrawApplicationActivity.this.finish();
-			}
-		}
-	};
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode== CARD_LIST_REQUEST_CODE) {
-			CardBean select_card = data.getParcelableExtra("select_item");
-			String bankNameAndCardNum = setBankNameAndCardNum(select_card);
+		if (requestCode == CARD_LIST_REQUEST_CODE && resultCode == BankCardListActivity.RESULT_CODE) {
+			selectedCard = data.getParcelableExtra("select_item");
+			String bankNameAndCardNum = setBankNameAndCardNum(selectedCard);
 			card_name.setText(bankNameAndCardNum);
 		}
 	}
 
-	private void sendWithDrawRequest() {
+	private void sendWithDrawRequest(String cardId, String memberId, String payPwd, String amount, String type, String merchantId, String weixinAccount) {
 		Type typeOfResult = new TypeToken<WithDrawInfoBean>() {
 		}.getType();
 		RdpNetCommand withdrawRequest = new RdpNetCommand(mApplication, typeOfResult);
-		withdrawRequest.setServerApiUrl("提现申请url");
+		withdrawRequest.setServerApiUrl(UrlConstant.WITH_DRAW_APPLY);
 		withdrawRequest.clearConditions();
 		withdrawRequest.setOnCommandSuccessedListener(WithdrawApplicationActivity.this);
 		withdrawRequest.setOnCommandFailedListener(WithdrawApplicationActivity.this);
-		withdrawRequest.setCondition("cardId", "cardId");
-		withdrawRequest.setCondition("memberId", "memberId");
-		withdrawRequest.setCondition("payPwd", "payPwd");
-		withdrawRequest.setCondition("amount", "amount");
-		withdrawRequest.setCondition("validateCode", "validateCode");
-		withdrawRequest.setCondition("type", "type");
+		withdrawRequest.setCondition("cardId", cardId);
+		withdrawRequest.setCondition("memberId", memberId);
+		withdrawRequest.setCondition("payPwd", payPwd);
+		withdrawRequest.setCondition("amount", amount);
+		withdrawRequest.setCondition("type", type);
+		withdrawRequest.setCondition("merchantId", merchantId);
+		withdrawRequest.setCondition("weixinAccount", weixinAccount);
 		withdrawRequest.execute();
 	}
 
 	@Override
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 		super.onCommandSuccessed(reqKey, result, data);
-		if ("提现请求的url".equals(result.getUrl())) {
+		if (UrlConstant.WITH_DRAW_APPLY.equals(result.getUrl())) {
 			// 提现请求
-			result.getMsg();
+			String titleStr = "申请已提交，将在1-2个工作日内完成转账，请注意查收";
+			Dialog warnDlg = MMAlertDialog.createCenterWarnDialog(WithdrawApplicationActivity.this, titleStr, closeClick);
+			warnDlg.setOnKeyListener(new DialogInterface.OnKeyListener() {
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+					if (keyCode == KeyEvent.KEYCODE_BACK
+							&& event.getRepeatCount() == 0) {
+						WithdrawApplicationActivity.this.finish();
+					}
+					return false;
+				}
+			});
+			warnDlg.show();
+			EventBus.getDefault().post(new GetUserInfoEvent());
 		}
 	}
 
 	@Override
 	public void onCommandFailed(Object reqKey, RdpResponseResult result) {
 		super.onCommandFailed(reqKey, result);
+		ToastMsg.showToastMsg(mApplication, result.getMsg());
 	}
 
 

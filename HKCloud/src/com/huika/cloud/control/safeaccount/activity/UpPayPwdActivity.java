@@ -1,9 +1,6 @@
 package com.huika.cloud.control.safeaccount.activity;
 
-import java.lang.reflect.Type;
-
 import android.app.Dialog;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
-import com.huika.cloud.control.me.activity.BindBankActivity;
 import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.util.MMAlertDialog;
 import com.huika.cloud.util.MMAlertDialog.DialogOnItemClickListener;
@@ -24,7 +20,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
+import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
+
+import java.lang.reflect.Type;
 
 /**
  * @description：修改支付密码第一步验证登录密码验证
@@ -54,7 +53,7 @@ public class UpPayPwdActivity extends RdpBaseActivity implements DialogOnItemCli
 		setFuncTitle(updatePwdType == 0 ?  R.string.update_pay_pwd_title_find : R.string.update_pay_pwd_title_second);
 		mView = addMasterView(R.layout.update_pay_pwd);
 		RdpAnnotationUtil.inject(this);
-		phone_tv_update_Pwd.setText("你的手机:" + HKCloudApplication.getInstance().getUserModel().getAccount());
+		phone_tv_update_Pwd.setText("你的手机:" + HKCloudApplication.getInstance().getUserModel().phone);
 		up_pay_pwd_edit.setHint(updatePwdType == 0 ? getString(R.string.update_input_login_pwd) : getString(R.string.update_input_pay_pwd));
 	}
 
@@ -103,10 +102,10 @@ public class UpPayPwdActivity extends RdpBaseActivity implements DialogOnItemCli
 		updatePwdCommand.setServerApiUrl(UrlConstant.USER_CHANGEPASSWORD); // 修改支付密码
 		updatePwdCommand.clearConditions();
 		updatePwdCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		updatePwdCommand.setCondition("memberId", HKCloudApplication.getInstance().getMemberId(false));
+		updatePwdCommand.setCondition("userId", HKCloudApplication.getInstance().getUserModel().userId);
 		updatePwdCommand.setCondition("type", updatePwdType == 0 ? 5 : 2);
-		updatePwdCommand.setCondition("oldPassWord", up_pay_pwd_edit.getText().toString());
-		updatePwdCommand.setCondition("password", pwd);
+		updatePwdCommand.setCondition("oldPassword", MD5Security.getMd5_32_UP(up_pay_pwd_edit.getText().toString()));
+		updatePwdCommand.setCondition("password", MD5Security.getMd5_32_UP(pwd));
 		updatePwdCommand.setCondition("validateCode", up_pay_pwd_edit.getText().toString());
 		updatePwdCommand.execute();
 	}
@@ -123,7 +122,7 @@ public class UpPayPwdActivity extends RdpBaseActivity implements DialogOnItemCli
 		updatePwdCommand.clearConditions();
 		updatePwdCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
 		updatePwdCommand.setCondition("type", 2);
-		updatePwdCommand.setCondition("phone", HKCloudApplication.getInstance().getUserModel().getAccount());
+		updatePwdCommand.setCondition("phone", HKCloudApplication.getInstance().getUserModel().phone);
 		updatePwdCommand.execute();
 	}
 

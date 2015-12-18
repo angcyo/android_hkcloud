@@ -14,15 +14,16 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mob.tools.FakeActivity;
+import com.mob.tools.utils.BitmapHelper;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mob.tools.FakeActivity;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
-import com.mob.tools.utils.BitmapHelper;
 
 import static com.mob.tools.utils.R.getStringRes;
 
@@ -36,16 +37,6 @@ public class EditPageFakeActivity extends FakeActivity {
   protected View backgroundView;
   protected ArrayList<String> toFriendList;
   private ArrayList<ImageInfo> shareImageList;
-
-  public static class ImageInfo {
-    public String paramName;
-    public String srcValue;
-    public Bitmap bitmap;
-  }
-
-  protected static interface ImageListResultsCallback {
-    void onFinish(ArrayList<ImageInfo> results);
-  }
 
   public void setShareData(HashMap<String, Object> data) {
     shareParamMap = data;
@@ -254,5 +245,15 @@ public class EditPageFakeActivity extends FakeActivity {
   @Override public boolean onFinish() {
     shareImageList = null;
     return super.onFinish();
+  }
+
+  protected interface ImageListResultsCallback {
+    void onFinish(ArrayList<ImageInfo> results);
+  }
+
+  public static class ImageInfo {
+    public String paramName;
+    public String srcValue;
+    public Bitmap bitmap;
   }
 }

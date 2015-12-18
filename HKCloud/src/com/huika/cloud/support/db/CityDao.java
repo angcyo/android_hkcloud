@@ -1,14 +1,14 @@
 package com.huika.cloud.support.db;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.huika.cloud.support.model.City;
 import com.huika.cloud.support.model.Province;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
@@ -23,19 +23,8 @@ import de.greenrobot.dao.internal.SqlUtils;
 public class CityDao extends AbstractDao<City, Integer> {
 
 	public static final String TABLENAME = "City";
-
-	/**
-	 * Properties of entity City.<br/>
-	 * Can be used for QueryBuilder and for referencing column names.
-	*/
-	public static class Properties {
-		public final static Property CityID = new Property(0, int.class, "cityID", true, "cityID");
-		public final static Property CityName = new Property(1, String.class, "cityName", false, "cityName");
-		public final static Property ZipCode = new Property(2, String.class, "zipCode", false, "zipCode");
-		public final static Property ProvinceID = new Property(3, int.class, "provinceID", false, "provinceID");
-	};
-
 	private AddressDaoSession daoSession;
+	private String selectDeep;
 
 	public CityDao(DaoConfig config) {
 		super(config);
@@ -136,8 +125,6 @@ public class CityDao extends AbstractDao<City, Integer> {
 		return true;
 	}
 
-	private String selectDeep;
-
 	protected String getSelectDeep() {
 		if (selectDeep == null) {
 			StringBuilder builder = new StringBuilder("SELECT ");
@@ -227,6 +214,17 @@ public class CityDao extends AbstractDao<City, Integer> {
 	public List<City> queryDeep(String where, String... selectionArg) {
 		Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
 		return loadDeepAllAndCloseCursor(cursor);
+	}
+
+	/**
+	 * Properties of entity City.<br/>
+	 * Can be used for QueryBuilder and for referencing column names.
+	 */
+	public static class Properties {
+		public final static Property CityID = new Property(0, int.class, "cityID", true, "cityID");
+		public final static Property CityName = new Property(1, String.class, "cityName", false, "cityName");
+		public final static Property ZipCode = new Property(2, String.class, "zipCode", false, "zipCode");
+		public final static Property ProvinceID = new Property(3, int.class, "provinceID", false, "provinceID");
 	}
 
 }

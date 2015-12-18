@@ -1,17 +1,13 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.gson.reflect.TypeToken;
@@ -20,6 +16,7 @@ import com.huika.cloud.config.Constant;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.support.model.AddressBean;
+import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.util.PhoneUtil;
 import com.huika.cloud.views.ChangeAddressDialog;
 import com.huika.cloud.views.ChangeAddressDialog.OnAddressCListener;
@@ -28,12 +25,33 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
 
+import java.lang.reflect.Type;
+
 /**
  * @description：编辑、新增收货地址
  * @author ht
  * @date 2015-12-4 上午10:28:33
  */
 public class AddRecipientActivity extends RdpBaseActivity {
+	static final String ADDRESS = "ADDRESS";
+	/**
+	 * 选择区域请求
+	 */
+	private static final int REQUEST_AREA = 0;
+	int isDefault = 0;
+	OnCheckedChangeListener occl = new OnCheckedChangeListener() {
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (isChecked) {
+				isDefault = 1;
+				ToastMsg.showToastMsg(mApplication, "设为默认");
+			} else {
+				isDefault = 0;
+				ToastMsg.showToastMsg(mApplication, "取消默认");
+			}
+		}
+	};
 	private View mMasterview;
 	private View footView;
 	private Button bt_save_recipient;
@@ -43,18 +61,15 @@ public class AddRecipientActivity extends RdpBaseActivity {
 	private EditText et_address_detail;
 	private TextView et_address_area;
 	private AddressBean addressBean;
-
-	/** 选择区域请求 */
-	private static final int REQUEST_AREA = 0;
-	static final String ADDRESS = "ADDRESS";
 	private RdpNetCommand addressCommand;
 	private ToggleButton tglbt;
-	
 	private String addressId;
-	
+	private UserModel mUser;
+
 	@Override
 	protected void initActivity() {
 		super.initActivity();
+		mUser = HKCloudApplication.getInstance().getUserModel();
 		Intent intent = getIntent();
 		isadd = intent.getBooleanExtra("isadd", false);
 		if (isadd) {
@@ -68,23 +83,23 @@ public class AddRecipientActivity extends RdpBaseActivity {
 			// 编辑地址界面
 			setFuncTitle("编辑收获地址");
 			// 查询单个地址
-			Type simpleAddressResult = new TypeToken<AddressBean>() {
-			}.getType();
-			RdpNetCommand simpleAddressCommand = new RdpNetCommand(mApplication, simpleAddressResult);
-			simpleAddressCommand.setOnCommandFailedListener(this);
-			simpleAddressCommand.setOnCommandSuccessedListener(this);
-			
-			getSimpleAddress(simpleAddressCommand);
+			getSimpleAddress(mUser.memberId,addressId);
 		}
 		mMasterview = addMasterView(R.layout.add_new_recipient);
 		initView();
 		initListener();
 	}
+
 	/**获取单个地址信息*/
-	private void getSimpleAddress(RdpNetCommand simpleAddressCommand) {
+	private void getSimpleAddress(String memberId, String addressId) {
+		Type simpleAddressResult = new TypeToken<AddressBean>() {
+		}.getType();
+		RdpNetCommand simpleAddressCommand = new RdpNetCommand(mApplication, simpleAddressResult);
+		simpleAddressCommand.setOnCommandFailedListener(this);
+		simpleAddressCommand.setOnCommandSuccessedListener(this);
 		simpleAddressCommand.setServerApiUrl(UrlConstant.USER_QUERY_SIMPLE_ADDRESS);
 		simpleAddressCommand.clearConditions();
-		simpleAddressCommand.setCondition("memberId", "402894e1511f1b6d01511f1bf30d0000");
+		simpleAddressCommand.setCondition("memberId", memberId);
 		simpleAddressCommand.setCondition("addressId", addressId);
 		simpleAddressCommand.execute();
 	}
@@ -118,7 +133,6 @@ public class AddRecipientActivity extends RdpBaseActivity {
 				ChangeAddressDialog mChangeAddressDialog = new ChangeAddressDialog(AddRecipientActivity.this);
 				mChangeAddressDialog.show();
 				mChangeAddressDialog.setAddresskListener(new OnAddressCListener() {
-
 					@Override
 					public void onClick(String province, String city, String area, String selectedAreaId) {
 						addressBean.receiverAreaName = province + city + area;
@@ -164,6 +178,20 @@ public class AddRecipientActivity extends RdpBaseActivity {
 		addressCommand.execute();
 	}
 
+//	@Override
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		super.onActivityResult(requestCode, resultCode, data);
+//		if (resultCode == RESULT_OK && data != null) {
+//			if (requestCode == REQUEST_AREA) {
+//				int areaId = data.getIntExtra(Constant.CHOICE_AREA_RESULT_ID, -1);
+//				addressBean.receiverAreaID = areaId == -1 ? "" : (areaId + "");
+//				addressBean.receiverAreaName = data.getStringExtra(Constant.CHOICE_AREA_RESULT);
+//			}
+//			showData();
+//			setResult(RESULT_OK);
+//		}
+//	}
+
 	@Override
 	public void onCommandFailed(Object reqKey, RdpResponseResult result) {
 		super.onCommandFailed(reqKey, result);
@@ -184,23 +212,10 @@ public class AddRecipientActivity extends RdpBaseActivity {
 				et_address_phone.setText(addressBean.receiverPhone);
 				et_address_area.setText(addressBean.province+addressBean.city+addressBean.area);
 				et_address_detail.setText(addressBean.receiverAddress);
+				tglbt.setChecked(addressBean.isDefault == 1 ? true : false);
 			}
 		}
 	}
-
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		super.onActivityResult(requestCode, resultCode, data);
-//		if (resultCode == RESULT_OK && data != null) {
-//			if (requestCode == REQUEST_AREA) {
-//				int areaId = data.getIntExtra(Constant.CHOICE_AREA_RESULT_ID, -1);
-//				addressBean.receiverAreaID = areaId == -1 ? "" : (areaId + "");
-//				addressBean.receiverAreaName = data.getStringExtra(Constant.CHOICE_AREA_RESULT);
-//			}
-//			showData();
-//			setResult(RESULT_OK);
-//		}
-//	}
 
 	private void showData() {
 		if (addressBean != null) {
@@ -244,21 +259,5 @@ public class AddRecipientActivity extends RdpBaseActivity {
 		}
 		return true;
 	}
-
-	int isDefault = 0;
-	OnCheckedChangeListener occl = new OnCheckedChangeListener() {
-
-		@Override
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			if (isChecked) {
-				isDefault = 1;
-				ToastMsg.showToastMsg(mApplication, "设为默认");
-			}
-			else {
-				isDefault = 0;
-				ToastMsg.showToastMsg(mApplication, "取消默认");
-			}
-		}
-	};
 
 }

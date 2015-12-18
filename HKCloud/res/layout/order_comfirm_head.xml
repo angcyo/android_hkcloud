@@ -13,6 +13,7 @@
         android:paddingTop="14dp" >
 
         <ImageView
+            android:id="@+id/img_adress_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/receiver_name_tv"

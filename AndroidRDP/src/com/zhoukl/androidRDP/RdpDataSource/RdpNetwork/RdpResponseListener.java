@@ -6,11 +6,11 @@ public interface RdpResponseListener {
      * @param taskKey 任务标识
      * @return 正常情况下返回true, 如果返回false, 应该终止任务继续执行.
      */
-    public boolean onBeforeExecute(long taskKey);
+    boolean onBeforeExecute(long taskKey);
 
     /** 任务返回后将要执行的操作.        */
-    public void onReponse(long taskKey, RdpResponseResult result);
+    void onReponse(long taskKey, RdpResponseResult result);
 
     /** 任务取消后将要执行的操作.        */
-    public void onCancelled(long taskKey, RdpResponseResult result);
+    void onCancelled(long taskKey, RdpResponseResult result);
 }

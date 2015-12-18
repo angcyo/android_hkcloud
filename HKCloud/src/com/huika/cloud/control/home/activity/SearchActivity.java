@@ -1,79 +1,72 @@
 package com.huika.cloud.control.home.activity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.huika.cloud.R;
+import com.huika.cloud.support.event.FinishEvent;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.AdapterViewHolder;
 import com.zhoukl.androidRDP.RdpAdapter.RdpAdapter.OnRefreshItemViewsListener;
 import com.zhoukl.androidRDP.RdpAdapter.RdpDataListAdapter;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
-import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * @description：搜索
  * @author ht
  * @date 2015-12-4 上午10:29:52
  */
-public class SearchActivity extends RdpBaseActivity implements OnRefreshItemViewsListener {
+public class SearchActivity extends RdpBaseActivity implements OnRefreshItemViewsListener, OnItemClickListener {
 	private static final String NAME = "search_history";
 	private static final String HISTORY_SEARCH_STRING = "history_search_string";
-	private ImageView back_iv;
-	private EditText searchEt;
-	private TextView gotoSearch;
-	private View mMasterView;
-	private LinearLayout search_history;
-	private ListView shop_list_history;
-	List<String> historySearchList=new ArrayList<String>();//搜索历史
 	public String realSearchKey;
+	List<String> historySearchList = new ArrayList<String>();//搜索历史
+	@ViewInject(R.id.searchEt)
+	private EditText searchEt;
+	private View mMasterView;
+	@ViewInject(R.id.shop_history)
+	private LinearLayout search_history;
+	@ViewInject(R.id.shop_list_history)
+	private ListView shop_list_history;
 	private RdpDataListAdapter<String> historSearchAdapter;
 	private SharedPreferences sp;
 	private View foot;
-	private Button clear_history_button;
 	
 	@Override
 	protected void initActivity() {
 		super.initActivity();
+		EventBus.getDefault().register(this);
 		removeLeftFuncView(TBAR_FUNC_BACK);
 		mTvTitle.setVisibility(View.GONE);
 		mMasterView = addMasterView(R.layout.search_master);
+		RdpAnnotationUtil.inject(this);
 		foot = View.inflate(mApplication, R.layout.activity_serch_mechent_foot, null);
-		initView();
-		initListener();
 		shop_list_history.addFooterView(foot);
 		sp=mApplication.getSharedPreferences(NAME, 0);
 		historSearchAdapter = new RdpDataListAdapter<String>(mApplication, R.layout.search_history_item);
 		historSearchAdapter.setListener(this);
-//		initSearchHistorySearch();
 		shop_list_history.setAdapter(historSearchAdapter);
-		shop_list_history.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				String item = historSearchAdapter.getItem(position);
-				ToastMsg.showToastMsg(mApplication, "点击的搜索条目为"+item);
-				gotoSearchList(item);
-			}
-		});
+		shop_list_history.setOnItemClickListener(this);
+	}
+
+	public void onEventMainThread(FinishEvent event) {
+		finish();
 	}
 
 	@Override
@@ -81,26 +74,13 @@ public class SearchActivity extends RdpBaseActivity implements OnRefreshItemView
 		super.onResume();
 		initSearchHistorySearch();
 	}
-	private void initListener() {
-		back_iv.setOnClickListener(this);
-		gotoSearch.setOnClickListener(this);
-		clear_history_button.setOnClickListener(this);
-	}
-
-	private void initView() {
-		search_history = (LinearLayout) mMasterView.findViewById(R.id.shop_history);
-		shop_list_history = (ListView) mMasterView.findViewById(R.id.shop_list_history);
-		back_iv = (ImageView) findViewById(R.id.back_iv);
-		searchEt = (EditText) findViewById(R.id.searchEt);
-		gotoSearch = (TextView) findViewById(R.id.gotoSearch);
-		clear_history_button = (Button) foot.findViewById(R.id.clear_history_shop_bt);
-	}
 	
 	@Override
 	protected int getBaseLayoutID() {
 		return R.layout.search_base_layout;
 	}
-	
+
+	@OnClick({R.id.gotoSearch, R.id.iv_back_icon, R.id.clear_history_shop_bt})
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -122,7 +102,7 @@ public class SearchActivity extends RdpBaseActivity implements OnRefreshItemView
 			}
 			gotoSearchList(keyword);
 			break;
-		case R.id.back_iv:
+			case R.id.iv_back_icon:
 			finish();
 			break;
 		case R.id.clear_history_shop_bt:
@@ -159,7 +139,22 @@ public class SearchActivity extends RdpBaseActivity implements OnRefreshItemView
 			}
 		}
 		sp.edit().putString(HISTORY_SEARCH_STRING, tempSave.toString()).commit();
-//		initSearchHistorySearch();
+	}
+
+	// 清空搜索历史
+	private void deleteHistorySearch() {
+		sp.edit().putString(HISTORY_SEARCH_STRING, "").commit();
+		historySearchList.clear();
+		historSearchAdapter.notifyDataSetChanged();
+		search_history.setVisibility(View.GONE);
+	}
+
+	@Override
+	public boolean onRefreshItemViews(RdpAdapter adapter, int position,
+									  View convertView, AdapterViewHolder holder) {
+		String item = (String) adapter.getItem(position);
+		holder.getTextView(R.id.shop_item_name).setText(item);
+		return false;
 	}
 	
 	private void initSearchHistorySearch() {
@@ -189,19 +184,16 @@ public class SearchActivity extends RdpBaseActivity implements OnRefreshItemView
 		}
 	}
 
-	// 清空搜索历史
-	private void deleteHistorySearch() {
-		sp.edit().putString(HISTORY_SEARCH_STRING, "").commit();
-		historySearchList.clear();
-		historSearchAdapter.notifyDataSetChanged();
-		search_history.setVisibility(View.GONE);
-	}
-		
 	@Override
-	public boolean onRefreshItemViews(RdpAdapter adapter, int position,
-			View convertView, AdapterViewHolder holder) {
-		String item = (String) adapter.getItem(position);
-		holder.getTextView(R.id.shop_item_name).setText(item);
-		return false;
+	protected void onDestroy() {
+		super.onDestroy();
+		EventBus.getDefault().unregister(this);
 	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		String item = historSearchAdapter.getItem(position);
+		gotoSearchList(item);
+	}
+
 }

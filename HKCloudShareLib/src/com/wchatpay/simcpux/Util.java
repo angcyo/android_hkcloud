@@ -1,24 +1,11 @@
 package com.wchatpay.simcpux;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import junit.framework.Assert;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -40,16 +27,29 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import junit.framework.Assert;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.Socket;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap.CompressFormat;
-import android.util.Log;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class Util {
 
   private static final String TAG = "SDK_Sample.Util";
+  private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
 
   public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
     ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -121,43 +121,6 @@ public class Util {
     }
   }
 
-  private static class SSLSocketFactoryEx extends SSLSocketFactory {
-
-    SSLContext sslContext = SSLContext.getInstance("TLS");
-
-    public SSLSocketFactoryEx(KeyStore truststore)
-        throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException,
-        UnrecoverableKeyException {
-      super(truststore);
-
-      TrustManager tm = new X509TrustManager() {
-
-        public X509Certificate[] getAcceptedIssuers() {
-          return null;
-        }
-
-        @Override public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws java.security.cert.CertificateException {
-        }
-
-        @Override public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws java.security.cert.CertificateException {
-        }
-      };
-
-      sslContext.init(null, new TrustManager[] { tm }, null);
-    }
-
-    @Override public Socket createSocket(Socket socket, String host, int port, boolean autoClose)
-        throws IOException, UnknownHostException {
-      return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
-    }
-
-    @Override public Socket createSocket() throws IOException {
-      return sslContext.getSocketFactory().createSocket();
-    }
-  }
-
   private static HttpClient getNewHttpClient() {
     try {
       KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -226,8 +189,6 @@ public class Util {
     }
     return b;
   }
-
-  private static final int MAX_DECODE_PICTURE_SIZE = 1920 * 1440;
 
   public static Bitmap extractThumbNail(final String path, final int height, final int width,
       final boolean crop) {
@@ -349,5 +310,46 @@ public class Util {
       result.add(src[i]);
     }
     return result;
+  }
+
+  private static class SSLSocketFactoryEx extends SSLSocketFactory {
+
+    SSLContext sslContext = SSLContext.getInstance("TLS");
+
+    public SSLSocketFactoryEx(KeyStore truststore)
+            throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException,
+            UnrecoverableKeyException {
+      super(truststore);
+
+      TrustManager tm = new X509TrustManager() {
+
+        public X509Certificate[] getAcceptedIssuers() {
+          return null;
+        }
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType)
+                throws java.security.cert.CertificateException {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType)
+                throws java.security.cert.CertificateException {
+        }
+      };
+
+      sslContext.init(null, new TrustManager[]{tm}, null);
+    }
+
+    @Override
+    public Socket createSocket(Socket socket, String host, int port, boolean autoClose)
+            throws IOException {
+      return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+    }
+
+    @Override
+    public Socket createSocket() throws IOException {
+      return sslContext.getSocketFactory().createSocket();
+    }
   }
 }

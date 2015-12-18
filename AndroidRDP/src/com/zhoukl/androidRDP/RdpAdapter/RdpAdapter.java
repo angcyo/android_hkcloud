@@ -1,8 +1,5 @@
 package com.zhoukl.androidRDP.RdpAdapter;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.zhoukl.androidRDP.R;
-
 import android.content.Context;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -22,8 +19,8 @@ import android.widget.TextView;
 
 public abstract class RdpAdapter extends BaseAdapter {
 
-    protected final int VIEW_NOT_DEFINE_ID = -1;
     public final int NO_LIMIT_COUNT = -1;
+    protected final int VIEW_NOT_DEFINE_ID = -1;
     protected int mItemLayoutID = -1;
 
     protected LayoutInflater mInflater;
@@ -47,15 +44,15 @@ public abstract class RdpAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void setMaxCount(int maxCount) {
-        if (maxCount <= NO_LIMIT_COUNT) 
-            mMaxCount = NO_LIMIT_COUNT;
-        else 
-            mMaxCount = maxCount;
-    }
-
     public int getMaxCount() {
         return mMaxCount;
+    }
+
+    public void setMaxCount(int maxCount) {
+        if (maxCount <= NO_LIMIT_COUNT)
+            mMaxCount = NO_LIMIT_COUNT;
+        else
+            mMaxCount = maxCount;
     }
     
     @Override
@@ -115,8 +112,16 @@ public abstract class RdpAdapter extends BaseAdapter {
     public void setItemLayoutID(int itemLayoutID) {
         mItemLayoutID = itemLayoutID;
     }
-    
 
+    public void setListener(OnRefreshItemViewsListener listener) {
+        mListener = listener;
+    }
+
+
+    public interface OnRefreshItemViewsListener {
+        boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder);
+    }
+    
     public static class AdapterViewHolder {
         SparseArray<Object> mViewArray;
         LayoutInflater mInflater;
@@ -140,7 +145,7 @@ public abstract class RdpAdapter extends BaseAdapter {
         public TextView getTextView(int key) {
             return (TextView) mViewArray.get(key);
         }
-        
+
         public CheckBox getCheckBox(int key) {
             return (CheckBox) mViewArray.get(key);
         }
@@ -170,21 +175,12 @@ public abstract class RdpAdapter extends BaseAdapter {
         public RatingBar getRatingBar(int key) {
             return (RatingBar) mViewArray.get(key);
         }
-        
+
         //AbsListView
         public AbsListView getAbsListView(int key) {
             return (AbsListView) mViewArray.get(key);
         }
 
-    }
-
-    
-    public void setListener(OnRefreshItemViewsListener listener) {
-        mListener = listener;
-    }
-    
-    public interface OnRefreshItemViewsListener {
-        public boolean onRefreshItemViews(RdpAdapter adapter, int position, View convertView, AdapterViewHolder holder); 
     }
 
 }

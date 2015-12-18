@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.mob.tools.FakeActivity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.mob.tools.FakeActivity;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 
@@ -18,16 +19,11 @@ public class PlatformListFakeActivity extends FakeActivity {
   protected boolean silent;
   protected ArrayList<CustomerLogo> customerLogos;
   protected HashMap<String, String> hiddenPlatforms;
-  private boolean canceled = false;
   protected View backgroundView;
-
   protected OnShareButtonClickListener onShareButtonClickListener;
   protected boolean dialogMode = false;
   protected ThemeShareCallback themeShareCallback;
-
-  public static interface OnShareButtonClickListener {
-    void onClick(View v, List<Object> checkPlatforms);
-  }
+  private boolean canceled = false;
 
   public void onCreate() {
     super.onCreate();
@@ -207,5 +203,9 @@ public class PlatformListFakeActivity extends FakeActivity {
         }
       }
     });
+  }
+
+  public interface OnShareButtonClickListener {
+    void onClick(View v, List<Object> checkPlatforms);
   }
 }

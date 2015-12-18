@@ -1,13 +1,10 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -21,20 +18,22 @@ import com.huika.cloud.control.base.HKCloudApplication;
 import com.huika.cloud.control.safeaccount.activity.UpPayPwdActivity;
 import com.huika.cloud.support.model.UserModel;
 import com.huika.cloud.views.passwordview.GridPasswordView;
-import com.zhoukl.androidRDP.RdpDataSource.RdpCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
+import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+
+import java.lang.reflect.Type;
 /**
  * @description：设置支付密码 验证支付密码
  * @author ht
  * @date 2015-11-24 下午3:27:30
  */
 public class BindBankActivity extends RdpBaseActivity {
-	private static final String FIRST_STEP = "first_step";
 	public static final String INP_TYPE = "PWDTYPE";  // 0 验证 1 设置 2、修改
 	public static final int RESULT_CODE = 1;
+	private static final String FIRST_STEP = "first_step";
 	private View mMasterView;
 	private GridPasswordView gpwv;
 	private BroadcastReceiver receiver;
@@ -126,7 +125,7 @@ public class BindBankActivity extends RdpBaseActivity {
 		case R.id.bt_confirm:
 			if(gpwv.getPassWord()!=null&&!TextUtils.isEmpty(gpwv.getPassWord())){
 				//TODO 设置支付密码
-				changePswRequest("402881e8461795c201461795c2e90000",mUser.getMemberId(),gpwv.getPassWord(),"","3","");
+				changePswRequest("402881e8461795c201461795c2e90000", mUser.userId, gpwv.getPassWord(), "", "3", "");
 			}else{
 				ToastMsg.showToastMsg(mApplication, "请设置支付密码");
 			}
@@ -153,9 +152,9 @@ public class BindBankActivity extends RdpBaseActivity {
 		payWordCommond.setOnCommandFailedListener(this);
 		payWordCommond.setOnCommandSuccessedListener(this);
 		payWordCommond.setCondition("merchantId",merchantId);
-		payWordCommond.setCondition("memberId", memberId);
-		payWordCommond.setCondition("password",password);
-		payWordCommond.setCondition("oldPassword",oldPassword);
+		payWordCommond.setCondition("userId", memberId);
+		payWordCommond.setCondition("password", MD5Security.getMd5_32_UP(password));
+		payWordCommond.setCondition("oldPassword", MD5Security.getMd5_32_UP(oldPassword));
 		payWordCommond.setCondition("type", type);
 		payWordCommond.setCondition("validateCode", validateCode);
 		payWordCommond.execute();
@@ -171,7 +170,7 @@ public class BindBankActivity extends RdpBaseActivity {
 	public void onCommandSuccessed(Object reqKey, RdpResponseResult result, Object data) {
 		super.onCommandSuccessed(reqKey, result, data);
 		setResult(RESULT_CODE);
-		mUser.setTransPassword(1);
+		mUser.transPassword = 1;
 		finish();
 	}
 

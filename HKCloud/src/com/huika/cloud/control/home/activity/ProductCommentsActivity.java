@@ -1,20 +1,25 @@
 package com.huika.cloud.control.home.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.CustomViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
-import com.huika.cloud.config.Constant;
 import com.huika.cloud.config.UrlConstant;
 import com.huika.cloud.control.base.HKCloudApplication;
-import com.huika.cloud.control.cart.activity.CartActivity;
 import com.huika.cloud.control.cart.activity.ConfirmOrderActivity;
 import com.huika.cloud.control.home.fragment.AllProductEnvaluteFragment;
 import com.huika.cloud.control.home.fragment.HasImgsProductEnvaluteFragment;
@@ -23,7 +28,6 @@ import com.huika.cloud.control.home.help.BuyNowClickListener.IDetailShopingCar;
 import com.huika.cloud.control.safeaccount.LoginHelper;
 import com.huika.cloud.control.safeaccount.activity.LoginActivity;
 import com.huika.cloud.support.event.CartChangeEvent;
-import com.huika.cloud.support.model.CartProduct;
 import com.huika.cloud.support.model.OrderProduct;
 import com.huika.cloud.support.model.ProductDetailBean;
 import com.huika.cloud.support.model.ProductImageArray;
@@ -37,23 +41,13 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.CustomViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -64,12 +58,23 @@ import de.greenrobot.event.EventBus;
  */
 public class ProductCommentsActivity extends RdpBaseActivity implements IDetailShopingCar {
 	public static final String INP_PRODUCTDETAILS = "productdetails";
+	/**
+	 * 设置标题
+	 */
+	@ViewInject(R.id.all_envalute_tv)
+	public TextView all_envalute;
+	@ViewInject(R.id.comment_has_imgs_tv)
+	public TextView has_imgs_envalute;
+	public List<SkuStock> skuStocks;
+	public List<SkuPropertyUnit> skuItems;
+	protected List<ProductImageArray> imgUrls;
 	private View mView;
 	/** viewPage模块 */
 	@ViewInject(R.id.comment_product_viewpager)
 	private CustomViewPager pager;// viewpage
 	@ViewInject(R.id.comment_all_rl)
 	private RelativeLayout comment_all_rl;
+	/** 是否有sku，通过skuItems是否为空来判断，默认情况下商品是有sku */
 	@ViewInject(R.id.comment_has_image_rl)
 	private RelativeLayout comment_has_image_rl;
 	@ViewInject(R.id.root_parent_fl)
@@ -80,27 +85,15 @@ public class ProductCommentsActivity extends RdpBaseActivity implements IDetailS
 	private Button add_to_list_btn;
 	@ViewInject(R.id.comment_buy_now_btn)
 	private Button mmediate_participation_btn;
-	/** 是否有sku，通过skuItems是否为空来判断，默认情况下商品是有sku */
-
-	/** 设置标题 */
-	@ViewInject(R.id.all_envalute_tv)
-	public TextView all_envalute;
-	@ViewInject(R.id.comment_has_imgs_tv)
-	public TextView has_imgs_envalute;
 	@ViewInject(R.id.comment_all_img)
 	private View comment_all_img;
 	@ViewInject(R.id.comment_has_imgs_img)
 	private View comment_has_imgs_img;
-
 	private String[] titleStrs;// 全部标题
-
 	/** 底部相关 */
 	private ProductDetailBean productDetailBean;
 	private String productId;
 	private SkuStock skuStock;
-	public List<SkuStock> skuStocks;
-	public List<SkuPropertyUnit> skuItems;
-	protected List<ProductImageArray> imgUrls;
 
 	@Override
 	protected void initActivity() {
@@ -141,10 +134,13 @@ public class ProductCommentsActivity extends RdpBaseActivity implements IDetailS
 	 * @date 2015年6月15日 下午2:09:17
 	 */
 	private void initOperationListener() {
-		if (productDetailBean.statusType.equals("1") || productDetailBean.stock.equals("0")) {// 没有下架或者库存为0的情况
-			if (productDetailBean.statusType.equals("1")) {
-				showToastMsg("亲，当前商品已下架!");
-			} else if (productDetailBean.stock.equals("0")) {
+		if (productDetailBean.stock.equals("0")) {// 没有下架或者库存为0的情况 productDetailBean.statusType.equals("1") ||
+			/*
+			 * if (productDetailBean.statusType.equals("1")) {
+			 * showToastMsg("亲，当前商品已下架!");
+			 * } else
+			 */
+			if (productDetailBean.stock.equals("0")) {
 				showToastMsg("亲，当前商品已缺货!");
 			}
 			mmediate_participation_btn.setOnClickListener(null);
@@ -177,88 +173,11 @@ public class ProductCommentsActivity extends RdpBaseActivity implements IDetailS
 		}
 	}
 
-	private class WantStudyPagerAdapter extends FragmentStatePagerAdapter {
-
-		public WantStudyPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-
-			Fragment fragment = null;
-			if (position == 0) {
-				fragment = new AllProductEnvaluteFragment();
-				Bundle bundle = new Bundle();
-				bundle.putString("productId", productId);
-				fragment.setArguments(bundle);
-			} else {
-				fragment = new HasImgsProductEnvaluteFragment();
-				Bundle bundle = new Bundle();
-				bundle.putString("productId", productId);
-				fragment.setArguments(bundle);
-			}
-			return fragment;
-		}
-
-		@Override
-		public int getCount() {
-			return titleStrs.length;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return titleStrs[position];
-		}
-	}
-
-	/*** tab点击监听 */
-	private class MyOnClickListener implements OnClickListener {
-		private int index = 0;
-
-		public MyOnClickListener(int i) {
-			index = i;
-		}
-
-		public void onClick(View v) {
-			pager.setCurrentItem(index);
-			switch (v.getId()) {
-				case R.id.comment_all_rl:
-					setTabSelect(true, false);
-					break;
-				case R.id.comment_has_image_rl:
-					setTabSelect(false, true);
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-
 	private void setTabSelect(boolean isSelectTeach, boolean isSelectClassify) {
 		comment_all_rl.setSelected(isSelectTeach);
 		comment_has_image_rl.setSelected(isSelectClassify);
 		comment_all_img.setVisibility(isSelectTeach ? View.VISIBLE : View.GONE);
 		comment_has_imgs_img.setVisibility(isSelectClassify ? View.VISIBLE : View.GONE);
-	}
-
-	/** 底部动画监听 */
-	public class MyOnPageChangeListener implements OnPageChangeListener {
-
-		public void onPageScrollStateChanged(int arg0) {
-		}
-
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-		}
-
-		public void onPageSelected(int position) {
-			if (position == 0) {
-				setTabSelect(true, false);
-			} else {
-				setTabSelect(false, true);
-			}
-		}
 	}
 
 	@Override
@@ -278,12 +197,12 @@ public class ProductCommentsActivity extends RdpBaseActivity implements IDetailS
 		RdpNetCommand shopCartCommand = new RdpNetCommand(this, shopCartType);
 		shopCartCommand.setServerApiUrl(isSkip ? UrlConstant.ORDER_GETPRODUCTPRICEFORORDER : UrlConstant.ORDER_INTOCART);
 		shopCartCommand.clearConditions();
-		shopCartCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().getMemberId()); // 用户id
+		shopCartCommand.setCondition("memberId", HKCloudApplication.getInstance().getUserModel().memberId); // 用户id
 		shopCartCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID); // 商家id
 		if (!isSkip) {
 			shopCartCommand.setCondition("productId", productId);
-			shopCartCommand.setCondition("sku", lastSelectSkuId);
-			shopCartCommand.setCondition("buyNum", buyNum);
+			shopCartCommand.setCondition("skuNumber", lastSelectSkuId);
+			shopCartCommand.setCondition("count", buyNum);
 		} else {
 			shopCartCommand.setCondition("productDetail", getProductDetailInfo(buyNum, lastSelectSkuId, skuText));
 			shopCartCommand.setCondition("addressId", "");
@@ -371,5 +290,86 @@ public class ProductCommentsActivity extends RdpBaseActivity implements IDetailS
 		}
 		array.put(jsonObject);
 		return array.toString();
+	}
+
+	private class WantStudyPagerAdapter extends FragmentStatePagerAdapter {
+
+		public WantStudyPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+
+			Fragment fragment = null;
+			if (position == 0) {
+				fragment = new AllProductEnvaluteFragment();
+				Bundle bundle = new Bundle();
+				bundle.putString("productId", productId);
+				fragment.setArguments(bundle);
+			} else {
+				fragment = new HasImgsProductEnvaluteFragment();
+				Bundle bundle = new Bundle();
+				bundle.putString("productId", productId);
+				fragment.setArguments(bundle);
+			}
+			return fragment;
+		}
+
+		@Override
+		public int getCount() {
+			return titleStrs.length;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return titleStrs[position];
+		}
+	}
+
+	/***
+	 * tab点击监听
+	 */
+	private class MyOnClickListener implements OnClickListener {
+		private int index = 0;
+
+		public MyOnClickListener(int i) {
+			index = i;
+		}
+
+		public void onClick(View v) {
+			pager.setCurrentItem(index);
+			switch (v.getId()) {
+				case R.id.comment_all_rl:
+					setTabSelect(true, false);
+					break;
+				case R.id.comment_has_image_rl:
+					setTabSelect(false, true);
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
+
+	/**
+	 * 底部动画监听
+	 */
+	public class MyOnPageChangeListener implements OnPageChangeListener {
+
+		public void onPageScrollStateChanged(int arg0) {
+		}
+
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+		}
+
+		public void onPageSelected(int position) {
+			if (position == 0) {
+				setTabSelect(true, false);
+			} else {
+				setTabSelect(false, true);
+			}
+		}
 	}
 }

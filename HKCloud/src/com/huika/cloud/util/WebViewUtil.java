@@ -1,12 +1,12 @@
 package com.huika.cloud.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ZoomButtonsController;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class WebViewUtil {
   public static void hideBuiltInZoomControls(WebView view) {
@@ -20,7 +20,7 @@ public class WebViewUtil {
       } else {
         WebSettings ws = view.getSettings();
         Method method =
-            WebSettings.class.getMethod("setDisplayZoomControls", new Class[] { boolean.class });
+                WebSettings.class.getMethod("setDisplayZoomControls", boolean.class);
         method.invoke(ws, false);
       }
     } catch (Exception e) {

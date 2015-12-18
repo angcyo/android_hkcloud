@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="#EEEEF1">
+    android:background="#EEEEF1"
+    android:orientation="vertical">
     
    <com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView 
 		android:id="@+id/rlv"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
    </com.zhoukl.androidRDP.RdpViews.RdpCommViews.RdpListView>
-</LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/no_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/load_error_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/icon_address_empty" />
+
+        <TextView
+            android:id="@+id/load_error_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/load_error_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="@string/my_address_empty"
+            android:textColor="#969696"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</FrameLayout>

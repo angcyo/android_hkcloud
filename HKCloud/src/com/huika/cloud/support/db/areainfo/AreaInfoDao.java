@@ -1,13 +1,14 @@
 package com.huika.cloud.support.db.areainfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.huika.cloud.support.model.AreaInfo;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+
+import com.huika.cloud.support.model.AreaInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
@@ -21,28 +22,8 @@ import de.greenrobot.dao.internal.SqlUtils;
 public class AreaInfoDao extends AbstractDao<AreaInfo, Integer> {
 
 	public static final String TABLENAME = "AreaInfo";
-
-	/**
-	 * Properties of entity Area.<br/>
-	 * Can be used for QueryBuilder and for referencing column names.
-	*/
-	public static class Properties {
-		public final static Property AreaID = new Property(0, int.class, "areaID", true, "areaID");
-		public final static Property AreaName = new Property(1, String.class, "areaName", false, "areaName");
-		public final static Property ParentID = new Property(2, int.class, "parentID", true, "parentID");
-		public final static Property ShortName = new Property(3, String.class, "shortName", false, "shortName");
-		public final static Property AreaType = new Property(4, int.class, "areaType", false, "areaType");
-//        public final static Property NamePath = new Property(5, String.class, "namePath", false, "namePath");
-//        public final static Property IDPath = new Property(6, String.class, "IDPath", false, "IDPath");
-		// public final static Property Initial = new Property(2, String.class, "initial", false, "initial"); // 首字母
-		// public final static Property ShortSpelling = new Property(2, String.class, "shortSpelling", false, "shortSpelling");
-		// public final static Property FullSpelling = new Property(2, String.class, "fullSpelling", false, "fullSpelling");
-
-		// private String levelNum;//城市级别2：省份，3：市，4：区
-		// private String type;//类型，0表示直辖市
-	};
-
 	private AreaInfoDaoSession daoSession;
+	private String selectDeep;
 
 	public AreaInfoDao(DaoConfig config) {
 		super(config);
@@ -145,8 +126,6 @@ public class AreaInfoDao extends AbstractDao<AreaInfo, Integer> {
 		return true;
 	}
 
-	private String selectDeep;
-
 	protected String getSelectDeep() {
 		if (selectDeep == null) {
 			StringBuilder builder = new StringBuilder("SELECT ");
@@ -230,6 +209,26 @@ public class AreaInfoDao extends AbstractDao<AreaInfo, Integer> {
 	public List<AreaInfo> queryDeep(String where, String... selectionArg) {
 		Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
 		return loadDeepAllAndCloseCursor(cursor);
+	}
+
+	/**
+	 * Properties of entity Area.<br/>
+	 * Can be used for QueryBuilder and for referencing column names.
+	 */
+	public static class Properties {
+		public final static Property AreaID = new Property(0, int.class, "areaID", true, "areaID");
+		public final static Property AreaName = new Property(1, String.class, "areaName", false, "areaName");
+		public final static Property ParentID = new Property(2, int.class, "parentID", true, "parentID");
+		public final static Property ShortName = new Property(3, String.class, "shortName", false, "shortName");
+		public final static Property AreaType = new Property(4, int.class, "areaType", false, "areaType");
+//        public final static Property NamePath = new Property(5, String.class, "namePath", false, "namePath");
+//        public final static Property IDPath = new Property(6, String.class, "IDPath", false, "IDPath");
+		// public final static Property Initial = new Property(2, String.class, "initial", false, "initial"); // 首字母
+		// public final static Property ShortSpelling = new Property(2, String.class, "shortSpelling", false, "shortSpelling");
+		// public final static Property FullSpelling = new Property(2, String.class, "fullSpelling", false, "fullSpelling");
+
+		// private String levelNum;//城市级别2：省份，3：市，4：区
+		// private String type;//类型，0表示直辖市
 	}
 
 }

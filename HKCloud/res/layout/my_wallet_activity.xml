@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_master"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:id="@+id/ll_master"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -42,9 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-            android:textSize="@dimen/common_textview_size"
+            android:text="微信账号"
             android:textColor="#333333"
-            android:text="微信账号" />
+            android:textSize="@dimen/common_textview_size" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,9 +52,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
-             android:textSize="@dimen/common_textview_size"
+            android:text="微信账号名"
             android:textColor="#333333"
-            android:text="微信账号名" />
+            android:textSize="@dimen/common_textview_size" />
     </RelativeLayout>
 
     <View
@@ -70,20 +70,20 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
-             android:textSize="@dimen/common_textview_size"
+            android:text="银行卡"
             android:textColor="#333333"
-            android:text="银行卡" />
+            android:textSize="@dimen/common_textview_size" />
 
         <TextView
             android:id="@+id/isBind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/iv_jump"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-             android:textSize="@dimen/common_textview_size"
+            android:layout_toLeftOf="@+id/iv_jump"
+            android:text="未绑定"
             android:textColor="#333333"
-            android:text="未绑定" />
+            android:textSize="@dimen/common_textview_size" />
         <ImageView 
             android:id="@+id/iv_jump"
             android:layout_width="wrap_content"
@@ -100,18 +100,18 @@
         android:background="#F0EFF4" />
 
     <Button 
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="50dp"
         android:id="@+id/bt_withdraw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/conner_button"
-        android:textColor="@color/white"
-         android:textSize="@dimen/common_textview_size"
         android:text="提现"
+        android:textColor="@color/white"
+        android:textSize="@dimen/common_textview_size"
         />
-    <Button 
+    <!-- <Button 
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
@@ -122,5 +122,5 @@
         android:textColor="@color/white"
          android:textSize="@dimen/common_textview_size"
         android:text="提现记录"
-        />
+        /> -->
 </LinearLayout>

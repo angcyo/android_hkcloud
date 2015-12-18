@@ -19,15 +19,6 @@ public class ProvinceDao extends AbstractDao<Province, Integer> {
 
 	public static final String TABLENAME = "Province";
 
-	/**
-	 * Properties of entity Province.<br/>
-	 * Can be used for QueryBuilder and for referencing column names.
-	*/
-	public static class Properties {
-		public final static Property ProvinceID = new Property(0, int.class, "provinceID", true, "provinceID");
-		public final static Property ProvinceName = new Property(1, String.class, "provinceName", false, "provinceName");
-	};
-
 	public ProvinceDao(DaoConfig config) {
 		super(config);
 	}
@@ -106,6 +97,15 @@ public class ProvinceDao extends AbstractDao<Province, Integer> {
 	@Override
 	protected boolean isEntityUpdateable() {
 		return true;
+	}
+
+	/**
+	 * Properties of entity Province.<br/>
+	 * Can be used for QueryBuilder and for referencing column names.
+	 */
+	public static class Properties {
+		public final static Property ProvinceID = new Property(0, int.class, "provinceID", true, "provinceID");
+		public final static Property ProvinceName = new Property(1, String.class, "provinceName", false, "provinceName");
 	}
 
 }

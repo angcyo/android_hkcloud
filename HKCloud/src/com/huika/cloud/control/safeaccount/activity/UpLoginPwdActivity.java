@@ -1,7 +1,5 @@
 package com.huika.cloud.control.safeaccount.activity;
 
-import java.lang.reflect.Type;
-
 import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,8 +18,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
-import com.zhoukl.androidRDP.RdpModel.BaseUserBean;
+import com.zhoukl.androidRDP.RdpUtils.MD5Security;
 import com.zhoukl.androidRDP.RdpUtils.RdpAnnotationUtil;
+
+import java.lang.reflect.Type;
 
 /**
  * @description：修改登录密码
@@ -101,9 +101,9 @@ public class UpLoginPwdActivity extends RdpBaseActivity {
 		updatePwdCommand.setServerApiUrl(UrlConstant.USER_CHANGEPASSWORD); // 修改登录密码
 		updatePwdCommand.clearConditions();
 		updatePwdCommand.setCondition("merchantId", HKCloudApplication.MERCHANTID);
-		updatePwdCommand.setCondition("memberId", mUser.getMemberId());
-		updatePwdCommand.setCondition("oldPassWord", mEdtOldPwd.getText().toString());
-		updatePwdCommand.setCondition("passWord", mEdtNewPwd.getText().toString());
+		updatePwdCommand.setCondition("userId", mUser.userId);
+		updatePwdCommand.setCondition("oldPassword", MD5Security.getMd5_32_UP(mEdtOldPwd.getText().toString()));
+		updatePwdCommand.setCondition("password", MD5Security.getMd5_32_UP(mEdtNewPwd.getText().toString()));
 		updatePwdCommand.setCondition("type", 1); // 1登陆密码 2交易密码 3设置交易密码
 		updatePwdCommand.setCondition("validateCode", "");
 		updatePwdCommand.execute();
@@ -116,7 +116,7 @@ public class UpLoginPwdActivity extends RdpBaseActivity {
 		dismissLoadingDialog();
 		showToastMsg(result.getMsg());
 		if (result.getCode() == 1) {
-			PreferHelper.getInstance().saveLoginInfo(mUser.getAccount(), mEdtNewPwd.getText().toString());
+			PreferHelper.getInstance().saveLoginInfo(mUser.account, mEdtNewPwd.getText().toString());
 			finish();
 		}
 	}

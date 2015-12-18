@@ -1,11 +1,11 @@
 package com.zhoukl.androidRDP.RdpFramework;
 
-import java.util.Stack;
+import android.app.Activity;
+import android.content.Context;
 
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 
-import android.app.Activity;
-import android.content.Context;
+import java.util.Stack;
 
 
 public class RdpActivityManager {
@@ -13,10 +13,6 @@ public class RdpActivityManager {
 	private Activity mCurrentAct;
 
 	private RdpActivityManager() {}
-
-	private static class ManagerHolder {
-		private static final RdpActivityManager instance = new RdpActivityManager();
-	}
 
 	public static RdpActivityManager create() {
 		return ManagerHolder.instance;
@@ -47,7 +43,7 @@ public class RdpActivityManager {
 				"Activity stack is Null,your Activity must extend BaseActivity"); }
 		if (activityStack.isEmpty()) { return null; }
 		RdpBaseActivity activity = activityStack.lastElement();
-		return (Activity) activity;
+		return activity;
 	}
 
 	/**
@@ -61,7 +57,7 @@ public class RdpActivityManager {
 				break;
 			}
 		}
-		return (Activity) activity;
+		return activity;
 	}
 
 	/**
@@ -69,7 +65,7 @@ public class RdpActivityManager {
 	 */
 	public void finishActivity() {
 		RdpBaseActivity activity = activityStack.lastElement();
-		finishActivity((Activity) activity);
+		finishActivity(activity);
 	}
 
 	/**
@@ -89,20 +85,20 @@ public class RdpActivityManager {
 	public void finishActivity(Class<?> cls) {
 		for (RdpBaseActivity activity : activityStack) {
 			if (activity.getClass().equals(cls)) {
-				finishActivity((Activity) activity);
+				finishActivity(activity);
 			}
 		}
 	}
 
 	/**
 	 * 关闭除了指定activity以外的全部activity 如果cls不存在于栈中，则栈全部清空
-	 * 
+	 *
 	 * @param cls
 	 */
 	public void finishOthersActivity(Class<?> cls) {
 		for (RdpBaseActivity activity : activityStack) {
 			if (!(activity.getClass().equals(cls))) {
-				finishActivity((Activity) activity);
+				finishActivity(activity);
 			}
 		}
 	}
@@ -113,7 +109,7 @@ public class RdpActivityManager {
 	public void finishAllActivity() {
 		for (int i = 0, size = activityStack.size(); i < size; i++) {
 			if (null != activityStack.get(i)) {
-				((Activity) activityStack.get(i)).finish();
+				activityStack.get(i).finish();
 			}
 		}
 		activityStack.clear();
@@ -131,17 +127,21 @@ public class RdpActivityManager {
 		}
 	}
 
-	/** 
+	/**
 	 * @Description: 弹出到指定Activity 移除栈中此Activity上面的所有activity
 	 * @param Class
 	 */
-	public void Pop2Activity(Class<?> cls) {  
+	public void Pop2Activity(Class<?> cls) {
 		if (null == findActivity(cls)) { return; }
-		mCurrentAct = (Activity) activityStack.peek();
+		mCurrentAct = activityStack.peek();
 		while (null != mCurrentAct && !mCurrentAct.getClass().equals(cls)) {
 			// mCurrentAct.finish();
 			finishActivity(mCurrentAct);
-			mCurrentAct = (Activity) activityStack.peek();
+			mCurrentAct = activityStack.peek();
 		}
+	}
+
+	private static class ManagerHolder {
+		private static final RdpActivityManager instance = new RdpActivityManager();
 	}
 }

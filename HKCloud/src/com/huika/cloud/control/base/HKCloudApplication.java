@@ -19,12 +19,32 @@ import com.zhoukl.androidRDP.RdpFramework.RdpApp.RdpApplication;
  * @date 2015-11-17 下午3:11:19
  */
 public class HKCloudApplication extends RdpApplication {
-	private static HKCloudApplication mInstance;
 	public static final String MERCHANTID = "402881e8461795c201461795c2e90000";
+	public static AreaInfoDaoMaster mAreaInfoDaoMaster;
+	private static HKCloudApplication mInstance;
 	private UserModel mUser;
+	private BroadcastReceiver receiverExitSystem = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			HKCloudApplication.this.onTerminate();
+		}
+	};
 
 	public static HKCloudApplication getInstance() {
 		return mInstance;
+	}
+
+	public static AreaInfoDaoMaster getAreaInfoDaoMaster() {
+		if (mAreaInfoDaoMaster == null) {
+			synchronized (HKCloudApplication.class) {
+				if (mAreaInfoDaoMaster == null) {
+					String path = AreaInfoDaoMaster.createOrUpdate(getInstance());
+					SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
+					mAreaInfoDaoMaster = new AreaInfoDaoMaster(db);
+				}
+			}
+		}
+		return mAreaInfoDaoMaster;
 	}
 
 	@Override
@@ -59,7 +79,7 @@ public class HKCloudApplication extends RdpApplication {
 
 	public String getMemberId(boolean jumpToLoginActivity) {
 		if (isLogin(jumpToLoginActivity)) {
-			return mCurrUser.getMemberId();
+			return mCurrUser.memberId;
 		} else {
 			return "";
 		}
@@ -73,27 +93,5 @@ public class HKCloudApplication extends RdpApplication {
 		if (mUser == null) { return new UserModel(); }
 		return mUser;
 	}
-
-	private BroadcastReceiver receiverExitSystem = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			HKCloudApplication.this.onTerminate();
-		}
-	};
-
-	public static AreaInfoDaoMaster mAreaInfoDaoMaster;
-
-	public static AreaInfoDaoMaster getAreaInfoDaoMaster() {
-		if (mAreaInfoDaoMaster == null) {
-			synchronized (HKCloudApplication.class) {
-				if (mAreaInfoDaoMaster == null) {
-					String path = AreaInfoDaoMaster.createOrUpdate(getInstance());
-					SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
-					mAreaInfoDaoMaster = new AreaInfoDaoMaster(db);
-				}
-			}
-		}
-		return mAreaInfoDaoMaster;
-	};
 
 }

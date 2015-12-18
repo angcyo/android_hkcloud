@@ -1,14 +1,9 @@
 package com.huika.cloud.control.me.activity;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
 import android.text.TextUtils;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.google.gson.reflect.TypeToken;
 import com.huika.cloud.R;
@@ -20,6 +15,8 @@ import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpNetCommand;
 import com.zhoukl.androidRDP.RdpDataSource.RdpNetwork.RdpResponseResult;
 import com.zhoukl.androidRDP.RdpFramework.RdpActivity.RdpBaseActivity;
 import com.zhoukl.androidRDP.RdpUtils.help.ToastMsg;
+
+import java.lang.reflect.Type;
 
 /**
  * @description：申请开店
@@ -83,7 +80,7 @@ public class ApplyForShopActivity extends RdpBaseActivity {
 		case R.id.bt_get_ver_code:
 			//获取验证码
 			Type typeOfResult=new TypeToken<AccountDetailBean>() {
-			}.getType();;
+			}.getType();
 			RdpNetCommand rdpNetCommand = new RdpNetCommand(mApplication, typeOfResult);
 			rdpNetCommand.setServerApiUrl("");
 			rdpNetCommand.clearConditions();
